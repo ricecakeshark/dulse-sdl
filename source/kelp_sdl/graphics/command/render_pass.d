@@ -1,0 +1,127 @@
+module kelp_sdl.graphics.command.render_pass;
+
+import bindbc.sdl;
+import std.exception;
+
+import kelp_sdl.graphics.command;
+import kelp_sdl.graphics.desc;
+import kelp_sdl.graphics.resource;
+
+import std.array, std.algorithm;
+
+class GPURenderPass
+{
+	SDL_GPURenderPass* render_pass_handle;
+
+	this()
+	{
+		return;
+	}
+
+	@property SDL_GPURenderPass* handle() pure nothrow @nogc @safe
+	{
+		return this.render_pass_handle;
+	}
+
+	typeof(this) begin(
+		GPUCommandBuffer command_buffer,
+		GPUColorTargetInfo[] color_target_info_list,
+	)
+	in (command_buffer.handle !is null)
+	{
+		this.render_pass_handle = SDL_BeginGPURenderPass(
+			command_buffer.handle,
+			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
+			cast(uint) color_target_info_list.length,
+			null,
+		);
+		return this;
+	}
+
+	typeof(this) begin(
+		GPUCommandBuffer command_buffer,
+		GPUColorTargetInfo[] color_target_info_list,
+		GPUDepthStencilTargetInfo depth_stencil_target_info,
+	)
+	in (command_buffer.handle !is null)
+	{
+		this.render_pass_handle = SDL_BeginGPURenderPass(
+			command_buffer.handle,
+			cast(SDL_GPUColorTargetInfo*)&color_target_info_list,
+			cast(uint) color_target_info_list.length,
+			cast(SDL_GPUDepthStencilTargetInfo*)&depth_stencil_target_info,
+		);
+		return this;
+	}
+
+	typeof(this) end()
+	{
+		SDL_EndGPURenderPass(this.handle);
+		this.render_pass_handle = null;
+		return this;
+	}
+
+	/+typeof(this) bind(GPUGraphicsPipeline pipeline)
+	in (this.handle !is null)
+	in (pipeline.handle !is null)
+	{
+		SDL_BindGPUGraphicsPipeline(this.handle, pipeline.handle);
+		return this;
+	}+/
+
+	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, uint first_slot = 0)
+	in (this.handle !is null)
+	{
+		GPUBufferBinding[] buffer_binding_list;
+		buffer_binding_list = vertex_buffer_list.map!(
+			vertex_buffer => GPUBufferBinding(vertex_buffer)
+		)().array();
+		SDL_BindGPUVertexBuffers(
+			this.render_pass_handle,
+			first_slot,
+			cast(SDL_GPUBufferBinding*) buffer_binding_list,
+			cast(uint) buffer_binding_list.length,
+		);
+		return this;
+	}
+
+	typeof(this) bind(GPUIndexBuffer index_buffer)
+	in (this.handle !is null)
+	{
+		GPUBufferBinding buffer_binding;
+		buffer_binding = GPUBufferBinding(index_buffer, 0);
+		SDL_BindGPUIndexBuffer(
+			this.render_pass_handle,
+			cast(SDL_GPUBufferBinding*)&buffer_binding,
+			SDL_GPU_INDEXELEMENTSIZE_16BIT,
+		);
+		return this;
+	}
+
+	// bind(GPUTextureSamplerBinding[])
+	// set(Viewport*)
+	// set(ScissorRect*)
+	// setReference()
+
+	typeof(this) drawPrimitive(
+		uint num_vertices,
+		uint num_instance,
+		uint first_vertex,
+		uint first_instance,
+	)
+	in (this.handle !is null)
+	{
+		SDL_DrawGPUPrimitives(
+			this.handle,
+			num_vertices,
+			num_instance,
+			first_vertex,
+			first_instance,
+		);
+		return this;
+	}
+
+	// typeof(this) drawIndexedPrimitive()
+	// typeof(this) drawPrimitiveIndirect()
+	// typeof(this) drawIndexedPrimitiveIndirect()
+}

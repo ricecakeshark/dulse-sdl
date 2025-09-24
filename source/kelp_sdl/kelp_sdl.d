@@ -1,14 +1,17 @@
-module kelp_sdl;
+module kelp_sdl.kelp_sdl;
 
+import kelp_sdl;
 import kelp_core;
 import kelp_api;
-public import bindbc.sdl;
+import bindbc.sdl;
 import std.exception;
 
 public:
 
-class SDL : SharedLibrary
+class SDL //: SharedLibrary
 {
+	SDL_Event[] temp_event_queue;
+
 	void initialize()
 	{
 		bool result;
@@ -20,6 +23,12 @@ class SDL : SharedLibrary
 	void finalize()
 	{
 		SDL_Quit();
+		return;
+	}
+
+	void process()
+	{
+		temp_event_queue ~= pollEvent();
 		return;
 	}
 

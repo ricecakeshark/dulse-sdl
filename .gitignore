@@ -1,6 +1,7 @@
 
 include/
 build/
+external/
 
 # D
 *.exe
