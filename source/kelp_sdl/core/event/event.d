@@ -16,12 +16,14 @@ Event normalize(SDL_EventType event_type)
 
 SDL_Event[] pollEvent()
 {
-	SDL_Event[] temp_event_queue;
+	import std.array : Appender;
+
+	Appender!(SDL_Event[]) event_list;
 	SDL_Event event;
 
-	while(SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event))
 	{
-		temp_event_queue ~= event;
+		event_list.put(event);
 	}
-	return temp_event_queue;
+	return event_list[];
 }

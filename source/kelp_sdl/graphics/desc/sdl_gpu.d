@@ -34,7 +34,16 @@ struct GPUColorTargetInfo
 	ubyte padding2;
 }
 
-deprecated struct GPUDepthStencilTargetInfo
+struct GPUDepthStencilTargetInfo
 {
-
+	SDL_GPUTexture* texture;
+	float clear_depth;
+	SDL_GPULoadOp load_op;
+	SDL_GPUStoreOp store_op;
+	SDL_GPULoadOp stencil_load_op;
+	SDL_GPUStoreOp stencil_store_op;
+	bool cycle;
+	ubyte clear_stencil;
+	ubyte mip_level;
+	ubyte layer;
 }

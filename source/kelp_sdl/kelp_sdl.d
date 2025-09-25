@@ -10,7 +10,14 @@ public:
 
 class SDL //: SharedLibrary
 {
+	Timer timer;
 	SDL_Event[] temp_event_queue;
+	
+	this()
+	{
+		this.timer = new Timer();
+		return;
+	}
 
 	void initialize()
 	{
