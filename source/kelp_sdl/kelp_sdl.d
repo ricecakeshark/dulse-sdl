@@ -8,14 +8,12 @@ import std.exception;
 
 public:
 
-class SDL //: SharedLibrary
+class SDLSubsystem : Subsystem
 {
-	Timer timer;
 	SDL_Event[] temp_event_queue;
-	
+
 	this()
 	{
-		this.timer = new Timer();
 		return;
 	}
 

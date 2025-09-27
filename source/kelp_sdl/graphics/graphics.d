@@ -16,7 +16,7 @@ import bindbc.sdl;
 
 //export extern(C):
 
-class Graphics : Subsystem
+class SDLGraphicsSubsystem : Subsystem
 {
 	// delete after
 	import std.exception;
@@ -95,7 +95,3 @@ class Graphics : Subsystem
 
 }
 
-export Subsystem createSubsystem()
-{
-	return cast(Subsystem) new Graphics();
-}
