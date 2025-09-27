@@ -7,7 +7,7 @@ import std.algorithm;
 class SDLKeyboard
 {
 	SDL_KeyboardID keyboard_id;
-	KeyboardInputState input_state;
+	KeyboardInputState[2] input_state;
 
 	this()
 	{
@@ -27,7 +27,8 @@ class SDLKeyboard
 
 	void process()
 	{
-		this.input_state = getKeyboardState();
+		this.input_state[1] = this.input_state[0];
+		this.input_state[0] = getKeyboardState();
 		return;
 	}
 
@@ -36,7 +37,7 @@ class SDLKeyboard
 		int count;
 		SDL_KeyboardID* keyboard_ptr;
 		keyboard_ptr = SDL_GetKeyboards(&count);
-		if(count < 1)
+		if (count < 1)
 		{
 			return;
 		}
@@ -44,12 +45,32 @@ class SDLKeyboard
 		return;
 	}
 
+	bool pressed(const Scancode scancode) const pure nothrow @nogc @safe
+	{
+		return (this.input_state[0].pressed(scancode)) ? true : false;
+	}
 
+	bool released(const Scancode scancode) const pure nothrow @nogc @safe
+	{
+		return (this.input_state[0].released(scancode)) ? true : false;
+	}
+
+	bool pressed_just(const Scancode scancode) const pure nothrow @nogc @safe
+	{
+		return (this.input_state[0].pressed(scancode)
+				&& this.input_state[1].released(scancode)) ? true : false;
+	}
+
+	bool released_just(const Scancode scancode) const pure nothrow @nogc @safe
+	{
+		return (this.input_state[0].released(scancode)
+				&& this.input_state[1].pressed(scancode)) ? true : false;
+	}
 }
 
 KeyboardInputState getKeyboardState()
 {
 	int num_keys;
 	const bool* key_state_ptr = SDL_GetKeyboardState(&num_keys);
-	return KeyboardInputState(key_state_ptr[0..num_keys]);
+	return KeyboardInputState(key_state_ptr[0 .. num_keys]);
 }
