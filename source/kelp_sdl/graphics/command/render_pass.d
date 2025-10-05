@@ -5,6 +5,7 @@ import std.exception;
 
 import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
+import kelp_sdl.graphics.rasterize.graphics_pipeline;
 import kelp_sdl.graphics.resource;
 
 import std.array, std.algorithm;
@@ -61,13 +62,13 @@ class GPURenderPass
 		return this;
 	}
 
-	/+typeof(this) bind(GPUGraphicsPipeline pipeline)
+	typeof(this) bind(GPUGraphicsPipeline pipeline)
 	in (this.handle !is null)
 	in (pipeline.handle !is null)
 	{
 		SDL_BindGPUGraphicsPipeline(this.handle, pipeline.handle);
 		return this;
-	}+/
+	}
 
 	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, uint first_slot = 0)
 	in (this.handle !is null)

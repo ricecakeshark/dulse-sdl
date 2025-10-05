@@ -3,6 +3,23 @@ module kelp_sdl.graphics.desc.sdl_gpu;
 import bindbc.sdl;
 import kelp_sdl.graphics.resource;
 
+struct PositionVertex
+{
+	float x, y, z;
+}
+
+struct PositionColorVertex
+{
+	float x, y, z;
+	ubyte r, g, b, a;
+}
+
+struct PositionTextureVertex
+{
+	float x,y,z;
+	float u,v;
+}
+
 struct GPUBufferBinding
 {
 	SDL_GPUBuffer* buffer;
@@ -15,6 +32,12 @@ struct GPUBufferBinding
 		this.offset = offset;
 		return;
 	}
+}
+
+struct GPUColorTargetDescription
+{
+	SDL_GPUTextureFormat format;
+	SDL_GPUColorTargetBlendState blend_state;
 }
 
 struct GPUColorTargetInfo
@@ -46,4 +69,67 @@ struct GPUDepthStencilTargetInfo
 	ubyte clear_stencil;
 	ubyte mip_level;
 	ubyte layer;
+}
+
+struct GPUGraphicsPipelineCreateInfo
+{
+	SDL_GPUShader* vertex_shader;
+	SDL_GPUShader* fragment_shader;
+	GPUVertexInputState vertex_input_state;
+	SDL_GPUPrimitiveType primitive_type;
+	SDL_GPURasterizerState rasterizer_state;
+	SDL_GPUMultisampleState multisample_state;
+	SDL_GPUDepthStencilState depth_stencil_state;
+	GPUGraphicsPipelineTargetInfo target_info;
+
+	SDL_PropertiesID props;
+}
+
+struct GPUGraphicsPipelineTargetInfo
+{
+	const GPUColorTargetDescription* color_target_description;
+	uint num_color_targets;
+	SDL_GPUTextureFormat depth_stencil_format;
+	bool has_depth_stencil_target;
+	ubyte padding1;
+	ubyte padding2;
+	ubyte padding3;
+}
+
+struct GPUTextureCreateInfo
+{
+	SDL_GPUTextureType type;
+	SDL_GPUTextureFormat format;
+	SDL_GPUTextureUsage usage;
+	uint width;
+	uint height;
+	uint layer_count_or_depth = 1;
+	uint num_levels = 1;
+	SDL_GPUSampleCount sample_count;
+
+	SDL_PropertiesID props;
+}
+
+struct GPUVertexBufferDescription
+{
+	uint slot;
+	uint pitch;
+	SDL_GPUVertexInputRate input_rate;
+	uint instance_step_rate;
+}
+
+struct GPUVertexAttribute
+{
+	uint location;
+	uint buffer_slot;
+	SDL_GPUVertexElementFormat format;
+	uint offset;
+}
+
+struct GPUVertexInputState
+{
+	const GPUVertexBufferDescription* vertex_buffer_description;
+	uint num_vertex_buffers;
+	const GPUVertexAttribute* vertex_attribute;
+	uint num_vertex_attributes;
 }
