@@ -3,23 +3,6 @@ module kelp_sdl.graphics.desc.sdl_gpu;
 import bindbc.sdl;
 import kelp_sdl.graphics.resource;
 
-struct PositionVertex
-{
-	float x, y, z;
-}
-
-struct PositionColorVertex
-{
-	float x, y, z;
-	ubyte r, g, b, a;
-}
-
-struct PositionTextureVertex
-{
-	float x,y,z;
-	float u,v;
-}
-
 struct GPUBufferBinding
 {
 	SDL_GPUBuffer* buffer;
@@ -96,6 +79,17 @@ struct GPUGraphicsPipelineTargetInfo
 	ubyte padding3;
 }
 
+struct GPUStorageTextureReadWriteBinding
+{
+	SDL_GPUTexture* texture;
+	uint mip_level;
+	uint layer;
+	bool cycle;
+	ubyte padding1;
+	ubyte padding2;
+	ubyte padding3;
+}
+
 struct GPUTextureCreateInfo
 {
 	SDL_GPUTextureType type;
@@ -108,6 +102,12 @@ struct GPUTextureCreateInfo
 	SDL_GPUSampleCount sample_count;
 
 	SDL_PropertiesID props;
+}
+
+struct GPUTextureSamplerBinding
+{
+	SDL_GPUTexture* texture;
+	SDL_GPUSampler* sampler;
 }
 
 struct GPUVertexBufferDescription
