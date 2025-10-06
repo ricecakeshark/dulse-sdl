@@ -104,11 +104,11 @@ class GPURenderPass
 	// set(ScissorRect*)
 	// setReference()
 
-	typeof(this) drawPrimitive(
+	typeof(this) draw(
 		uint num_vertices,
 		uint num_instance,
-		uint first_vertex,
-		uint first_instance,
+		uint first_vertex = 0,
+		uint first_instance = 0,
 	)
 	in (this.handle !is null)
 	{
@@ -122,7 +122,55 @@ class GPURenderPass
 		return this;
 	}
 
-	// typeof(this) drawIndexedPrimitive()
-	// typeof(this) drawPrimitiveIndirect()
-	// typeof(this) drawIndexedPrimitiveIndirect()
+	typeof(this) draw_indexed(
+		uint num_indices,
+		uint num_instances,
+		uint first_index = 0,
+		int vertex_offset,
+		uint first_instance = 0,
+	)
+	in (this.handle !is null)
+	{
+		SDL_DrawGPUIndexedPrimitives(
+			this.handle,
+			num_indices,
+			num_instances,
+			first_index,
+			vertex_offset,
+			first_instance,
+		);
+		return this;
+	}
+
+	typeof(this) draw_indirect(
+		GPUDrawBuffer draw_buffer,
+		uint offset,
+		uint draw_count
+	)
+	in (this.handle !is null)
+	{
+		SDL_DrawGPUIndexedPrimitivesIndirect(
+			this.handle,
+			draw_buffer.handle,
+			offset,
+			draw_count
+		);
+		return this;
+	}
+
+	typeof(this) draw_indexed_indirect(
+		GPUDrawBuffer draw_buffer,
+		uint offset,
+		uint draw_count,
+	)
+	in (this.handle !is null)
+	{
+		SDL_DrawGPUIndexedPrimitivesIndirect(
+			this.handle,
+			draw_buffer.handle,
+			offset,
+			draw_count,
+		);
+		return this;
+	}
 }
