@@ -13,6 +13,6 @@ struct PositionColorVertex
 
 struct PositionTextureVertex
 {
-	float x,y,z;
-	float u,v;
+	float x, y, z;
+	float u, v;
 }

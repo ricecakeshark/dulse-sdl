@@ -42,7 +42,7 @@ class GPUDevice
 	}
 
 	typeof(this) release()
-	in (!this.isNull)
+	in (this.handle !is null)
 	{
 		SDL_DestroyGPUDevice(this.device_handle);
 		this.device_handle = null;

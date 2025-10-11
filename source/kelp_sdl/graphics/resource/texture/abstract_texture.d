@@ -23,4 +23,3 @@ module kelp_sdl.graphics.resource.texture.abstract_texture;
 }+/
 
 public:
-

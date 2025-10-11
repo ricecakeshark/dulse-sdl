@@ -12,7 +12,7 @@ import std.array, std.algorithm;
 
 class GPURenderPass
 {
-	SDL_GPURenderPass* render_pass_handle;
+	SDL_GPURenderPass* pass_handle;
 
 	this()
 	{
@@ -21,7 +21,7 @@ class GPURenderPass
 
 	@property SDL_GPURenderPass* handle() pure nothrow @nogc @safe
 	{
-		return this.render_pass_handle;
+		return this.pass_handle;
 	}
 
 	typeof(this) begin(
@@ -30,7 +30,7 @@ class GPURenderPass
 	)
 	in (command_buffer.handle !is null)
 	{
-		this.render_pass_handle = SDL_BeginGPURenderPass(
+		this.pass_handle = SDL_BeginGPURenderPass(
 			command_buffer.handle,
 			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
 			cast(uint) color_target_info_list.length,
@@ -46,7 +46,7 @@ class GPURenderPass
 	)
 	in (command_buffer.handle !is null)
 	{
-		this.render_pass_handle = SDL_BeginGPURenderPass(
+		this.pass_handle = SDL_BeginGPURenderPass(
 			command_buffer.handle,
 			cast(SDL_GPUColorTargetInfo*)&color_target_info_list,
 			cast(uint) color_target_info_list.length,
@@ -58,7 +58,7 @@ class GPURenderPass
 	typeof(this) end()
 	{
 		SDL_EndGPURenderPass(this.handle);
-		this.render_pass_handle = null;
+		this.pass_handle = null;
 		return this;
 	}
 
@@ -78,7 +78,7 @@ class GPURenderPass
 			vertex_buffer => GPUBufferBinding(vertex_buffer)
 		)().array();
 		SDL_BindGPUVertexBuffers(
-			this.render_pass_handle,
+			this.pass_handle,
 			first_slot,
 			cast(SDL_GPUBufferBinding*) buffer_binding_list,
 			cast(uint) buffer_binding_list.length,
@@ -92,7 +92,7 @@ class GPURenderPass
 		GPUBufferBinding buffer_binding;
 		buffer_binding = GPUBufferBinding(index_buffer, 0);
 		SDL_BindGPUIndexBuffer(
-			this.render_pass_handle,
+			this.pass_handle,
 			cast(SDL_GPUBufferBinding*)&buffer_binding,
 			SDL_GPU_INDEXELEMENTSIZE_16BIT,
 		);

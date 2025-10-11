@@ -35,7 +35,7 @@ abstract class GPUShader(Derived)
 	{
 		ShaderCode shader_code;
 		shader_code = ShaderCode(device, shader_code_uri);
-		
+
 		SDL_GPUShaderCreateInfo sci = {
 			code: cast(const(ubyte)*) shader_code.code,
 			code_size: shader_code.code.length,

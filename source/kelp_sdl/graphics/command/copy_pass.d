@@ -23,6 +23,7 @@ class GPUCopyPass
 	typeof(this) end()
 	{
 		SDL_EndGPUCopyPass(this.pass_handle);
+		this.pass_handle = null;
 		return this;
 	}
 

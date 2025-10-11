@@ -42,7 +42,7 @@ public:
 	{
 		SDL_PushGPUVertexUniformData(
 			this.handle, first_slot,
-			cast(void*)&vertex_uniform_data, Type.sizeof,
+			cast(const(void*))&vertex_uniform_data, Type.sizeof,
 		);
 		return this;
 	}
@@ -52,7 +52,7 @@ public:
 	{
 		SDL_PushGPUFragmentUniformData(
 			this.handle, first_slot,
-			cast(void*)&fragment_uniform_data, Type.sizeof,
+			cast(const(void*))&fragment_uniform_data, Type.sizeof,
 		);
 		return this;
 	}
@@ -60,9 +60,9 @@ public:
 	typeof(this) pushComputeUniformData(Type)(Type compute_uniform_data, uint first_slot = 0)
 	in (this.handle !is null)
 	{
-		SDL_PushGPUFragmentUniformData(
+		SDL_PushGPUComputeUniformData(
 			this.handle, first_slot,
-			cast(void*)&compute_uniform_data, Type.sizeof,
+			cast(const(void*))&compute_uniform_data, Type.sizeof,
 		);
 		return this;
 	}

@@ -1,6 +1,6 @@
 module kelp_sdl.core.device.device;
 
-import kelp_api;
+import kelp_core.core.subsystem;
 import kelp_sdl.core.device;
 
 final class SDLDeviceSubsystem : Subsystem

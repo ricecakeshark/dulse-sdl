@@ -2,7 +2,7 @@ module kelp_sdl.kelp_sdl;
 
 import kelp_sdl;
 import kelp_core;
-import kelp_api;
+import kelp_core.core.subsystem;
 import bindbc.sdl;
 import std.exception;
 
@@ -10,8 +10,6 @@ public:
 
 class SDLSubsystem : Subsystem
 {
-	SDL_Event[] temp_event_queue;
-
 	this()
 	{
 		return;
@@ -33,7 +31,7 @@ class SDLSubsystem : Subsystem
 
 	void process()
 	{
-		temp_event_queue ~= pollEvent();
+		//temp_event_queue ~= pollEvent();
 		return;
 	}
 
