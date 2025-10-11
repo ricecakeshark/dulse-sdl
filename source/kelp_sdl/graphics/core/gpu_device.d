@@ -2,6 +2,7 @@ module kelp_sdl.graphics.core.gpu_device;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
+import kelp_sdl.util;
 import std.exception;
 
 class GPUDevice
@@ -25,13 +26,8 @@ class GPUDevice
 		return this.device_handle;
 	}
 
-	bool isNull() const pure nothrow @nogc @safe
-	{
-		return (this.device_handle is null);
-	}
-
 	typeof(this) create()
-	in (this.isNull)
+	in (this.handle is null)
 	{
 		this.device_handle = SDL_CreateGPUDevice(
 			SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
@@ -42,10 +38,13 @@ class GPUDevice
 	}
 
 	typeof(this) release()
-	in (this.handle !is null)
 	{
-		SDL_DestroyGPUDevice(this.device_handle);
-		this.device_handle = null;
+		this.release_window();
+		if (this.device_handle !is null)
+		{
+			SDL_DestroyGPUDevice(this.device_handle);
+			this.device_handle = null;
+		}
 		return this;
 	}
 
@@ -59,12 +58,21 @@ class GPUDevice
 		return this;
 	}
 
-	typeof(this) releaseWindow()
-	in (!this.isNull)
-	in (this.claimed_window !is null)
+	typeof(this) release_window()
+	in (this.handle !is null)
 	{
-		SDL_ReleaseWindowFromGPUDevice(this.handle, this.claimed_window.handle);
-		this.claimed_window = null;
+		if (this.claimed_window.handle !is null)
+		{
+			SDL_ReleaseWindowFromGPUDevice(this.handle, this.claimed_window.handle);
+			this.claimed_window = null;
+		}
+		return this;
+	}
+
+	typeof(this) wait()
+	{
+		bool result;
+		SDL_WaitForGPUIdle(this.device_handle).catchSDLError();
 		return this;
 	}
 
