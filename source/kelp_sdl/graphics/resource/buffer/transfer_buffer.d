@@ -30,12 +30,25 @@ class GPUTransferBuffer(Derived)
 		return this.buffer_handle;
 	}
 
-	Derived create(uint size)
+	Derived createBySize(uint size)
 	{
 		this.size = size;
 		SDL_GPUTransferBufferCreateInfo create_info = {
 			usage: SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
 			size: size,
+		};
+		this.buffer_handle = SDL_CreateGPUTransferBuffer(this.device.handle, &create_info);
+		enforce(this.buffer_handle !is null);
+		return cast(Derived) this;
+	}
+
+	Derived createByData(void[] data)
+	in (data[0].sizeof * data.length <= uint.max, "data is oversized than uint.max")
+	{
+		this.size = cast(uint)(data[0].sizeof * data.length);
+		SDL_GPUTransferBufferCreateInfo create_info = {
+			usage: SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
+			size: cast(uint)(data[0].sizeof * data.length),
 		};
 		this.buffer_handle = SDL_CreateGPUTransferBuffer(this.device.handle, &create_info);
 		enforce(this.buffer_handle !is null);
@@ -69,6 +82,15 @@ class GPUTransferBuffer(Derived)
 	in (this.device.handle !is null)
 	{
 		SDL_UnmapGPUTransferBuffer(this.device.handle, this.handle,);
+		this.transfer_ptr = null;
+		return cast(Derived) this;
+	}
+
+	Derived set_data(void[] set_data)
+	in (this.transfer_ptr !is null)
+	in (set_data[0].sizeof * set_data.length <= uint.max)
+	{
+		memcpy(transfer_ptr, cast(void*) set_data, set_data[0].sizeof * set_data.length);
 		return cast(Derived) this;
 	}
 }
@@ -81,10 +103,17 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return;
 	}
 
+	typeof(this) create(uint size)
+	{
+		this.createBySize(size);
+		return this;
+	}
+
 	typeof(this) set(void[] data)
 	in (data[0].sizeof * data.length == this.size)
+	in (this.transfer_ptr !is null)
 	{
-		memcpy(transfer_ptr, cast(void*) data, data[0].sizeof * data.length);
+		memcpy(transfer_ptr, cast(void*) data.ptr, data[0].sizeof * data.length);
 		return this;
 	}
 }

@@ -100,7 +100,12 @@ class GPURenderPass
 	}
 
 	// bind(GPUTextureSamplerBinding[])
-	// set(Viewport*)
+	typeof(this) set(const GPUViewport viewport)
+	in (this.handle !is null)
+	{
+		SDL_SetGPUViewport(this.handle, cast(SDL_GPUViewport*)&viewport);
+		return this;
+	}
 	// set(ScissorRect*)
 	// setReference()
 

@@ -133,3 +133,84 @@ struct GPUVertexInputState
 	const GPUVertexAttribute* vertex_attribute;
 	uint num_vertex_attributes;
 }
+
+struct GPUViewport
+{
+	float x;
+	float y;
+	float w;
+	float h;
+	float min_depth;
+	float max_depth;
+
+	this(float x, float y, float w, float h)
+	{
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.min_depth = 0.0f;
+		this.max_depth = +1.0f;
+		return;
+	}
+}
+
+struct GPUTransferBufferLocation
+{
+	SDL_GPUTransferBuffer* transfer_buffer;
+	uint offset;
+
+	this(
+		SDL_GPUTransferBuffer* transfer_buffer_handle,
+		uint offset = 0,
+	)
+	in (transfer_buffer_handle !is null)
+	{
+		this.transfer_buffer = transfer_buffer_handle;
+		this.offset = offset;
+		return;
+	}
+
+	this(
+		GPUBufferTransferBuffer transfer_buffer,
+		uint offset = 0,
+	)
+	in (transfer_buffer.handle !is null)
+	{
+		this.transfer_buffer = transfer_buffer.handle;
+		this.offset = offset;
+		return;
+	}
+}
+
+struct GPUBufferRegion
+{
+	SDL_GPUBuffer* buffer;
+	uint offset;
+	uint size;
+
+	this(
+		SDL_GPUBuffer* buffer_handle,
+		uint offset,
+		uint size,
+	)
+	in (buffer_handle !is null)
+	{
+		this.buffer = buffer_handle;
+		this.offset = offset;
+		this.size = size;
+		return;
+	}
+
+	this(
+		GPUBuffer buffer,
+		uint offset = 0,
+	)
+	in (buffer.handle !is null)
+	{
+		this.buffer = buffer.handle;
+		this.offset = offset;
+		this.size = buffer.size;
+		return;
+	}
+}

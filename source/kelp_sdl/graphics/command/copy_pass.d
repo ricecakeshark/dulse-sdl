@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.command.copy_pass;
 
 import kelp_sdl.graphics.command;
+import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 import bindbc.sdl;
 
@@ -28,6 +29,41 @@ class GPUCopyPass
 	}
 
 	typeof(this) upload(
+		GPUTransferBufferLocation transfer_buffer_location,
+		GPUBufferRegion upload_buffer_region,
+	)
+	{
+		SDL_UploadToGPUBuffer(
+			this.handle,
+			cast(SDL_GPUTransferBufferLocation*)&transfer_buffer_location,
+			cast(SDL_GPUBufferRegion*)&upload_buffer_region,
+			false
+		);
+		return this;
+	}
+
+	deprecated typeof(this) upload(
+		GPUBufferTransferBuffer transfer_buffer,
+		uint transfer_offset = 0,
+		GPUBuffer upload_buffer,
+		uint upload_size,
+	)
+	in (this.handle !is null)
+	in (upload_buffer.handle !is null)
+	{
+		SDL_GPUTransferBufferLocation buffer_location;
+		SDL_GPUBufferRegion buffer_region;
+		buffer_location = SDL_GPUTransferBufferLocation(
+			transfer_buffer.handle, transfer_offset,
+		);
+		buffer_region = SDL_GPUBufferRegion(
+			upload_buffer.handle, 0, upload_size,
+		);
+		SDL_UploadToGPUBuffer(this.handle, &buffer_location, &buffer_region, false);
+		return this;
+	}
+
+	deprecated typeof(this) upload(
 		GPUBufferTransferBuffer transfer_buffer,
 		GPUBuffer buffer,
 		uint offset = 0,

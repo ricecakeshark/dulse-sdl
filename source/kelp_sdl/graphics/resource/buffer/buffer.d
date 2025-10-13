@@ -57,16 +57,17 @@ protected:
 		SDL_GPUBufferUsageFlags usage_flags,
 		void[] setting_data,
 	)
+	in (setting_data[0].sizeof * setting_data.length <= uint.max, "setting_data is oversized")
 	{
 		SDL_GPUBufferCreateInfo buffer_create_info;
 		buffer_create_info = SDL_GPUBufferCreateInfo(
 			usage_flags,
 			cast(uint)(setting_data[0].sizeof * setting_data.length)
 		);
-
 		this.buffer_handle = SDL_CreateGPUBuffer(
 			this.device.handle, &buffer_create_info
 		);
+		this.size = cast(uint)(setting_data[0].sizeof * setting_data.length);
 		return this;
 	}
 
