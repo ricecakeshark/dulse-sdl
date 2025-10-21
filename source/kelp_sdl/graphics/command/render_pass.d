@@ -80,7 +80,7 @@ class GPURenderPass
 		SDL_BindGPUVertexBuffers(
 			this.pass_handle,
 			first_slot,
-			cast(SDL_GPUBufferBinding*) buffer_binding_list,
+			cast(const(SDL_GPUBufferBinding*)) buffer_binding_list,
 			cast(uint) buffer_binding_list.length,
 		);
 		return this;
@@ -93,21 +93,32 @@ class GPURenderPass
 		buffer_binding = GPUBufferBinding(index_buffer, 0);
 		SDL_BindGPUIndexBuffer(
 			this.pass_handle,
-			cast(SDL_GPUBufferBinding*)&buffer_binding,
+			cast(const(SDL_GPUBufferBinding*))&buffer_binding,
 			SDL_GPU_INDEXELEMENTSIZE_16BIT,
 		);
 		return this;
 	}
 
 	// bind(GPUTextureSamplerBinding[])
+
 	typeof(this) set(const GPUViewport viewport)
 	in (this.handle !is null)
 	{
-		SDL_SetGPUViewport(this.handle, cast(SDL_GPUViewport*)&viewport);
+		SDL_SetGPUViewport(this.handle, cast(const(SDL_GPUViewport*))&viewport);
 		return this;
 	}
-	// set(ScissorRect*)
-	// setReference()
+
+	typeof(this) set(const Rect scissor_rect)
+	{
+		SDL_SetGPUScissor(this.handle, cast(const(SDL_Rect*))&scissor_rect);
+		return this;
+	}
+
+	typeof(this) set(ubyte stencil_referensce)
+	{
+		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
+		return this;
+	}
 
 	typeof(this) draw(
 		uint num_vertices,
