@@ -50,8 +50,8 @@ class GPUDevice
 
 	typeof(this) claim(GPUWindow window)
 	in (this.handle !is null)
-	in (window.handle !is null)
 	in (this.claimed_window is null)
+	in (window.handle !is null)
 	{
 		enforce(SDL_ClaimWindowForGPUDevice(this.handle, window.handle));
 		this.claimed_window = window;
@@ -70,10 +70,29 @@ class GPUDevice
 	}
 
 	typeof(this) wait()
+	in (this.handle !is null)
 	{
 		bool result;
 		SDL_WaitForGPUIdle(this.device_handle).catchSDLError();
 		return this;
+	}
+
+	@property SDL_GPUTextureFormat getSwapchainTextureFormat()
+	in (this.handle !is null)
+	in (this.claimed_window !is null)
+	in (this.claimed_window.handle !is null)
+	{
+		return SDL_GetGPUSwapchainTextureFormat(this.handle, this.claimed_window.handle);
+	}
+
+	bool supportFormat(
+		SDL_GPUTextureFormat format,
+		SDL_GPUTextureType type,
+		SDL_GPUTextureUsageFlags usage
+	)
+	in (this.handle !is null)
+	{
+		return SDL_GPUTextureSupportsFormat(this.handle, format, type, usage);
 	}
 
 	invariant

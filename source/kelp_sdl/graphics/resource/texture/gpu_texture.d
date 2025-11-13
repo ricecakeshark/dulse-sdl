@@ -37,6 +37,28 @@ final class GPUTexture
 		return (this.width * this.height * 4);
 	}
 
+	typeof(this) create(
+		GPUTextureUsageFlags usage_flags,
+		GPUTextureFormat format
+	)
+	{
+		GPUTextureCreateInfo create_info = GPUTextureCreateInfo(
+			GPUTextureType._2d,
+			format,
+			usage_flags,
+			width, height,
+			1, 1,
+			GPUSampleCount.x1
+		);
+		this.texture_handle = SDL_CreateGPUTexture(
+			this.device.handle, cast(SDL_GPUTextureCreateInfo*)&create_info
+
+		);
+		enforce(this.texture_handle !is null);
+
+		return this;
+	}
+
 	typeof(this) create(string uri)
 	{
 		SDL_Surface* temp_surface, temp_surface2;
@@ -58,13 +80,13 @@ final class GPUTexture
 		this.height = temp_surface.h;
 		with (create_info)
 		{
-			type = SDL_GPU_TEXTURETYPE_2D;
-			format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
+			type = GPUTextureType._2d;
+			format = GPUTextureFormat.r8g8b8a8_unorm;
 			width = temp_surface.w;
 			height = temp_surface.h;
 			layer_count_or_depth = 1;
 			num_levels = 1;
-			usage = SDL_GPU_TEXTUREUSAGE_SAMPLER;
+			usage = GPUTextureUsageFlags.sampler;
 		}
 		this.texture_handle = SDL_CreateGPUTexture(
 			this.device.handle,

@@ -109,12 +109,14 @@ class GPURenderPass
 	}
 
 	typeof(this) set(const Rect scissor_rect)
+	in (this.handle !is null)
 	{
 		SDL_SetGPUScissor(this.handle, cast(const(SDL_Rect*))&scissor_rect);
 		return this;
 	}
 
 	typeof(this) set(ubyte stencil_referensce)
+	in (this.handle !is null)
 	{
 		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
 		return this;

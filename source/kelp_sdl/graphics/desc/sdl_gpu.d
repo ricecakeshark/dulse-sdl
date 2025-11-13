@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.desc.sdl_gpu;
 
 import bindbc.sdl;
+import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 
 struct GPUBufferBinding
@@ -40,6 +41,21 @@ struct GPUColorTargetInfo
 	ubyte padding2;
 }
 
+struct GPUDepthStencilState
+{
+	GPUCompareOp compare_op;
+	GPUStencilOpState back_stencil_state;
+	GPUStencilOpState front_stencil_state;
+	ubyte compare_mask;
+	ubyte write_mask;
+	bool enable_depth_test;
+	bool enable_depth_write;
+	bool enable_stencil_test;
+	ubyte padding1;
+	ubyte padding2;
+	ubyte padding3;
+}
+
 struct GPUDepthStencilTargetInfo
 {
 	SDL_GPUTexture* texture;
@@ -60,9 +76,9 @@ struct GPUGraphicsPipelineCreateInfo
 	SDL_GPUShader* fragment_shader;
 	GPUVertexInputState vertex_input_state;
 	SDL_GPUPrimitiveType primitive_type;
-	SDL_GPURasterizerState rasterizer_state;
+	GPURasterizerState rasterizer_state;
 	SDL_GPUMultisampleState multisample_state;
-	SDL_GPUDepthStencilState depth_stencil_state;
+	GPUDepthStencilState depth_stencil_state;
 	GPUGraphicsPipelineTargetInfo target_info;
 
 	SDL_PropertiesID props;
@@ -72,11 +88,33 @@ struct GPUGraphicsPipelineTargetInfo
 {
 	const GPUColorTargetDescription* color_target_description;
 	uint num_color_targets;
-	SDL_GPUTextureFormat depth_stencil_format;
+	GPUTextureFormat depth_stencil_format;
 	bool has_depth_stencil_target;
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
+}
+
+struct GPURasterizerState
+{
+	GPUFillMode fill_mode;
+	GPUCullMode cull_mode;
+	GPUFrontFace front_face;
+	float depth_bias_constant_factor;
+	float depth_bias_clamp;
+	float depth_bias_slope_factor;
+	bool enable_depth_bias;
+	bool enable_depth_clip;
+	ubyte padding1;
+	ubyte padding2;
+}
+
+struct GPUStencilOpState
+{
+	GPUStencilOp fail_op;
+	GPUStencilOp pass_op;
+	GPUStencilOp depth_fail_op;
+	GPUCompareOp compare_op;
 }
 
 struct GPUStorageTextureReadWriteBinding
@@ -92,14 +130,14 @@ struct GPUStorageTextureReadWriteBinding
 
 struct GPUTextureCreateInfo
 {
-	SDL_GPUTextureType type;
-	SDL_GPUTextureFormat format;
-	SDL_GPUTextureUsage usage;
+	GPUTextureType type;
+	GPUTextureFormat format;
+	GPUTextureUsageFlags usage;
 	uint width;
 	uint height;
 	uint layer_count_or_depth = 1;
 	uint num_levels = 1;
-	SDL_GPUSampleCount sample_count;
+	GPUSampleCount sample_count;
 
 	SDL_PropertiesID props;
 }
