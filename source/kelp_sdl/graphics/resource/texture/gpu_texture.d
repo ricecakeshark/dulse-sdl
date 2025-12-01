@@ -27,6 +27,7 @@ final class GPUTexture
 	}
 
 	@property inout(SDL_GPUTexture*) handle() inout pure nothrow @nogc @safe
+	in (this.texture_handle !is null)
 	{
 		return this.texture_handle;
 	}
@@ -38,15 +39,29 @@ final class GPUTexture
 	}
 
 	typeof(this) create(
+		GPUTextureCreateInfo create_info
+	)
+	{
+		this.texture_handle = SDL_CreateGPUTexture(
+			this.device.handle, cast(SDL_GPUTextureCreateInfo*)&create_info
+		);
+		enforce(this.texture_handle !is null);
+		return this;
+	}
+
+	typeof(this) create(
+		size_t width, size_t height,
 		GPUTextureUsageFlags usage_flags,
 		GPUTextureFormat format
 	)
+	in (width <= uint.max)
+	in (height <= uint.max)
 	{
 		GPUTextureCreateInfo create_info = GPUTextureCreateInfo(
 			GPUTextureType._2d,
 			format,
 			usage_flags,
-			width, height,
+			cast(uint) width, cast(uint) height,
 			1, 1,
 			GPUSampleCount.x1
 		);

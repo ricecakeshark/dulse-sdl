@@ -28,7 +28,9 @@ class GPURenderPass
 		GPUCommandBuffer command_buffer,
 		GPUColorTargetInfo[] color_target_info_list,
 	)
+	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
+	in (color_target_info_list.length >= 1)
 	{
 		this.pass_handle = SDL_BeginGPURenderPass(
 			command_buffer.handle,
@@ -44,11 +46,13 @@ class GPURenderPass
 		GPUColorTargetInfo[] color_target_info_list,
 		GPUDepthStencilTargetInfo depth_stencil_target_info,
 	)
+	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
+	in (color_target_info_list.length >= 1)
 	{
 		this.pass_handle = SDL_BeginGPURenderPass(
 			command_buffer.handle,
-			cast(SDL_GPUColorTargetInfo*)&color_target_info_list,
+			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
 			cast(uint) color_target_info_list.length,
 			cast(SDL_GPUDepthStencilTargetInfo*)&depth_stencil_target_info,
 		);
@@ -64,6 +68,7 @@ class GPURenderPass
 
 	typeof(this) bind(GPUGraphicsPipeline pipeline)
 	in (this.handle !is null)
+	in (pipeline !is null)
 	in (pipeline.handle !is null)
 	{
 		SDL_BindGPUGraphicsPipeline(this.handle, pipeline.handle);
@@ -72,6 +77,8 @@ class GPURenderPass
 
 	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, uint first_slot = 0)
 	in (this.handle !is null)
+	in (vertex_buffer_list.all!(buffer => buffer !is null))
+	in (vertex_buffer_list.all!(buffer => buffer.handle !is null))
 	{
 		GPUBufferBinding[] buffer_binding_list;
 		buffer_binding_list = vertex_buffer_list.map!(
@@ -88,6 +95,8 @@ class GPURenderPass
 
 	typeof(this) bind(GPUIndexBuffer index_buffer)
 	in (this.handle !is null)
+	in (index_buffer !is null)
+	in (index_buffer.handle !is null)
 	{
 		GPUBufferBinding buffer_binding;
 		buffer_binding = GPUBufferBinding(index_buffer, 0);

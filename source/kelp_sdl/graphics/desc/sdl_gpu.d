@@ -59,12 +59,12 @@ struct GPUDepthStencilState
 struct GPUDepthStencilTargetInfo
 {
 	SDL_GPUTexture* texture;
-	float clear_depth;
+	float clear_depth = 0.0f;
 	SDL_GPULoadOp load_op;
 	SDL_GPUStoreOp store_op;
 	SDL_GPULoadOp stencil_load_op;
 	SDL_GPUStoreOp stencil_store_op;
-	bool cycle;
+	bool cycle = false;
 	ubyte clear_stencil;
 	ubyte mip_level;
 	ubyte layer;
