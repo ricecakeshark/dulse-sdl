@@ -2,8 +2,10 @@ module kelp_sdl.graphics.resource.buffer.transfer_buffer;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core.gpu_device;
+import kelp_sdl.graphics.resource.buffer;
 import kelp_sdl.graphics.resource.texture;
 import std.exception : enforce;
+import std.algorithm : map, sum;
 import core.stdc.string : memcpy;
 
 class GPUTransferBuffer(Derived)
@@ -86,11 +88,16 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived set_data(void[] set_data)
+	Derived set_data(void[] set_data, size_t write_offset = 0)
 	in (this.transfer_ptr !is null)
 	in (set_data[0].sizeof * set_data.length <= uint.max)
+	in (write_offset + (set_data[0].sizeof * set_data.length) <= this.size)
 	{
-		memcpy(transfer_ptr, cast(void*) set_data, set_data[0].sizeof * set_data.length);
+		memcpy(
+			transfer_ptr + write_offset,
+			cast(void*) set_data,
+			set_data[0].sizeof * set_data.length
+		);
 		return cast(Derived) this;
 	}
 }
@@ -109,11 +116,31 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return this;
 	}
 
-	typeof(this) set(void[] data)
-	in (data[0].sizeof * data.length == this.size)
-	in (this.transfer_ptr !is null)
+	typeof(this) set(void[] data, size_t write_offset = 0)
+	in (write_offset + (data[0].sizeof * data.length) <= this.size)
 	{
-		memcpy(transfer_ptr, cast(void*) data.ptr, data[0].sizeof * data.length);
+		super.set_data(data, write_offset);
+		return this;
+	}
+
+	typeof(this) set(TypeList...)(TypeList data_list)
+	in
+	{
+		scope size_t temp_size;
+		foreach (data; data_list)
+		{
+			temp_size += data[0].sizeof * data.length;
+		}
+		assert(temp_size <= this.size);
+	}
+	do
+	{
+		size_t temp_offset = 0;
+		foreach (data; data_list)
+		{
+			super.set_data(data, temp_offset);
+			temp_offset += (data[0].sizeof * data.length);
+		}
 		return this;
 	}
 }

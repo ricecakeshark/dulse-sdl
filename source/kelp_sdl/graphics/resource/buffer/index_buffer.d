@@ -18,4 +18,16 @@ public:
 		super.createByData(SDL_GPU_BUFFERUSAGE_INDEX, data);
 		return this;
 	}
+
+	typeof(this) create(size_t size)
+	{
+		super.createBySize(SDL_GPU_BUFFERUSAGE_INDEX, size);
+		return this;
+	}
+
+	typeof(this) set(ushort[] data)
+	{
+		super.setData(data);
+		return this;
+	}
 }
