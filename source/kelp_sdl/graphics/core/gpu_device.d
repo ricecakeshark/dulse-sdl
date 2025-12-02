@@ -39,6 +39,10 @@ class GPUDevice
 
 	typeof(this) release()
 	{
+		if(this is null || this.device_handle is null)
+		{
+			return this;
+		}
 		this.release_window();
 		if (this.device_handle !is null)
 		{
@@ -59,13 +63,14 @@ class GPUDevice
 	}
 
 	typeof(this) release_window()
-	in (this.handle !is null)
+	in (this.device_handle !is null)
 	{
-		if (this.claimed_window.handle !is null)
+		if (this.claimed_window !is null && this.claimed_window.handle !is null)
 		{
-			SDL_ReleaseWindowFromGPUDevice(this.handle, this.claimed_window.handle);
-			this.claimed_window = null;
+			return this;
 		}
+		SDL_ReleaseWindowFromGPUDevice(this.handle, this.claimed_window.handle);
+		this.claimed_window = null;
 		return this;
 	}
 

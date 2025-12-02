@@ -32,7 +32,7 @@ class GPUGraphicsPipeline
 
 	typeof(this) release()
 	{
-		if (this.handle is null || this.device.handle is null)
+		if (this.pipeline_handle is null || this.device.handle is null)
 		{
 			return this;
 		}

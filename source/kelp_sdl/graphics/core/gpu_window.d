@@ -33,8 +33,11 @@ class GPUWindow
 	}
 
 	typeof(this) release()
-	in (this.handle !is null)
 	{
+		if(this.window_handle is null)
+		{
+			return this;
+		}
 		SDL_DestroyWindow(this.window_handle);
 		this.window_handle = null;
 		return this;
