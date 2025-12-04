@@ -43,6 +43,7 @@ class GPUComputePass
 	typeof(this) end()
 	{
 		SDL_EndGPUComputePass(this.pass_handle);
+		this.pass_handle = null;
 		return this;
 	}
 

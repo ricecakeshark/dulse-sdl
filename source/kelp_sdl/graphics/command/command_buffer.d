@@ -34,6 +34,7 @@ public:
 		bool succeed;
 		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
 		enforce(succeed, SDL_GetError().fromStringz());
+		this.command_buffer_handle = null;
 		return this;
 	}
 
