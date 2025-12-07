@@ -93,6 +93,11 @@ class GPUDevice
 		return SDL_GPUTextureSupportsFormat(this.handle, format, type, usage);
 	}
 
+	SDL_GPUShaderFormat get_shader_format()
+	{
+		return cast(SDL_GPUShaderFormat)SDL_GetGPUShaderFormats(this.device_handle);
+	}
+
 	invariant
 	{
 		assert(this !is null, "the instance is not initialized.");

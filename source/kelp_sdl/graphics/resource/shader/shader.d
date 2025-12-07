@@ -27,28 +27,13 @@ abstract class GPUShader(Derived)
 		return this.shader_handle;
 	}
 
-	protected Derived createShader(
-		string shader_code_uri,
-		SDL_GPUShaderStage stage,
-		GPUShaderArguments shader_args,
+	protected Derived create(
+		GPUShaderCreateInfo shader_create_info
 	)
 	{
-		ShaderCode shader_code;
-		shader_code = ShaderCode(device, shader_code_uri);
-
-		SDL_GPUShaderCreateInfo sci = {
-			code: cast(const(ubyte)*) shader_code.code,
-			code_size: shader_code.code.length,
-			entrypoint: toStringz(shader_code.entry_point),
-			format: shader_code.frontend_format,
-			stage: stage,
-			num_samplers: shader_args.sampler_count,
-			num_uniform_buffers: shader_args.uniform_buffer_count,
-			num_storage_buffers: shader_args.storage_buffer_count,
-			num_storage_textures: shader_args.storage_texture_count,
-		};
-
-		this.shader_handle = SDL_CreateGPUShader(this.device.handle, &sci);
+		this.shader_handle = SDL_CreateGPUShader(
+			this.device.handle, cast(SDL_GPUShaderCreateInfo*)&shader_create_info
+		);
 		enforce(this.shader_handle !is null, "failed to create shader");
 		return cast(Derived) this;
 	}
@@ -79,10 +64,12 @@ final class GPUVertexShader : GPUShader!(GPUVertexShader)
 	)
 	in (shader_filename.endsWith(".vert"))
 	{
-		super.createShader(
-			shader_filename, SDL_GPU_SHADERSTAGE_VERTEX, shader_args
+		ShaderCode shader_code;
+		shader_code = ShaderCode(device, shader_filename);
+		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
+			shader_code, SDL_GPU_SHADERSTAGE_VERTEX, shader_args
 		);
-
+		super.create(shader_create_info);
 		return this;
 	}
 }
@@ -101,10 +88,12 @@ final class GPUFragmentShader : GPUShader!(GPUVertexShader)
 	)
 	in (shader_filename.endsWith(".frag"))
 	{
-		super.createShader(
-			shader_filename, SDL_GPU_SHADERSTAGE_FRAGMENT, shader_args
+		ShaderCode shader_code;
+		shader_code = ShaderCode(device, shader_filename);
+		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
+			shader_code, SDL_GPU_SHADERSTAGE_FRAGMENT, shader_args
 		);
-
+		super.create(shader_create_info);
 		return this;
 	}
 }
@@ -118,9 +107,7 @@ struct ShaderCode
 	this(GPUDevice device, string shader_filename)
 	{
 		string shader_uri;
-		SDL_GPUShaderFormat backend_formats = cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
-			device.handle,
-		);
+		SDL_GPUShaderFormat backend_formats = device.get_shader_format();
 		frontend_format = SDL_GPU_SHADERFORMAT_INVALID;
 
 		if (backend_formats & SDL_GPU_SHADERFORMAT_SPIRV)
@@ -150,12 +137,4 @@ struct ShaderCode
 		this.code = cast(string) read(shader_uri);
 		return;
 	}
-}
-
-struct GPUShaderArguments
-{
-	uint sampler_count;
-	uint uniform_buffer_count;
-	uint storage_buffer_count;
-	uint storage_texture_count;
 }

@@ -1,5 +1,13 @@
 module kelp_sdl.graphics.desc.param;
 
+struct GPUShaderArguments
+{
+	uint sampler_count;
+	uint uniform_buffer_count;
+	uint storage_buffer_count;
+	uint storage_texture_count;
+}
+
 struct ParamPrimitive
 {
 	uint num_vertices;
