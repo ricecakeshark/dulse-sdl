@@ -109,6 +109,25 @@ struct GPURasterizerState
 	ubyte padding2;
 }
 
+struct GPUSamplerCreateInfo
+{
+	GPUFilter min_filter;
+	GPUFilter mag_filter;
+	GPUSamplerMipmapMode mipmap_mode;
+	GPUSamplerAddressMode address_mode_u;
+	GPUSamplerAddressMode address_mode_v;
+	GPUSamplerAddressMode address_mode_w;
+	float mip_lod_bias;
+	float max_anisotropy;
+	GPUCompareOp compare_op;
+	float min_lod;
+	float max_lod;
+	bool enable_anisotropy;
+	bool enable_compare;
+	ubyte padding1;
+	ubyte padding2;
+}
+
 struct GPUShaderCreateInfo
 {
 	size_t code_size;
@@ -120,7 +139,7 @@ struct GPUShaderCreateInfo
 	uint num_storage_textures;
 	uint num_storage_buffers;
 	uint num_uniform_buffers;
-	
+
 	this(ShaderCode shader_code, SDL_GPUShaderStage stage, GPUShaderArguments shader_args)
 	{
 		import std.string : toStringz;
@@ -137,7 +156,6 @@ struct GPUShaderCreateInfo
 		return;
 	}
 }
-
 
 struct GPUStencilOpState
 {
@@ -172,10 +190,52 @@ struct GPUTextureCreateInfo
 	SDL_PropertiesID props;
 }
 
+struct GPUTextureLocation
+{
+	SDL_GPUTexture* texture;
+	uint mip_level;
+	uint layer;
+	uint x;
+	uint y;
+	uint z;
+}
+
+struct GPUTextureRegion
+{
+	SDL_GPUTexture* texture;
+	uint mip_level;
+	uint layer;
+	uint x;
+	uint y;
+	uint z;
+	uint w;
+	uint h;
+	uint d;
+}
+
 struct GPUTextureSamplerBinding
 {
 	SDL_GPUTexture* texture;
 	SDL_GPUSampler* sampler;
+
+	this(GPUTexture texture, GPUSampler sampler)
+	in (texture !is null)
+	in (texture.handle !is null)
+	in (sampler !is null)
+	in (sampler.handle !is null)
+	{
+		this.texture = texture.handle;
+		this.sampler = sampler.handle;
+		return;
+	}
+}
+
+struct GPUTextureTransferInfo
+{
+	SDL_GPUTransferBuffer* transfer_buffer;
+	uint offset;
+	uint pixels_per_row;
+	uint rows_per_layer;
 }
 
 struct GPUVertexBufferDescription

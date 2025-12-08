@@ -4,6 +4,8 @@ import bindbc.sdl;
 import kelp_sdl.graphics.core.gpu_device;
 import kelp_sdl.graphics.resource.buffer;
 import kelp_sdl.graphics.resource.texture;
+import kelp_sdl.image;
+
 import std.exception : enforce;
 import std.algorithm : map, sum;
 import core.stdc.string : memcpy;
@@ -117,6 +119,8 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 	}
 
 	typeof(this) set(void[] data, size_t write_offset = 0)
+	in (this !is null)
+	in (this.buffer_handle !is null)
 	in (write_offset + (data[0].sizeof * data.length) <= this.size)
 	{
 		super.set_data(data, write_offset);
@@ -145,7 +149,7 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 	}
 }
 
-class GPUTextureTansferBuffer : GPUTransferBuffer!(GPUTextureTansferBuffer)
+class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
 {
 	this(GPUDevice device)
 	{
@@ -153,13 +157,31 @@ class GPUTextureTansferBuffer : GPUTransferBuffer!(GPUTextureTansferBuffer)
 		return;
 	}
 
-	typeof(this) set(GPUTexture texture)
+	typeof(this) create(uint size)
+	{
+		super.createBySize(size);
+		return this;
+	}
+
+	typeof(this) set(Surface surface)
+	in (this !is null)
+	in (this.buffer_handle !is null)
 	{
 		memcpy(
 			this.transfer_ptr,
-			texture.surface_handle.pixels,
-			texture.sizeInbytes,
+			surface.data_ptr,
+			surface.size,
 		);
 		return this;
 	}
+
+	/+@disable typeof(this) set(GPUTexture texture)
+	{
+		memcpy(
+			this.transfer_ptr,
+			cast(void*)texture.data,
+			texture.size,
+		);
+		return this;
+	}+/
 }

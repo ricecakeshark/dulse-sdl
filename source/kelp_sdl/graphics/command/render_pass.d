@@ -108,6 +108,20 @@ class GPURenderPass
 		return this;
 	}
 
+	typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot)
+	in (this.handle !is null)
+	in (binding_list.length >= 1)
+	in (binding_list.length < uint.max)
+	{
+		SDL_BindGPUFragmentSamplers(
+			this.pass_handle,
+			first_slot,
+			cast(const(SDL_GPUTextureSamplerBinding*)) binding_list,
+			cast(uint) binding_list.length,
+		);
+		return this;
+	}
+
 	// bind(GPUTextureSamplerBinding[])
 
 	typeof(this) set(const GPUViewport viewport)

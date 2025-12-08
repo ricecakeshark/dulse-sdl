@@ -29,58 +29,30 @@ class GPUCopyPass
 	}
 
 	typeof(this) upload(
-		GPUTransferBufferLocation transfer_buffer_location,
-		GPUBufferRegion upload_buffer_region,
+		GPUTransferBufferLocation buffer_location,
+		GPUBufferRegion buffer_region,
 	)
 	{
 		SDL_UploadToGPUBuffer(
 			this.handle,
-			cast(SDL_GPUTransferBufferLocation*)&transfer_buffer_location,
-			cast(SDL_GPUBufferRegion*)&upload_buffer_region,
+			cast(SDL_GPUTransferBufferLocation*)&buffer_location,
+			cast(SDL_GPUBufferRegion*)&buffer_region,
 			false
 		);
 		return this;
 	}
 
-	deprecated typeof(this) upload(
-		GPUBufferTransferBuffer transfer_buffer,
-		uint transfer_offset = 0,
-		GPUBuffer upload_buffer,
-		uint upload_size,
+	typeof(this) upload(
+		GPUTextureTransferInfo transfer_info,
+		GPUTextureRegion texture_region,
 	)
-	in (this.handle !is null)
-	in (upload_buffer.handle !is null)
 	{
-		SDL_GPUTransferBufferLocation buffer_location;
-		SDL_GPUBufferRegion buffer_region;
-		buffer_location = SDL_GPUTransferBufferLocation(
-			transfer_buffer.handle, transfer_offset,
+		SDL_UploadToGPUTexture(
+			this.handle,
+			cast(SDL_GPUTextureTransferInfo*)&transfer_info,
+			cast(SDL_GPUTextureRegion*)&texture_region,
+			false
 		);
-		buffer_region = SDL_GPUBufferRegion(
-			upload_buffer.handle, 0, upload_size,
-		);
-		SDL_UploadToGPUBuffer(this.handle, &buffer_location, &buffer_region, false);
 		return this;
 	}
-
-	deprecated typeof(this) upload(
-		GPUBufferTransferBuffer transfer_buffer,
-		GPUBuffer buffer,
-		uint offset = 0,
-	)
-	in (this.handle !is null)
-	in (buffer.handle !is null)
-	{
-		SDL_GPUTransferBufferLocation buffer_location;
-		SDL_GPUBufferRegion buffer_region;
-		buffer_location = SDL_GPUTransferBufferLocation(
-			transfer_buffer.handle, offset,
-		);
-		buffer_region = SDL_GPUBufferRegion(
-			buffer.handle, 0, buffer.sizeInBytes,
-		);
-		SDL_UploadToGPUBuffer(this.handle, &buffer_location, &buffer_region, false);
-		return this;
-	}
-
 }

@@ -26,6 +26,12 @@ enum GPUFillMode
 	line
 }
 
+enum GPUFilter
+{
+	nearest,
+	linear,
+}
+
 enum GPUFrontFace
 {
 	counter_clockwise,
@@ -38,6 +44,25 @@ enum GPUSampleCount
 	x2,
 	x4,
 	x8
+}
+
+enum GPUSamplerAddressMode
+{
+	repeat,
+	mirrored_repeat,
+	clamp_to_edge,
+}
+
+enum GPUSamplerMipmapMode
+{
+	nearest,
+	linear,
+}
+
+enum GPUShaderStage
+{
+	vertex,
+	fragment,
 }
 
 enum GPUStencilOp
