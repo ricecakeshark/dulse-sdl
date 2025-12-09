@@ -1,4 +1,4 @@
-module kelp_sdl.graphics.desc.sdl_gpu;
+module kelp_sdl.graphics.desc.sdl_gpu_struct;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.desc;
@@ -39,6 +39,25 @@ struct GPUColorTargetInfo
 	bool cycle_resolve_texture;
 	ubyte padding1;
 	ubyte padding2;
+}
+
+struct GPUComputePipelineCreateInfo
+{
+	size_t code_size;
+	const ubyte* code;
+	const char* entrypoint;
+	GPUShaderFormat format;
+	uint num_samplers;
+	uint num_readonly_storage_textures;
+	uint num_readonly_storage_buffers;
+	uint num_readwrite_storage_textures;
+	uint num_readwrite_storage_buffers;
+	uint num_uniform_buffers;
+	uint threadcount_x;
+	uint threadcount_y;
+	uint threadcount_z;
+
+	SDL_PropertiesID props;
 }
 
 struct GPUDepthStencilState
@@ -256,10 +275,37 @@ struct GPUVertexAttribute
 
 struct GPUVertexInputState
 {
-	const GPUVertexBufferDescription* vertex_buffer_description;
+	const GPUVertexBufferDescription* vertex_buffer_descriptions;
 	uint num_vertex_buffers;
-	const GPUVertexAttribute* vertex_attribute;
+	const GPUVertexAttribute* vertex_attributes;
 	uint num_vertex_attributes;
+
+	this(
+		GPUVertexBufferDescription[] description,
+		uint num_buffers,
+		GPUVertexAttribute[] attribute,
+		uint num_attributes,
+	)
+	in (description.length < uint.max)
+	in (attribute.length < uint.max)
+	{
+		this.vertex_buffer_descriptions = cast(GPUVertexBufferDescription*) description;
+		this.num_vertex_buffers = cast(uint) num_buffers;
+		this.vertex_attributes = cast(GPUVertexAttribute*) attribute;
+		this.num_vertex_attributes = cast(uint) num_attributes;
+		return;
+	}
+
+	this(GPUVertexBufferDescription[] description, GPUVertexAttribute[] attribute)
+	in (description.length < uint.max)
+	in (attribute.length < uint.max)
+	{
+		this.vertex_buffer_descriptions = cast(GPUVertexBufferDescription*) description;
+		this.num_vertex_buffers = cast(uint) description.length;
+		this.vertex_attributes = cast(GPUVertexAttribute*) attribute;
+		this.num_vertex_attributes = cast(uint) attribute.length;
+		return;
+	}
 }
 
 struct GPUViewport

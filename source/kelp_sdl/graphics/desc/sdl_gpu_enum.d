@@ -1,4 +1,4 @@
-module kelp_sdl.graphics.desc.desc;
+module kelp_sdl.graphics.desc.sdl_gpu_enum;
 
 enum GPUCompareOp
 {
@@ -212,13 +212,8 @@ enum GPUTextureType
 	cube_array
 }
 
-enum GPUTextureUsageFlags : uint
+enum GPUVertexInputRate
 {
-	sampler = 1u << 0,
-	color_target = 1u << 1,
-	depth_stencil_target = 1u << 2,
-	graphics_storage_read = 1u << 3,
-	compute_storage_read = 1u << 4,
-	compute_storage_write = 1u << 5,
-	compute_storage_simultaneous_read_write = 1u << 6
+	vertex,
+	instance,
 }
