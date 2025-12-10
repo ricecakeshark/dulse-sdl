@@ -112,6 +112,55 @@ struct GPUGraphicsPipelineTargetInfo
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
+
+	this(
+		GPUColorTargetDescription[] description,
+		uint num_target,
+		GPUTextureFormat format,
+		bool has_depth_stencil_target,
+	)
+	in (num_target <= description.length)
+	{
+		this.color_target_description = cast(GPUColorTargetDescription*) description;
+		this.num_color_targets = num_target;
+		this.depth_stencil_format = format;
+		this.has_depth_stencil_target = has_depth_stencil_target;
+		return;
+	}
+
+	this(
+		GPUColorTargetDescription[] description,
+		uint num_target,
+	)
+	in (num_target <= description.length)
+	{
+		this.color_target_description = cast(GPUColorTargetDescription*) description;
+		this.num_color_targets = num_target;
+		return;
+	}
+
+	this(
+		GPUColorTargetDescription[] description
+	)
+	in (description.length < uint.max)
+	{
+		this.color_target_description = cast(GPUColorTargetDescription*) description;
+		this.num_color_targets = cast(uint) description.length;
+		return;
+	}
+
+	this(
+		GPUColorTargetDescription[] description,
+		GPUTextureFormat depth_stencil_format,
+	)
+	in (description.length < uint.max)
+	{
+		this.color_target_description = cast(GPUColorTargetDescription*) description;
+		this.num_color_targets = cast(uint) description.length;
+		this.depth_stencil_format = depth_stencil_format;
+		this.has_depth_stencil_target = true;
+		return;
+	}
 }
 
 struct GPURasterizerState
