@@ -212,6 +212,65 @@ enum GPUTextureType
 	cube_array
 }
 
+enum GPUVertexElementFormat
+{
+	invalid,
+
+	/* 32-bit signed integers */
+	int1,
+	int2,
+	int3,
+	int4,
+
+	/* 32-bit unsigned integers */
+	uint1,
+	uint2,
+	uint3,
+	uint4,
+
+	/* 32-bit floats */
+	float1,
+	float2,
+	float3,
+	float4,
+
+	/* 8-bit signed integers */
+	byte2,
+	byte4,
+
+	/* 8-bit unsigned integers */
+	ubyte2,
+	ubyte4,
+
+	/* 8-bit signed normalized */
+	byte2_norm,
+	byte4_norm,
+
+	/* 8-bit unsigned normalized */
+	ubyte2_norm,
+	ubyte4_norm,
+
+	/* 16-bit signed integers */
+	short2,
+	short4,
+
+	/* 16-bit unsigned integers */
+	ushort2,
+	ushort4,
+
+	/* 16-bit signed normalized */
+	short2_norm,
+	short4_norm,
+
+	/* 16-bit unsigned normalized */
+	ushort2_norm,
+	ushort4_norm,
+
+	/* 16-bit floats */
+	half2,
+	half4
+}
+
 enum GPUVertexInputRate
 {
 	vertex,

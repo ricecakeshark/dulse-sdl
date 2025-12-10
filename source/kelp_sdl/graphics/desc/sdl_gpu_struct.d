@@ -310,7 +310,7 @@ struct GPUVertexBufferDescription
 {
 	uint slot;
 	uint pitch;
-	SDL_GPUVertexInputRate input_rate;
+	GPUVertexInputRate input_rate;
 	uint instance_step_rate;
 }
 
@@ -318,7 +318,7 @@ struct GPUVertexAttribute
 {
 	uint location;
 	uint buffer_slot;
-	SDL_GPUVertexElementFormat format;
+	GPUVertexElementFormat format;
 	uint offset;
 }
 
