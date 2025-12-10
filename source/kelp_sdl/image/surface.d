@@ -63,6 +63,7 @@ class Surface
 	in (this.surface_handle is null)
 	{
 		this.surface_handle = IMG_Load(file_uri.toStringz());
+		//this.surface_handle = SDL_LoadBMP(file_uri.toStringz());
 		enforce(this.surface_handle !is null);
 		return this;
 	}
@@ -71,11 +72,15 @@ class Surface
 	in (this.surface_handle is null)
 	{
 		this.surface_handle = IMG_Load(file_uri.toStringz());
+		//this.surface_handle = SDL_LoadBMP(file_uri.toStringz());
 		enforce(this.surface_handle !is null);
 
 		if (this.surface_handle.format != SDL_PIXELFORMAT_ABGR8888)
 		{
-			this.surface_handle = SDL_ConvertSurface(this.surface_handle, SDL_PIXELFORMAT_ABGR8888);
+			SDL_Surface* temp_handle;
+			temp_handle = SDL_ConvertSurface(this.surface_handle, SDL_PIXELFORMAT_ABGR8888);
+			SDL_DestroySurface(this.surface_handle);
+			this.surface_handle = temp_handle;
 		}
 		return this;
 	}
@@ -85,6 +90,18 @@ class Surface
 		SDL_DestroySurface(this.surface_handle);
 		this.surface_handle = null;
 		return this;
+	}
+
+	int[4] opIndex(size_t x, size_t y)
+	{
+		int[4] temp;
+		ubyte[] data;
+		data = cast(ubyte[])(this.data_ptr[0 .. width * height * 4]);
+		temp[0] = data[y * pitch + x * 4];
+		temp[1] = data[y * pitch + x * 4 + 1];
+		temp[2] = data[y * pitch + x * 4 + 2];
+		temp[3] = data[y * pitch + x * 4 + 3];
+		return temp;
 	}
 
 	/+typeof(this) save(string uri)

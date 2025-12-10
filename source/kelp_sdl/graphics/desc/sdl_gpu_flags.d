@@ -1,5 +1,13 @@
 module kelp_sdl.graphics.desc.sdl_gpu_flags;
 
+enum GPUColorComponentFlags : uint
+{
+	r = 1u << 0,
+	g = 1u << 1,
+	b = 1u << 2,
+	a = 1u << 3,
+}
+
 enum GPUShaderFormat : uint
 {
 	invalid = 0,

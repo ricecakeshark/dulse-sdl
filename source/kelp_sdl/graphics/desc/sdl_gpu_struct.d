@@ -18,10 +18,25 @@ struct GPUBufferBinding
 	}
 }
 
+struct GPUColorTargetBlendState
+{
+	GPUBlendFactor src_color_blendfactor;
+	GPUBlendFactor dst_color_blendfactor;
+	GPUBlendOp color_blend_op;
+	GPUBlendFactor src_alpha_blendfactor;
+	GPUBlendFactor dst_alpha_blendfactor;
+	GPUBlendOp alpha_blend_op;
+	GPUColorComponentFlags color_write_mask;
+	bool enable_blend;
+	bool enable_color_write_mask;
+	ubyte padding1;
+	ubyte padding2;
+}
+
 struct GPUColorTargetDescription
 {
 	SDL_GPUTextureFormat format;
-	SDL_GPUColorTargetBlendState blend_state;
+	GPUColorTargetBlendState blend_state;
 }
 
 struct GPUColorTargetInfo

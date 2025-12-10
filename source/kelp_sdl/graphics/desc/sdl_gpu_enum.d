@@ -1,5 +1,33 @@
 module kelp_sdl.graphics.desc.sdl_gpu_enum;
 
+enum GPUBlendFactor
+{
+	invalid,
+	zero, /**< 0 */
+	one, /**< 1 */
+	src_color, /**< source color */
+	one_minus_src_color, /**< 1 - source color */
+	dst_color, /**< destination color */
+	one_minus_dst_color, /**< 1 - destination color */
+	src_alpha, /**< source alpha */
+	one_minus_src_alpha, /**< 1 - source alpha */
+	dst_alpha, /**< destination alpha */
+	one_minus_dst_alpha, /**< 1 - destination alpha */
+	constant_color, /**< blend constant */
+	one_minus_constant_color, /**< 1 - blend constant */
+	src_alpha_saturate /**< min(source alpha, 1 - destination alpha) */
+}
+
+enum GPUBlendOp
+{
+	invalid,
+	add,
+	subtract,
+	reverse_subtract,
+	min,
+	max
+}
+
 enum GPUCompareOp
 {
 	invalid,
@@ -36,6 +64,15 @@ enum GPUFrontFace
 {
 	counter_clockwise,
 	clockwise
+}
+
+enum GPUPrimitiveType
+{
+	triangle_list,
+	triangle_strip,
+	line_list,
+	line_strip,
+	point_list,
 }
 
 enum GPUSampleCount

@@ -38,7 +38,7 @@ public:
 		return this;
 	}
 
-	typeof(this) pushVertexData(Type)(Type vertex_uniform_data, uint first_slot = 0)
+	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint first_slot = 0)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUVertexUniformData(
@@ -48,7 +48,7 @@ public:
 		return this;
 	}
 
-	typeof(this) pushFragmentData(Type)(Type fragment_uniform_data, uint first_slot = 0)
+	typeof(this) push_fragment(Type)(Type fragment_uniform_data, uint first_slot = 0)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUFragmentUniformData(
@@ -58,7 +58,7 @@ public:
 		return this;
 	}
 
-	typeof(this) pushComputeUniformData(Type)(Type compute_uniform_data, uint first_slot = 0)
+	typeof(this) push_compute(Type)(Type compute_uniform_data, uint first_slot = 0)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUComputeUniformData(
