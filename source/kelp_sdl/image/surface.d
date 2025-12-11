@@ -5,6 +5,7 @@ import kelp_sdl.image;
 
 import std.string : toStringz;
 import std.exception;
+import std.file : isFile;
 
 class Surface
 {
@@ -19,6 +20,11 @@ class Surface
 	~this()
 	{
 		return;
+	}
+
+	@property inout(SDL_Surface*) handle() inout pure nothrow @nogc @safe
+	{
+		return this.surface_handle;
 	}
 
 	@property int width() const pure nothrow @nogc @safe
@@ -62,6 +68,7 @@ class Surface
 	typeof(this) load(string file_uri)
 	in (this.surface_handle is null)
 	{
+		enforce(isFile(file_uri), "the file is not exsist");
 		this.surface_handle = IMG_Load(file_uri.toStringz());
 		//this.surface_handle = SDL_LoadBMP(file_uri.toStringz());
 		enforce(this.surface_handle !is null);
@@ -71,6 +78,7 @@ class Surface
 	typeof(this) load_for_gpu(string file_uri)
 	in (this.surface_handle is null)
 	{
+		enforce(isFile(file_uri), "the file is not exsist");
 		this.surface_handle = IMG_Load(file_uri.toStringz());
 		//this.surface_handle = SDL_LoadBMP(file_uri.toStringz());
 		enforce(this.surface_handle !is null);
@@ -128,6 +136,13 @@ class Surface
 		succeed = SDL_ClearSurface(
 			this.surface_handle, r, g, b, a
 		);
+		return this;
+	}
+
+	typeof(this) set_blend_mode()
+	in (this.surface_handle !is null)
+	{
+		SDL_SetSurfaceBlendMode(this.surface_handle, SDL_BLENDMODE_BLEND);
 		return this;
 	}
 }

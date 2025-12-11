@@ -169,7 +169,7 @@ class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
 	{
 		memcpy(
 			this.transfer_ptr,
-			surface.data_ptr,
+			surface.handle.pixels,
 			surface.size,
 		);
 		return this;

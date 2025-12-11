@@ -49,7 +49,7 @@ final class GPUTexture
 		return this;
 	}
 
-	typeof(this) create(
+	deprecated typeof(this) create(
 		size_t width, size_t height,
 		GPUTextureUsageFlags usage_flags,
 		GPUTextureFormat format
@@ -76,6 +76,7 @@ final class GPUTexture
 
 	typeof(this) create(string uri)
 	{
+
 		SDL_Surface* temp_surface, temp_surface2;
 		GPUTextureCreateInfo create_info;
 		enforce(isFile(uri), "image file is not found.");
@@ -88,7 +89,7 @@ final class GPUTexture
 			);
 			SDL_DestroySurface(temp_surface);
 			temp_surface = temp_surface2;
-			SDL_DestroySurface(temp_surface2);
+			//SDL_DestroySurface(temp_surface2);
 		}
 		this.surface_handle = temp_surface;
 		this.width = temp_surface.w;

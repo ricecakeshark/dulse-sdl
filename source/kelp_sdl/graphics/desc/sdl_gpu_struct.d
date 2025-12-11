@@ -183,9 +183,9 @@ struct GPURasterizerState
 	GPUFillMode fill_mode;
 	GPUCullMode cull_mode;
 	GPUFrontFace front_face;
-	float depth_bias_constant_factor;
-	float depth_bias_clamp;
-	float depth_bias_slope_factor;
+	float depth_bias_constant_factor = 0.0f;
+	float depth_bias_clamp = 0.0f;
+	float depth_bias_slope_factor = 0.0f;
 	bool enable_depth_bias;
 	bool enable_depth_clip;
 	ubyte padding1;
@@ -200,11 +200,11 @@ struct GPUSamplerCreateInfo
 	GPUSamplerAddressMode address_mode_u;
 	GPUSamplerAddressMode address_mode_v;
 	GPUSamplerAddressMode address_mode_w;
-	float mip_lod_bias;
-	float max_anisotropy;
+	float mip_lod_bias = 0.0f;
+	float max_anisotropy = 0.0f;
 	GPUCompareOp compare_op;
-	float min_lod;
-	float max_lod;
+	float min_lod = 0.0f;
+	float max_lod = 0.0f;
 	bool enable_anisotropy;
 	bool enable_compare;
 	ubyte padding1;
@@ -378,8 +378,8 @@ struct GPUViewport
 	float y;
 	float w;
 	float h;
-	float min_depth;
-	float max_depth;
+	float min_depth = 0.0f;
+	float max_depth = 1.0f;
 
 	this(float x, float y, float w, float h)
 	{
