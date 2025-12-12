@@ -66,6 +66,13 @@ enum GPUFrontFace
 	clockwise
 }
 
+enum GPULoadOp
+{
+	load,
+	clear,
+	dont_care,
+}
+
 enum GPUPrimitiveType
 {
 	triangle_list,
@@ -113,6 +120,14 @@ enum GPUStencilOp
 	invert,
 	increment_and_wrap,
 	decrement_and_wrap,
+}
+
+enum GPUStoreOp
+{
+	store,
+	dont_care,
+	resolve,
+	resolve_and_store,
 }
 
 enum GPUTextureFormat : uint

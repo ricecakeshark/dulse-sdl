@@ -8,6 +8,14 @@ enum SurfaceFlags : uint
 	simd_aligned = 8u,
 }
 
+enum SdlFlipMode
+{
+	none,
+	horizontal,
+	vertical,
+	horizontal_and_vertical = (horizontal | vertical),
+}
+
 enum SdlPixelFormat : uint
 {
 	unknown = 0,

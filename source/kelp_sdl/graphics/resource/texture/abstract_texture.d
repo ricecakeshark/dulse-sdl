@@ -1,25 +1,35 @@
 module kelp_sdl.graphics.resource.texture.abstract_texture;
 
-/+abstract class GPUAbstractTexture
+import bindbc.sdl;
+import kelp_sdl.graphics.core;
+import kelp_sdl.graphics.resource.texture;
+
+abstract class GPUAbstractTexture
 {
 	SDL_GPUTexture* texture_handle;
 	GPUDevice device;
+	protected uint _width, _height;
 
-	this(GPUDevice device)
-	{
-		this.device = device;
-		return;
-	}
-
-	@property SDL_GPUTexture* handle() const pure nothrow @nogc @safe
+	@property inout(SDL_GPUTexture*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.texture_handle;
 	}
 
+	@property inout(uint) width() inout pure nothrow @nogc @safe
+	in (this.texture_handle !is null)
+	{
+		return this._width;
+	}
+
+	@property inout(uint) height() inout pure nothrow @nogc @safe
+	in (this.texture_handle !is null)
+	{
+		return this._height;
+	}
+
 	uint sizeInBytes() const pure nothrow @nogc @safe
+	in (this.texture_handle !is null)
 	{
 		return cast(uint)(this.width * this.height * 4);
 	}
-}+/
-
-public:
+}

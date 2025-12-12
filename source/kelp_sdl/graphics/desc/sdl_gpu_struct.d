@@ -3,6 +3,58 @@ module kelp_sdl.graphics.desc.sdl_gpu_struct;
 import bindbc.sdl;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
+import kelp_sdl.image.desc;
+
+struct GPUBlitInfo
+{
+	GPUBlitRegion source;
+	GPUBlitRegion destination;
+	GPULoadOp load_op;
+	SDL_FColor clear_color;
+	SdlFlipMode flip_mode;
+	GPUFilter filter;
+	bool cycle;
+	ubyte padding1;
+	ubyte padding2;
+	ubyte padding3;
+}
+
+struct GPUBlitRegion
+{
+	SDL_GPUTexture* texture;
+	uint mip_level;
+	uint layer_or_depth_plane;
+	uint x;
+	uint y;
+	uint w;
+	uint h;
+
+	this(
+		GPUAbstractTexture texture,
+		uint mip_level, uint layer_or_depth_plane,
+		uint x, uint y, uint w, uint h
+	)
+	{
+		this.texture = texture.handle;
+		this.mip_level = mip_level;
+		this.layer_or_depth_plane = layer_or_depth_plane;
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		return;
+	}
+
+	this(
+		GPUAbstractTexture texture,
+	)
+	{
+		this.texture = texture.handle;
+		this.w = texture.width;
+		this.h = texture.height;
+		return;
+	}
+}
 
 struct GPUBufferBinding
 {
@@ -45,8 +97,8 @@ struct GPUColorTargetInfo
 	uint mip_level;
 	uint layer_or_depth_plane;
 	SDL_FColor clear_color;
-	SDL_GPULoadOp load_op;
-	SDL_GPUStoreOp store_op;
+	SDL_GPULoadOp load_op; // = cast(SDL_GPULoadOp)GPULoadOp.clear;
+	SDL_GPUStoreOp store_op; // = cast(SDL_GPUStoreOp)GPUStoreOp.store;
 	SDL_GPUTexture* resolve_texture;
 	uint resolve_mip_level;
 	uint resolve_layer;
@@ -439,9 +491,13 @@ struct GPUBufferRegion
 
 unittest
 {
+	import std.stdio;
 	import std.format;
 
-	static foreach (symbol; ["PrimitiveType", "ColorTargetDescription"])
+	static foreach (symbol; [
+			"PrimitiveType", "ColorTargetInfo", "ColorTargetDescription", "LoadOp",
+			"StoreOp"
+		])
 	{
 		mixin(
 			format(

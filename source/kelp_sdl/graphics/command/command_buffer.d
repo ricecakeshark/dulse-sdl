@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.command.command_buffer;
 
 import bindbc.sdl;
+import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
 
 import std.exception, std.string;
@@ -68,26 +69,12 @@ public:
 		return this;
 	}
 
-	/+typeof(this) blitTexture(GPUAbstractTexture dst_texture, GPUAbstractTexture src_texture)
+	typeof(this) blit_texture(GPUBlitInfo info)
 	in (this.handle !is null)
-	in (dst_texture.handle !is null)
-	in (src_texture.handle !is null)
 	{
-		SDL_GPUBlitInfo blit_info;
-		with (blit_info)
-		{
-			source.texture = src_texture.handle;
-			source.w = 960;
-			source.h = 540;
-			destination.texture = dst_texture.handle;
-			destination.w = 960;
-			destination.h = 540;
-			load_op = SDL_GPU_LOADOP_DONT_CARE;
-			filter = SDL_GPU_FILTER_LINEAR;
-		}
-		SDL_BlitGPUTexture(this.handle, &blit_info);
+		SDL_BlitGPUTexture(this.handle, cast(SDL_GPUBlitInfo*)&info);
 		return this;
-	}+/
+	}
 
 	/+typeof(this) blitTexture(ref GPUBlitInfo blit_info)
 	{
