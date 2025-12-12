@@ -9,8 +9,9 @@ dependency "bindbc-sdl" version="~>2.2.2"
 
 subConfiguration "bindbc-sdl" "static"
 
-targetType "staticLibrary"
+targetType "library"
 targetName "kelp_sdl"
 targetPath "build"
 
 versions "SDL_3_2_18" "SDL_Image_3_2" "SDL_TTF_3_2_2"
+libs "SDL3" "SDL3_image"

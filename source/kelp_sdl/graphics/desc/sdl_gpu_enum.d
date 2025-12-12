@@ -25,7 +25,7 @@ enum GPUBlendOp
 	subtract,
 	reverse_subtract,
 	min,
-	max
+	max,
 }
 
 enum GPUCompareOp
@@ -115,7 +115,7 @@ enum GPUStencilOp
 	decrement_and_wrap,
 }
 
-enum GPUTextureFormat
+enum GPUTextureFormat : uint
 {
 	invalid,
 

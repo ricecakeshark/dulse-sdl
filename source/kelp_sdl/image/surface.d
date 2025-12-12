@@ -89,6 +89,7 @@ class Surface
 			temp_handle = SDL_ConvertSurface(this.surface_handle, SDL_PIXELFORMAT_ABGR8888);
 			SDL_DestroySurface(this.surface_handle);
 			this.surface_handle = temp_handle;
+			SDL_DestroySurface(temp_handle);
 		}
 		return this;
 	}
@@ -101,6 +102,9 @@ class Surface
 	}
 
 	int[4] opIndex(size_t x, size_t y)
+	in (this.surface_handle !is null)
+	in (x <= this.width)
+	in (y <= this.height)
 	{
 		int[4] temp;
 		ubyte[] data;

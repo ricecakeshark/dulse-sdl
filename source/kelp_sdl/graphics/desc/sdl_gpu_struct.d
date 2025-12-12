@@ -35,7 +35,7 @@ struct GPUColorTargetBlendState
 
 struct GPUColorTargetDescription
 {
-	SDL_GPUTextureFormat format;
+	GPUTextureFormat format;
 	GPUColorTargetBlendState blend_state;
 }
 
@@ -111,71 +111,55 @@ struct GPUGraphicsPipelineCreateInfo
 	GPUVertexInputState vertex_input_state;
 	SDL_GPUPrimitiveType primitive_type;
 	GPURasterizerState rasterizer_state;
-	SDL_GPUMultisampleState multisample_state;
+	GPUMultisampleState multisample_state;
 	GPUDepthStencilState depth_stencil_state;
 	GPUGraphicsPipelineTargetInfo target_info;
 
-	SDL_PropertiesID props;
+	SDL_PropertiesID props = 0;
 }
 
 struct GPUGraphicsPipelineTargetInfo
 {
-	const GPUColorTargetDescription* color_target_description;
+	const(GPUColorTargetDescription*) color_target_descriptions;
 	uint num_color_targets;
-	GPUTextureFormat depth_stencil_format;
+	GPUTextureFormat depth_stencil_format = GPUTextureFormat.init;
 	bool has_depth_stencil_target;
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
 
 	this(
-		GPUColorTargetDescription[] description,
-		uint num_target,
-		GPUTextureFormat format,
-		bool has_depth_stencil_target,
+		GPUColorTargetDescription[] description_list
 	)
-	in (num_target <= description.length)
+	in (description_list.length < uint.max)
 	{
-		this.color_target_description = cast(GPUColorTargetDescription*) description;
-		this.num_color_targets = num_target;
-		this.depth_stencil_format = format;
-		this.has_depth_stencil_target = has_depth_stencil_target;
+		this.color_target_descriptions = cast(GPUColorTargetDescription*) description_list.ptr;
+		this.num_color_targets = cast(uint) description_list.length;
 		return;
 	}
 
 	this(
-		GPUColorTargetDescription[] description,
-		uint num_target,
-	)
-	in (num_target <= description.length)
-	{
-		this.color_target_description = cast(GPUColorTargetDescription*) description;
-		this.num_color_targets = num_target;
-		return;
-	}
-
-	this(
-		GPUColorTargetDescription[] description
-	)
-	in (description.length < uint.max)
-	{
-		this.color_target_description = cast(GPUColorTargetDescription*) description;
-		this.num_color_targets = cast(uint) description.length;
-		return;
-	}
-
-	this(
-		GPUColorTargetDescription[] description,
+		GPUColorTargetDescription[] description_list,
 		GPUTextureFormat depth_stencil_format,
 	)
-	in (description.length < uint.max)
+	in (description_list.length < uint.max)
 	{
-		this.color_target_description = cast(GPUColorTargetDescription*) description;
-		this.num_color_targets = cast(uint) description.length;
+		this.color_target_descriptions = cast(GPUColorTargetDescription*) description_list.ptr;
+		this.num_color_targets = cast(uint) description_list.length;
 		this.depth_stencil_format = depth_stencil_format;
 		this.has_depth_stencil_target = true;
 		return;
 	}
+}
+
+struct GPUMultisampleState
+{
+	GPUSampleCount sample_count;
+	uint sample_mask;
+	bool enable_mask;
+	bool enable_alpha_to_coverage;
+	ubyte padding2;
+	ubyte padding3;
 }
 
 struct GPURasterizerState
@@ -450,5 +434,20 @@ struct GPUBufferRegion
 		this.offset = offset;
 		this.size = buffer.size;
 		return;
+	}
+}
+
+unittest
+{
+	import std.format;
+
+	static foreach (symbol; ["PrimitiveType", "ColorTargetDescription"])
+	{
+		mixin(
+			format(
+				"assert( GPU%s.sizeof == SDL_GPU%s.sizeof, \"GPU%s != SDL_GPU...\");",
+				symbol, symbol, symbol,
+		)
+		);
 	}
 }

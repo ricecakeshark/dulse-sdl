@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.desc.sdl_gpu_flags;
 
-enum GPUColorComponentFlags : uint
+enum GPUColorComponentFlags : ubyte
 {
 	r = 1u << 0,
 	g = 1u << 1,
@@ -28,4 +28,19 @@ enum GPUTextureUsageFlags : uint
 	compute_storage_read = 1u << 4,
 	compute_storage_write = 1u << 5,
 	compute_storage_simultaneous_read_write = 1u << 6
+}
+
+unittest
+{
+	import bindbc.sdl;
+	import std.format;
+
+	static foreach (symbol; [
+			"ColorComponentFlags", "ShaderFormat", "TextureUsageFlags"
+		])
+	{
+		mixin(
+			format("assert( GPU%s.sizeof == SDL_GPU%s.sizeof,\"%s\");", symbol, symbol, symbol)
+		);
+	}
 }

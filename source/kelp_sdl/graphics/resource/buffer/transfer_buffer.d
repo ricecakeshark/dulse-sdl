@@ -112,9 +112,10 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return;
 	}
 
-	typeof(this) create(uint size)
+	typeof(this) create(size_t size)
+	in (size <= uint.max)
 	{
-		this.createBySize(size);
+		this.createBySize(cast(uint) size);
 		return this;
 	}
 
@@ -157,9 +158,10 @@ class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
 		return;
 	}
 
-	typeof(this) create(uint size)
+	typeof(this) create(size_t size)
+	in (size <= uint.max)
 	{
-		super.createBySize(size);
+		super.createBySize(cast(uint) size);
 		return this;
 	}
 
