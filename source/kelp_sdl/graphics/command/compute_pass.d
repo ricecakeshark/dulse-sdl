@@ -7,6 +7,8 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer.storage_buffer;
 import kelp_sdl.graphics.resource.texture;
 
+import std.exception,std.string;
+
 class GPUComputePass
 {
 	SDL_GPUComputePass* pass_handle;
@@ -26,17 +28,41 @@ class GPUComputePass
 		return this.pass_handle;
 	}
 
-	typeof(this) begin(GPUCommandBuffer command_buffer, GPUTexture texture)
+	typeof(this) begin(
+		GPUCommandBuffer command_buffer,
+		GPUStorageTextureReadWriteBinding[] texture_binding_list,
+	)
+	in (command_buffer !is null)
+	in (command_buffer.handle !is null)
+	in (texture_binding_list.length < uint.max)
 	{
-		GPUStorageTextureReadWriteBinding rw_binding;
-		rw_binding = GPUStorageTextureReadWriteBinding(
-			texture.handle, 0, 0, true,
-		);
 		this.pass_handle = SDL_BeginGPUComputePass(
 			command_buffer.handle,
-			cast(SDL_GPUStorageTextureReadWriteBinding*)&rw_binding,
-			1, null, 0,
+			cast(SDL_GPUStorageTextureReadWriteBinding*) texture_binding_list.ptr,
+			cast(uint) texture_binding_list.length,
+			null,
+			cast(uint) 0u,
 		);
+		enforce(this.pass_handle !is null);
+		return this;
+	}
+
+	typeof(this) begin(
+		GPUCommandBuffer command_buffer,
+		GPUStorageTextureReadWriteBinding[] texture_binding_list,
+		GPUStorageBufferReadWriteBinding[] buffer_binding_list,
+	)
+	in (texture_binding_list.length < uint.max)
+	in (buffer_binding_list.length < uint.max)
+	{
+		this.pass_handle = SDL_BeginGPUComputePass(
+			command_buffer.handle,
+			cast(SDL_GPUStorageTextureReadWriteBinding*) texture_binding_list.ptr,
+			cast(uint) texture_binding_list.length,
+			cast(SDL_GPUStorageBufferReadWriteBinding*) buffer_binding_list.ptr,
+			cast(uint) buffer_binding_list.length,
+		);
+		enforce(this.pass_handle !is null);
 		return this;
 	}
 
@@ -78,10 +104,10 @@ class GPUComputePass
 		return this;
 	}
 
-	typeof(this) dispatch(int x, int y, int z)
+	typeof(this) dispatch(int groupcount_x, int groupcount_y, int groupcount_z)
 	in (this.handle !is null)
 	{
-		SDL_DispatchGPUCompute(this.handle, x, y, z);
+		SDL_DispatchGPUCompute(this.handle, groupcount_x, groupcount_y, groupcount_z);
 		return this;
 	}
 }

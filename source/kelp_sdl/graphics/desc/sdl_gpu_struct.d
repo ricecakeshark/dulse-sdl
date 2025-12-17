@@ -125,6 +125,17 @@ struct GPUComputePipelineCreateInfo
 	uint threadcount_z;
 
 	SDL_PropertiesID props;
+
+	this(ShaderCode shader_code)
+	{
+		import std.string;
+
+		this.code = cast(const(ubyte)*) shader_code.code;
+		this.code_size = shader_code.code.length;
+		this.entrypoint = toStringz(shader_code.entry_point);
+		this.format = cast(GPUShaderFormat)shader_code.frontend_format;
+		return;
+	}
 }
 
 struct GPUDepthStencilState
@@ -252,14 +263,14 @@ struct GPUShaderCreateInfo
 	size_t code_size;
 	const ubyte* code;
 	const char* entrypoint;
-	SDL_GPUShaderFormat format;
-	SDL_GPUShaderStage stage;
+	GPUShaderFormat format;
+	GPUShaderStage stage;
 	uint num_samplers;
 	uint num_storage_textures;
 	uint num_storage_buffers;
 	uint num_uniform_buffers;
 
-	this(ShaderCode shader_code, SDL_GPUShaderStage stage, GPUShaderArguments shader_args)
+	this(ShaderCode shader_code, GPUShaderStage stage, GPUShaderArguments shader_args)
 	{
 		import std.string : toStringz;
 
@@ -274,6 +285,32 @@ struct GPUShaderCreateInfo
 		this.num_storage_textures = shader_args.storage_texture_count;
 		return;
 	}
+
+	this(
+		ShaderCode shader_code,
+		GPUShaderFormat frontend_format,
+		GPUShaderStage stage,
+		GPUShaderArguments shader_args
+	)
+	{
+		import std.string : toStringz;
+
+		this.code = cast(const(ubyte)*) shader_code.code;
+		this.code_size = shader_code.code.length;
+		this.entrypoint = toStringz(shader_code.entry_point);
+		this.format = frontend_format;
+		this.stage = stage;
+		this.num_samplers = shader_args.sampler_count;
+		this.num_uniform_buffers = shader_args.uniform_buffer_count;
+		this.num_storage_buffers = shader_args.storage_buffer_count;
+		this.num_storage_textures = shader_args.storage_texture_count;
+		return;
+	}
+
+	this(ShaderCode shader_code)
+	{
+
+	}
 }
 
 struct GPUStencilOpState
@@ -282,6 +319,22 @@ struct GPUStencilOpState
 	GPUStencilOp pass_op;
 	GPUStencilOp depth_fail_op;
 	GPUCompareOp compare_op;
+}
+
+struct GPUStorageBufferReadWriteBinding
+{
+	SDL_GPUBuffer* buffer;
+	bool cycle;
+	ubyte padding1;
+	ubyte padding2;
+	ubyte padding3;
+
+	this(GPUBuffer buffer, bool cycle = false)
+	{
+		this.buffer = buffer.handle;
+		this.cycle = cycle;
+		return;
+	}
 }
 
 struct GPUStorageTextureReadWriteBinding
@@ -293,6 +346,21 @@ struct GPUStorageTextureReadWriteBinding
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
+
+	this(GPUTexture texture)
+	{
+		this.texture = texture.handle;
+		return;
+	}
+
+	this(GPUTexture texture, uint mip_level, uint layer, bool cycle = false)
+	{
+		this.texture = texture.handle;
+		this.mip_level = mip_level;
+		this.layer = layer;
+		this.cycle = cycle;
+		return;
+	}
 }
 
 struct GPUTextureCreateInfo

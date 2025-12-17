@@ -66,8 +66,14 @@ final class GPUVertexShader : GPUShader!(GPUVertexShader)
 	{
 		ShaderCode shader_code;
 		shader_code = ShaderCode(device, shader_filename);
-		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
+		/+GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
 			shader_code, SDL_GPU_SHADERSTAGE_VERTEX, shader_args
+		);+/
+		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
+			shader_code,
+			this.device.get_shader_format(),
+			GPUShaderStage.vertex,
+			shader_args,
 		);
 		super.create(shader_create_info);
 		return this;
@@ -91,7 +97,7 @@ final class GPUFragmentShader : GPUShader!(GPUVertexShader)
 		ShaderCode shader_code;
 		shader_code = ShaderCode(device, shader_filename);
 		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
-			shader_code, SDL_GPU_SHADERSTAGE_FRAGMENT, shader_args
+			shader_code, GPUShaderStage.fragment, shader_args
 		);
 		super.create(shader_create_info);
 		return this;
@@ -102,30 +108,64 @@ struct ShaderCode
 {
 	public string code;
 	public string entry_point;
-	public SDL_GPUShaderFormat frontend_format;
+	public GPUShaderFormat frontend_format;
 
 	this(GPUDevice device, string shader_filename)
 	{
 		string shader_uri;
-		SDL_GPUShaderFormat backend_formats = device.get_shader_format();
-		frontend_format = SDL_GPU_SHADERFORMAT_INVALID;
+		scope GPUShaderFormat backend_formats;
+		backend_formats = device.get_shader_format();
+		frontend_format = GPUShaderFormat.invalid;
 
-		if (backend_formats & SDL_GPU_SHADERFORMAT_SPIRV)
+		if (backend_formats & GPUShaderFormat.spirv)
 		{
 			shader_uri = format("./shader/compiled/SPIRV/%s.spv", shader_filename);
-			frontend_format = SDL_GPU_SHADERFORMAT_SPIRV;
+			frontend_format = GPUShaderFormat.spirv;
 			entry_point = "main";
 		}
-		else if (backend_formats & SDL_GPU_SHADERFORMAT_MSL)
+		else if (backend_formats & GPUShaderFormat.msl)
 		{
 			shader_uri = format("./shader/compiled/MSL/%s.msl", shader_filename);
-			frontend_format = SDL_GPU_SHADERFORMAT_MSL;
+			frontend_format = GPUShaderFormat.msl;
 			entry_point = "main0";
 		}
-		else if (backend_formats & SDL_GPU_SHADERFORMAT_DXIL)
+		else if (backend_formats & GPUShaderFormat.dxil)
 		{
 			shader_uri = format("./shader/compiled/DXIL/%s.dxil", shader_filename);
-			frontend_format = SDL_GPU_SHADERFORMAT_DXIL;
+			frontend_format = GPUShaderFormat.dxil;
+			entry_point = "main";
+		}
+		else
+		{
+			enforce(false, "unrecognized backend shader format");
+		}
+
+		enforce(isFile(shader_uri), "shader file was not found.(" ~ shader_uri ~ ")");
+		this.code = cast(string) read(shader_uri);
+		return;
+	}
+
+	this(GPUShaderFormat backend_formats,string shader_filename)
+	{
+		string shader_uri;
+		frontend_format = GPUShaderFormat.invalid;
+
+		if (backend_formats & GPUShaderFormat.spirv)
+		{
+			shader_uri = format("./shader/compiled/SPIRV/%s.spv", shader_filename);
+			frontend_format = GPUShaderFormat.spirv;
+			entry_point = "main";
+		}
+		else if (backend_formats & GPUShaderFormat.msl)
+		{
+			shader_uri = format("./shader/compiled/MSL/%s.msl", shader_filename);
+			frontend_format = GPUShaderFormat.msl;
+			entry_point = "main0";
+		}
+		else if (backend_formats & GPUShaderFormat.dxil)
+		{
+			shader_uri = format("./shader/compiled/DXIL/%s.dxil", shader_filename);
+			frontend_format = GPUShaderFormat.dxil;
 			entry_point = "main";
 		}
 		else

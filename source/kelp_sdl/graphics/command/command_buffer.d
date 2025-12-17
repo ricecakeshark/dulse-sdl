@@ -18,7 +18,7 @@ class GPUCommandBuffer
 	}
 
 public:
-	@property SDL_GPUCommandBuffer* handle() pure nothrow @nogc @safe
+	@property inout(SDL_GPUCommandBuffer*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.command_buffer_handle;
 	}
@@ -26,6 +26,7 @@ public:
 	typeof(this) acquire()
 	{
 		this.command_buffer_handle = SDL_AcquireGPUCommandBuffer(this.device.handle());
+		enforce(this.command_buffer_handle !is null);
 		return this;
 	}
 

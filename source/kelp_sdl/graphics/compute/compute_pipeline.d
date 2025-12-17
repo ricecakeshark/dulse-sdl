@@ -2,6 +2,8 @@ module kelp_sdl.graphics.compute.compute_pipeline;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
+import kelp_sdl.graphics.desc;
+import std.exception;
 
 class GPUComputePipeline
 {
@@ -25,8 +27,13 @@ class GPUComputePipeline
 		return this.pipeline_handle;
 	}
 
-	typeof(this) create()
+	typeof(this) create(GPUComputePipelineCreateInfo create_info)
 	{
+		this.pipeline_handle = SDL_CreateGPUComputePipeline(
+			this.device.handle,
+			cast(SDL_GPUComputePipelineCreateInfo*)&create_info,
+		);
+		enforce(this.pipeline_handle !is null);
 		return this;
 	}
 
