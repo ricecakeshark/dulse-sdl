@@ -52,6 +52,8 @@ class GPUComputePass
 		GPUStorageTextureReadWriteBinding[] texture_binding_list,
 		GPUStorageBufferReadWriteBinding[] buffer_binding_list,
 	)
+	in (command_buffer !is null)
+	in (command_buffer.handle !is null)
 	in (texture_binding_list.length < uint.max)
 	in (buffer_binding_list.length < uint.max)
 	{
