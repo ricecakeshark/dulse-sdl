@@ -8,7 +8,7 @@ abstract class GPUAbstractTexture
 {
 	SDL_GPUTexture* texture_handle;
 	GPUDevice device;
-	protected uint _width, _height;
+	uint _width, _height;
 
 	@property inout(SDL_GPUTexture*) handle() inout pure nothrow @nogc @safe
 	{

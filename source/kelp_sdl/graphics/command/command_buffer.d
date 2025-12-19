@@ -3,6 +3,7 @@ module kelp_sdl.graphics.command.command_buffer;
 import bindbc.sdl;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
+import kelp_sdl.graphics.resource.texture.swapchain_texture;
 
 import std.exception, std.string;
 
@@ -10,10 +11,18 @@ class GPUCommandBuffer
 {
 	SDL_GPUCommandBuffer* command_buffer_handle;
 	GPUDevice device;
+	GPUWindow window;
 
 	this(GPUDevice device)
 	{
 		this.device = device;
+		return;
+	}
+
+	this(GPUDevice device, GPUWindow window)
+	{
+		this.device = device;
+		this.window = window;
 		return;
 	}
 
@@ -23,10 +32,24 @@ public:
 		return this.command_buffer_handle;
 	}
 
-	typeof(this) acquire()
+	typeof(this) acquire_buffer()
 	{
 		this.command_buffer_handle = SDL_AcquireGPUCommandBuffer(this.device.handle());
 		enforce(this.command_buffer_handle !is null);
+		return this;
+	}
+
+	typeof(this) acquire_texture(
+		ref GPUSwapchainTexture swapchain_texture,
+	)
+	in (this.window !is null)
+	{
+		SDL_WaitAndAcquireGPUSwapchainTexture(
+			this.handle, this.window.handle,
+			&(swapchain_texture.texture_handle),
+			&(swapchain_texture._width),
+			&(swapchain_texture._height),
+		);
 		return this;
 	}
 
@@ -60,7 +83,7 @@ public:
 		return this;
 	}
 
-	typeof(this) push_compute(Type)(Type compute_uniform_data, uint first_slot = 0)
+	typeof(this) push_uniform(Type)(Type compute_uniform_data, uint first_slot = 0)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUComputeUniformData(
