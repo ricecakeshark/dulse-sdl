@@ -23,6 +23,8 @@ final class GPUTexture : GPUAbstractTexture
 	}
 
 	typeof(this) create(GPUTextureCreateInfo create_info)
+	in (create_info.width >= 1)
+	in (create_info.height >= 1)
 	{
 		this.texture_handle = SDL_CreateGPUTexture(
 			this.device.handle, cast(SDL_GPUTextureCreateInfo*)&create_info

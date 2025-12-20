@@ -2,6 +2,7 @@ module kelp_sdl.graphics.resource.buffer.buffer;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
+import kelp_sdl.graphics.desc;
 import std.exception : enforce;
 
 abstract class GPUBuffer
@@ -9,7 +10,7 @@ abstract class GPUBuffer
 	SDL_GPUBuffer* buffer_handle;
 	GPUDevice device;
 	void[] data;
-	uint size;
+	uint _size;
 
 	this(GPUDevice device)
 	{
@@ -29,16 +30,9 @@ public:
 		return this.buffer_handle;
 	}
 
-	@property uint count() const pure nothrow @nogc @safe
-	in (this.data !is null)
+	@property uint size() const pure nothrow @nogc @safe
 	{
-		return cast(uint)(this.data.length);
-	}
-
-	@property uint sizeInBytes() const pure nothrow @nogc @safe
-	in (this.data !is null)
-	{
-		return cast(uint)(this.data[0].sizeof * this.data.length);
+		return cast(uint)(this._size);
 	}
 
 	typeof(this) release()
@@ -53,13 +47,13 @@ public:
 	}
 
 protected:
-	typeof(this) createByData(
+	deprecated typeof(this) create_by_data(
 		SDL_GPUBufferUsageFlags usage_flags,
 		void[] setting_data,
 	)
 	in (setting_data[0].sizeof * setting_data.length <= uint.max, "setting_data is oversized")
 	{
-		SDL_GPUBufferCreateInfo buffer_create_info;
+		scope SDL_GPUBufferCreateInfo buffer_create_info;
 		buffer_create_info = SDL_GPUBufferCreateInfo(
 			usage_flags,
 			cast(uint)(setting_data[0].sizeof * setting_data.length)
@@ -67,35 +61,49 @@ protected:
 		this.buffer_handle = SDL_CreateGPUBuffer(
 			this.device.handle, &buffer_create_info
 		);
-		this.size = cast(uint)(setting_data[0].sizeof * setting_data.length);
+		enforce(this.buffer_handle !is null);
+		this.data = setting_data;
+		this._size = cast(uint)(setting_data[0].sizeof * setting_data.length);
 		return this;
 	}
 
-	typeof(this) createBySize(
+	typeof(this) create_by_info(
+		GPUBufferCreateInfo create_info,
+	)
+	in (this.device.handle !is null)
+	{
+		this.buffer_handle = SDL_CreateGPUBuffer(
+			this.device.handle, cast(SDL_GPUBufferCreateInfo*)&create_info
+		);
+		enforce(this.buffer_handle !is null);
+		this._size = create_info.size;
+		return this;
+	}
+
+	typeof(this) create_by_size(
 		SDL_GPUBufferUsageFlags usage_flags,
 		size_t size,
 	)
 	in (this.device.handle !is null)
 	in (size <= uint.max)
 	{
-		SDL_GPUBufferCreateInfo buffer_create_info;
+		scope SDL_GPUBufferCreateInfo buffer_create_info;
 		buffer_create_info = SDL_GPUBufferCreateInfo(
 			usage_flags, cast(uint) size,
 		);
-		this.size = cast(uint) size;
+		this._size = cast(uint) size;
 		this.buffer_handle = SDL_CreateGPUBuffer(
 			this.device.handle, &buffer_create_info
 		);
 		enforce(this.buffer_handle !is null);
-		this.data.length = size;
 		return this;
 	}
 
-	typeof(this) setData(void[] set_data)
+	typeof(this) set_data(void[] setting_data)
 	in (this.handle !is null)
-	in (set_data[0].sizeof * set_data.length == this.size, "mismatched buffer size with setting size")
+	in (setting_data[0].sizeof * setting_data.length == this.size, "mismatched buffer size with setting size")
 	{
-		this.data = set_data;
+		this.data = setting_data;
 		return this;
 	}
 }

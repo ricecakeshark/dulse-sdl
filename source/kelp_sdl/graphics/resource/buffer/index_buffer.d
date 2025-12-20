@@ -13,21 +13,15 @@ class GPUIndexBuffer : GPUBuffer
 	}
 
 public:
-	typeof(this) create(ushort[] data)
+	typeof(this) create(void[] data)
 	{
-		super.createByData(SDL_GPU_BUFFERUSAGE_INDEX, data);
+		super.create_by_size(SDL_GPU_BUFFERUSAGE_INDEX, data[0].sizeof * data.length);
 		return this;
 	}
 
 	typeof(this) create(size_t size)
 	{
-		super.createBySize(SDL_GPU_BUFFERUSAGE_INDEX, size);
-		return this;
-	}
-
-	typeof(this) set(ushort[] data)
-	{
-		super.setData(data);
+		super.create_by_size(SDL_GPU_BUFFERUSAGE_INDEX, size);
 		return this;
 	}
 }

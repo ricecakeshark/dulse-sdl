@@ -70,6 +70,22 @@ struct GPUBufferBinding
 	}
 }
 
+struct GPUBufferCreateInfo
+{
+	GPUBufferUsageFlags usage;
+	uint size;
+
+	SDL_PropertiesID props;
+
+	this(GPUBufferUsageFlags flags, size_t size)
+	in (size <= uint.max)
+	{
+		this.usage = flags;
+		this.size = cast(uint) size;
+		return;
+	}
+}
+
 struct GPUColorTargetBlendState
 {
 	GPUBlendFactor src_color_blendfactor;
@@ -133,7 +149,7 @@ struct GPUComputePipelineCreateInfo
 		this.code = cast(const(ubyte)*) shader_code.code;
 		this.code_size = shader_code.code.length;
 		this.entrypoint = toStringz(shader_code.entry_point);
-		this.format = cast(GPUShaderFormat)shader_code.frontend_format;
+		this.format = cast(GPUShaderFormat) shader_code.frontend_format;
 		return;
 	}
 }
@@ -398,6 +414,15 @@ struct GPUTextureRegion
 	uint w;
 	uint h;
 	uint d;
+
+	/+this(GPUTexture texture)
+	{
+		this.texture = texture.handle;
+		this.w = texture.width;
+		this.h = texture.height;
+		this.d = 1u;
+		return;
+	}+/
 }
 
 struct GPUTextureSamplerBinding
@@ -423,6 +448,21 @@ struct GPUTextureTransferInfo
 	uint offset;
 	uint pixels_per_row;
 	uint rows_per_layer;
+
+	this(GPUTextureTransferBuffer texture_transfer_buffer, uint offset)
+	{
+		this.transfer_buffer = texture_transfer_buffer.handle;
+		this.offset = offset;
+		return;
+	}
+}
+
+struct GPUTransferBufferCreateInfo
+{
+	GPUTransferBufferUsage usage;
+	uint size;
+
+	SDL_PropertiesID props;
 }
 
 struct GPUVertexBufferDescription

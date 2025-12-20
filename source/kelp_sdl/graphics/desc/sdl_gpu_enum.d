@@ -264,6 +264,12 @@ enum GPUTextureType
 	cube_array
 }
 
+enum GPUTransferBufferUsage
+{
+	upload,
+	download,
+}
+
 enum GPUVertexElementFormat
 {
 	invalid,

@@ -108,6 +108,19 @@ class GPURenderPass
 		return this;
 	}
 
+	typeof(this) bind(GPUTexture[] texture_list, uint first_slot = 0u)
+	{
+		SDL_GPUTexture*[] texture_binding_list;
+		texture_binding_list = texture_list.map!(texture => texture.handle).array();
+		SDL_BindGPUFragmentStorageTextures(
+			this.pass_handle,
+			first_slot,
+			cast(SDL_GPUTexture**) texture_binding_list.ptr,
+			cast(uint) texture_list.length,
+		);
+		return this;
+	}
+
 	typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot)
 	in (this.handle !is null)
 	in (binding_list.length >= 1)
@@ -121,8 +134,6 @@ class GPURenderPass
 		);
 		return this;
 	}
-
-	// bind(GPUTextureSamplerBinding[])
 
 	typeof(this) set(const GPUViewport viewport)
 	in (this.handle !is null)

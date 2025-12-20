@@ -2,6 +2,7 @@ module kelp_sdl.graphics.resource.buffer.transfer_buffer;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core.gpu_device;
+import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 import kelp_sdl.graphics.resource.texture;
 import kelp_sdl.image;
@@ -14,7 +15,7 @@ class GPUTransferBuffer(Derived)
 {
 	SDL_GPUTransferBuffer* buffer_handle;
 	GPUDevice device;
-	uint size;
+	uint _size;
 	void* transfer_ptr;
 
 	this(GPUDevice device)
@@ -34,9 +35,24 @@ class GPUTransferBuffer(Derived)
 		return this.buffer_handle;
 	}
 
-	Derived createBySize(uint size)
+	@property inout(uint) size() inout pure nothrow @nogc @safe
 	{
-		this.size = size;
+		return this._size;
+	}
+
+	Derived create_by_info(GPUTransferBufferCreateInfo create_info)
+	{
+		this._size = create_info.size;
+		this.buffer_handle = SDL_CreateGPUTransferBuffer(
+			this.device.handle, cast(SDL_GPUTransferBufferCreateInfo*)&create_info
+		);
+		enforce(this.buffer_handle !is null);
+		return cast(Derived) this;
+	}
+
+	Derived create_by_size(uint size)
+	{
+		this._size = size;
 		SDL_GPUTransferBufferCreateInfo create_info = {
 			usage: SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
 			size: size,
@@ -46,13 +62,13 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived createByData(void[] data)
+	deprecated Derived create_by_data(void[] data)
 	in (data[0].sizeof * data.length <= uint.max, "data is oversized than uint.max")
 	{
-		this.size = cast(uint)(data[0].sizeof * data.length);
+		this._size = cast(uint)(data[0].sizeof * data.length);
 		SDL_GPUTransferBufferCreateInfo create_info = {
 			usage: SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
-			size: cast(uint)(data[0].sizeof * data.length),
+			size: this.size,
 		};
 		this.buffer_handle = SDL_CreateGPUTransferBuffer(this.device.handle, &create_info);
 		enforce(this.buffer_handle !is null);
@@ -70,12 +86,12 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived map()
+	Derived map(bool cycle = false)
 	in (this.handle !is null)
 	in (this.device.handle !is null)
 	{
 		this.transfer_ptr = cast(void*) SDL_MapGPUTransferBuffer(
-			this.device.handle, this.handle, false,
+			this.device.handle, this.handle, cycle,
 		);
 		enforce(this.transfer_ptr !is null);
 		return cast(Derived) this;
@@ -112,10 +128,16 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return;
 	}
 
+	typeof(this) create(GPUTransferBufferCreateInfo create_info)
+	{
+		super.create_by_info(create_info);
+		return this;
+	}
+
 	typeof(this) create(size_t size)
 	in (size <= uint.max)
 	{
-		this.createBySize(cast(uint) size);
+		this.create_by_size(cast(uint) size);
 		return this;
 	}
 
@@ -131,6 +153,7 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 	typeof(this) set(TypeList...)(TypeList data_list)
 	in
 	{
+		assert(this.size >= 1);
 		scope size_t temp_size;
 		foreach (data; data_list)
 		{
@@ -158,10 +181,16 @@ class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
 		return;
 	}
 
+	typeof(this) create(GPUTransferBufferCreateInfo create_info)
+	{
+		super.create_by_info(create_info);
+		return this;
+	}
+
 	typeof(this) create(size_t size)
 	in (size <= uint.max)
 	{
-		super.createBySize(cast(uint) size);
+		super.create_by_size(cast(uint) size);
 		return this;
 	}
 
@@ -176,14 +205,4 @@ class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
 		);
 		return this;
 	}
-
-	/+@disable typeof(this) set(GPUTexture texture)
-	{
-		memcpy(
-			this.transfer_ptr,
-			cast(void*)texture.data,
-			texture.size,
-		);
-		return this;
-	}+/
 }

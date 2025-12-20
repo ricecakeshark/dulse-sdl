@@ -1,5 +1,15 @@
 module kelp_sdl.graphics.desc.sdl_gpu_flags;
 
+enum GPUBufferUsageFlags : uint
+{
+	vertex = 1u << 0,
+	index = 1u << 1,
+	indirect = 1u << 2,
+	graphics_storage_read = 1u << 3,
+	compute_storage_read = 1u << 4,
+	compute_storage_write = 1u << 5,
+}
+
 enum GPUColorComponentFlags : ubyte
 {
 	r = 1u << 0,

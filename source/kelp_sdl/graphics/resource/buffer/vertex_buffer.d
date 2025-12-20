@@ -15,19 +15,19 @@ class GPUVertexBuffer : GPUBuffer
 public:
 	typeof(this) create(void[] data)
 	{
-		super.createByData(SDL_GPU_BUFFERUSAGE_VERTEX, data);
+		super.create_by_size(SDL_GPU_BUFFERUSAGE_VERTEX, data[0].sizeof * data.length);
 		return this;
 	}
 
 	typeof(this) create(size_t size)
 	{
-		super.createBySize(SDL_GPU_BUFFERUSAGE_VERTEX, size);
+		super.create_by_size(SDL_GPU_BUFFERUSAGE_VERTEX, size);
 		return this;
 	}
 
 	typeof(this) set(void[] data)
 	{
-		super.setData(data);
+		super.set_data(data);
 		return this;
 	}
 }
