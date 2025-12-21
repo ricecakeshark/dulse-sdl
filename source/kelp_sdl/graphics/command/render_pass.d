@@ -171,24 +171,6 @@ class GPURenderPass
 		return this;
 	}
 
-	deprecated typeof(this) draw(
-		uint num_vertices,
-		uint num_instance,
-		uint first_vertex = 0,
-		uint first_instance = 0,
-	)
-	in (this.handle !is null)
-	{
-		SDL_DrawGPUPrimitives(
-			this.handle,
-			num_vertices,
-			num_instance,
-			first_vertex,
-			first_instance,
-		);
-		return this;
-	}
-
 	typeof(this) draw_indexed(
 		ParamIndexedPrimitive param
 	)
@@ -205,31 +187,12 @@ class GPURenderPass
 		return this;
 	}
 
-	deprecated typeof(this) draw_indexed(
-		uint num_indices,
-		uint num_instances,
-		uint first_index = 0,
-		int vertex_offset,
-		uint first_instance = 0,
-	)
-	in (this.handle !is null)
-	{
-		SDL_DrawGPUIndexedPrimitives(
-			this.handle,
-			num_indices,
-			num_instances,
-			first_index,
-			vertex_offset,
-			first_instance,
-		);
-		return this;
-	}
-
 	typeof(this) draw_indirect(
 		GPUDrawBuffer draw_buffer,
 		ParamPrimitiveIndirect param
 	)
 	in (this.handle !is null)
+	in (draw_buffer.handle !is null)
 	{
 		SDL_DrawGPUPrimitivesIndirect(
 			this.handle,
@@ -240,27 +203,12 @@ class GPURenderPass
 		return this;
 	}
 
-	deprecated typeof(this) draw_indirect(
-		GPUDrawBuffer draw_buffer,
-		uint offset,
-		uint draw_count
-	)
-	in (this.handle !is null)
-	{
-		SDL_DrawGPUPrimitivesIndirect(
-			this.handle,
-			draw_buffer.handle,
-			offset,
-			draw_count
-		);
-		return this;
-	}
-
 	typeof(this) draw_indexed_indirect(
 		GPUDrawBuffer draw_buffer,
 		ParamPrimitiveIndirect param
 	)
 	in (this.handle !is null)
+	in (draw_buffer.handle !is null)
 	{
 		SDL_DrawGPUIndexedPrimitivesIndirect(
 			this.handle,
@@ -271,19 +219,4 @@ class GPURenderPass
 		return this;
 	}
 
-	deprecated typeof(this) draw_indexed_indirect(
-		GPUDrawBuffer draw_buffer,
-		uint offset,
-		uint draw_count,
-	)
-	in (this.handle !is null)
-	{
-		SDL_DrawGPUIndexedPrimitivesIndirect(
-			this.handle,
-			draw_buffer.handle,
-			offset,
-			draw_count,
-		);
-		return this;
-	}
 }
