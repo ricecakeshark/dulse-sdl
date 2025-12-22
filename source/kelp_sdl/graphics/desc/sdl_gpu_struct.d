@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.desc.sdl_gpu_struct;
 
 import bindbc.sdl;
+import kelp_core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import kelp_sdl.image.desc;
@@ -112,9 +113,9 @@ struct GPUColorTargetInfo
 	SDL_GPUTexture* texture;
 	uint mip_level;
 	uint layer_or_depth_plane;
-	SDL_FColor clear_color;
-	SDL_GPULoadOp load_op; // = cast(SDL_GPULoadOp)GPULoadOp.clear;
-	SDL_GPUStoreOp store_op; // = cast(SDL_GPUStoreOp)GPUStoreOp.store;
+	Color clear_color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	GPULoadOp load_op;
+	GPUStoreOp store_op;
 	SDL_GPUTexture* resolve_texture;
 	uint resolve_mip_level;
 	uint resolve_layer;
@@ -122,6 +123,34 @@ struct GPUColorTargetInfo
 	bool cycle_resolve_texture;
 	ubyte padding1;
 	ubyte padding2;
+
+	this(GPUAbstractTexture texture, GPULoadOp load_op, GPUStoreOp store_op)
+	{
+		this.texture = texture.handle;
+		this.load_op = load_op;
+		this.store_op = store_op;
+		return;
+	}
+
+	this(
+		GPUAbstractTexture texture, GPULoadOp load_op, GPUStoreOp store_op,
+		uint mip_level,
+		uint layer_count_or_depth,
+	)
+	{
+		this.texture = texture.handle;
+		this.load_op = load_op;
+		this.store_op = store_op;
+		this.mip_level = mip_level;
+		this.store_op = store_op;
+		return;
+	}
+
+	invariant
+	{
+		if (cycle == true)
+			assert(this.load_op != GPULoadOp.load);
+	}
 }
 
 struct GPUComputePipelineCreateInfo
