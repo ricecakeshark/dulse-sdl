@@ -11,13 +11,27 @@ struct GPUBlitInfo
 	GPUBlitRegion source;
 	GPUBlitRegion destination;
 	GPULoadOp load_op;
-	SDL_FColor clear_color;
+	Color clear_color;
 	SdlFlipMode flip_mode;
 	GPUFilter filter;
 	bool cycle;
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
+
+	this(
+		GPUBlitRegion source,
+		GPUBlitRegion dest,
+		GPULoadOp load_op,
+		Color color = Color(0.0f, 0.0f, 0.0f, 1.0f),
+	)
+	{
+		this.source = source;
+		this.destination = dest;
+		this.load_op = load_op;
+		this.clear_color = color;
+		return;
+	}
 }
 
 struct GPUBlitRegion
@@ -29,6 +43,33 @@ struct GPUBlitRegion
 	uint y;
 	uint w;
 	uint h;
+
+
+	this(
+		GPUAbstractTexture texture,
+		uint x,uint y,
+		uint w,uint h,
+	)
+	{
+		this.texture = texture.handle;
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		return;
+	}
+
+	this(
+		GPUAbstractTexture texture,
+	)
+	{
+		this.texture = texture.handle;
+		this.x = 0u;
+		this.y = 0u;
+		this.w = texture.width;
+		this.h = texture.height;
+		return;
+	}
 
 	this(
 		GPUAbstractTexture texture,
@@ -43,16 +84,6 @@ struct GPUBlitRegion
 		this.y = y;
 		this.w = w;
 		this.h = h;
-		return;
-	}
-
-	this(
-		GPUAbstractTexture texture,
-	)
-	{
-		this.texture = texture.handle;
-		this.w = texture.width;
-		this.h = texture.height;
 		return;
 	}
 }
@@ -133,15 +164,17 @@ struct GPUColorTargetInfo
 	}
 
 	this(
-		GPUAbstractTexture texture, GPULoadOp load_op, GPUStoreOp store_op,
+		GPUAbstractTexture texture,
+		GPULoadOp load_op, GPUStoreOp store_op,
 		uint mip_level,
-		uint layer_count_or_depth,
+		uint depth,
 	)
 	{
 		this.texture = texture.handle;
 		this.load_op = load_op;
 		this.store_op = store_op;
 		this.mip_level = mip_level;
+		this.layer_or_depth_plane = depth;
 		this.store_op = store_op;
 		return;
 	}
