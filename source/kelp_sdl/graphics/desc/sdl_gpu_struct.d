@@ -261,7 +261,7 @@ struct GPUGraphicsPipelineCreateInfo
 
 struct GPUGraphicsPipelineTargetInfo
 {
-	const(GPUColorTargetDescription*) color_target_descriptions;
+	GPUColorTargetDescription* color_target_descriptions;
 	uint num_color_targets;
 	GPUTextureFormat depth_stencil_format = GPUTextureFormat.init;
 	bool has_depth_stencil_target;
@@ -545,9 +545,9 @@ struct GPUVertexAttribute
 
 struct GPUVertexInputState
 {
-	const GPUVertexBufferDescription* vertex_buffer_descriptions;
+	GPUVertexBufferDescription* vertex_buffer_descriptions;
 	uint num_vertex_buffers;
-	const GPUVertexAttribute* vertex_attributes;
+	GPUVertexAttribute* vertex_attributes;
 	uint num_vertex_attributes;
 
 	this(
