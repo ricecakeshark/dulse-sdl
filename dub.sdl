@@ -5,7 +5,7 @@ copyright "Copyright © 2025, RiceShark"
 license "proprietary"
 
 dependency "kelp-core" path="..\\kelp_core"
-dependency "bindbc-sdl" version="~>2.2.2"
+dependency "bindbc-sdl" version="~>2.3.1"
 
 subConfiguration "bindbc-sdl" "static"
 
