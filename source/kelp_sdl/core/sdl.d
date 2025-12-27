@@ -1,4 +1,4 @@
-module kelp_sdl.kelp_sdl;
+module kelp_sdl.core.sdl;
 
 import kelp_sdl;
 import kelp_core;

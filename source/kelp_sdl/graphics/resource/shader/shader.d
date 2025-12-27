@@ -145,7 +145,7 @@ struct ShaderCode
 		return;
 	}
 
-	this(GPUShaderFormat backend_formats,string shader_filename)
+	this(GPUShaderFormat backend_formats, string shader_filename)
 	{
 		string shader_uri;
 		frontend_format = GPUShaderFormat.invalid;
