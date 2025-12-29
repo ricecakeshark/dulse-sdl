@@ -14,4 +14,4 @@ targetName "kelp_sdl"
 targetPath "build"
 
 versions "SDL_3_2_18" "SDL_Image_3_2" "SDL_TTF_3_2_2"
-libs "SDL3" "SDL3_image"
+libs "SDL3" "SDL3_image" "SDL3_ttf"
