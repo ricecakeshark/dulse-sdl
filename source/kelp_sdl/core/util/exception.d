@@ -1,7 +1,7 @@
-module kelp_sdl.util.exception;
+module kelp_sdl.core.util.exception;
 
 import bindbc.sdl;
-import std.stdio;
+import std.stdio : writeln;
 import std.string : fromStringz;
 
 void catchSDLError(const bool succeed) @trusted

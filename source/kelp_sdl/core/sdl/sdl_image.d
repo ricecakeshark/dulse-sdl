@@ -1,8 +1,7 @@
 module kelp_sdl.core.sdl.sdl_image;
 
 import bindbc.sdl;
-import kelp_sdl.core.sdl_version;
-import kelp_sdl.util;
+import kelp_sdl.core;
 
 class LibrarySDLImage
 {

@@ -1,8 +1,8 @@
 module kelp_sdl.graphics.sync.fence;
 
 import bindbc.sdl;
+import kelp_sdl.core;
 import kelp_sdl.graphics.core.gpu_device;
-import kelp_sdl.util;
 
 class GPUFence
 {

@@ -1,9 +1,10 @@
 module kelp_sdl.graphics.core.gpu_device;
 
 import bindbc.sdl;
+import kelp_sdl.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
-import kelp_sdl.util;
+
 import std.exception, std.string;
 
 class GPUDevice
@@ -96,7 +97,8 @@ class GPUDevice
 
 	GPUShaderFormat get_shader_format()
 	{
-		return cast(GPUShaderFormat)cast(SDL_GPUShaderFormat)SDL_GetGPUShaderFormats(this.device_handle);
+		return cast(GPUShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
+			this.device_handle);
 	}
 
 	invariant

@@ -1,7 +1,7 @@
 module kelp_sdl.core.sdl.sdl_subsystem;
 
-import kelp_core.core;
-import kelp_sdl.core.sdl;
+import kelp_core.core.subsystem;
+import kelp_sdl.core;
 
 class SDLSubsystem : Subsystem
 {

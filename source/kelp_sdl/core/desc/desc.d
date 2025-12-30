@@ -1,4 +1,4 @@
-module kelp_sdl.core.sdl_version;
+module kelp_sdl.core.desc.desc;
 
 import bindbc.sdl;
 import std.format;
