@@ -16,6 +16,7 @@ class LibrarySDLTTF
 	void initialize()
 	{
 		TTF_Init().catchSDLError();
+		get_version();
 		return;
 	}
 

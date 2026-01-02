@@ -18,6 +18,7 @@ class LibrarySDL
 	void initialize()
 	{
 		SDL_Init(init_flags).catchSDLError();
+		get_version();
 		return;
 	}
 

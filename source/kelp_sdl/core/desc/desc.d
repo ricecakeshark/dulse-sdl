@@ -19,6 +19,6 @@ struct SemVersion
 
 	string opCast(T : string)() const
 	{
-		return format!("[%(,%02d%)]")(major, minor, micro);
+		return format!("[%2d,%2d,%2d]")(major, minor, micro);
 	}
 }

@@ -16,6 +16,7 @@ class LibrarySDLImage
 	void initialize()
 	{
 		// no need IMG_Init() and more
+		get_version();
 		return;
 	}
 
