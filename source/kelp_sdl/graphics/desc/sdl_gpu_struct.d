@@ -44,11 +44,10 @@ struct GPUBlitRegion
 	uint w;
 	uint h;
 
-
 	this(
 		GPUAbstractTexture texture,
-		uint x,uint y,
-		uint w,uint h,
+		uint x, uint y,
+		uint w, uint h,
 	)
 	{
 		this.texture = texture.handle;
@@ -385,9 +384,24 @@ struct GPUShaderCreateInfo
 		return;
 	}
 
-	this(ShaderCode shader_code)
+	this(
+		ShaderFile shader_file,
+		GPUShaderStage stage,
+		GPUShaderArguments shader_args
+	)
 	{
+		import std.string : toStringz;
 
+		this.code = cast(const(ubyte)*) shader_file.code;
+		this.code_size = shader_file.code.length;
+		this.entrypoint = toStringz(shader_file.entry_point);
+		this.format = shader_file.frontend_format;
+		this.stage = stage;
+		this.num_samplers = shader_args.sampler_count;
+		this.num_uniform_buffers = shader_args.uniform_buffer_count;
+		this.num_storage_buffers = shader_args.storage_buffer_count;
+		this.num_storage_textures = shader_args.storage_texture_count;
+		return;
 	}
 }
 
