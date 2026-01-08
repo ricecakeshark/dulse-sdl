@@ -33,8 +33,10 @@ public:
 	}
 
 	typeof(this) acquire_buffer()
+	in (this.device !is null)
+	in (this.device.handle !is null)
 	{
-		this.command_buffer_handle = SDL_AcquireGPUCommandBuffer(this.device.handle());
+		this.command_buffer_handle = SDL_AcquireGPUCommandBuffer(this.device.handle);
 		enforce(this.command_buffer_handle !is null);
 		return this;
 	}
@@ -69,6 +71,16 @@ public:
 		SDL_PushGPUVertexUniformData(
 			this.handle, first_slot,
 			cast(const(void*))&vertex_uniform_data, Type.sizeof,
+		);
+		return this;
+	}
+
+	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint first_slot, uint size)
+	in (this.handle !is null)
+	{
+		SDL_PushGPUVertexUniformData(
+			this.handle, first_slot,
+			cast(const(void*))&vertex_uniform_data, size,
 		);
 		return this;
 	}

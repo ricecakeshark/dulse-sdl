@@ -1,6 +1,8 @@
 module kelp_sdl.graphics.text.font;
 
 import bindbc.sdl;
+import kelp_sdl.core.util : catchSDLError;
+import sdl_ttf;
 
 import std.exception;
 import std.string : toStringz, fromStringz;
@@ -43,5 +45,18 @@ class GPUTextFont
 	in (this.font_handle !is null)
 	{
 		return cast(string) TTF_GetFontFamilyName(this.font_handle).fromStringz();
+	}
+
+	typeof(this) set_SDF()
+	{
+		TTF_SetFontSDF(this.font_handle, true)
+			.catchSDLError();
+		return this;
+	}
+
+	typeof(this) set_align()
+	{
+		TTF_SetFontWrapAlignment(this.font_handle, TTF_HORIZONTAL_ALIGN_CENTER);
+		return this;
 	}
 }

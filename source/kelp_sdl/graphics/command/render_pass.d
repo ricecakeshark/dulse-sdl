@@ -93,7 +93,10 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUIndexBuffer index_buffer)
+	typeof(this) bind(
+		GPUIndexBuffer index_buffer,
+		SDL_GPUIndexElementSize element_size = SDL_GPU_INDEXELEMENTSIZE_32BIT
+	)
 	in (this.handle !is null)
 	in (index_buffer !is null)
 	in (index_buffer.handle !is null)
@@ -103,7 +106,7 @@ class GPURenderPass
 		SDL_BindGPUIndexBuffer(
 			this.pass_handle,
 			cast(const(SDL_GPUBufferBinding*))&buffer_binding,
-			SDL_GPU_INDEXELEMENTSIZE_16BIT,
+			element_size,
 		);
 		return this;
 	}

@@ -28,7 +28,8 @@ class GPUSampler
 		return this.sampler_handle;
 	}
 
-	typeof(this) create(const GPUSamplerCreateInfo create_info)
+	typeof(this) create(in GPUSamplerCreateInfo create_info)
+	in (this.device !is null)
 	{
 		this.sampler_handle = SDL_CreateGPUSampler(
 			this.device.handle,

@@ -9,6 +9,7 @@ import kelp_sdl.image;
 
 import std.exception : enforce;
 import std.algorithm : map, sum;
+import std.traits : isArray;
 import core.stdc.string : memcpy;
 
 class GPUTransferBuffer(Derived)
@@ -115,6 +116,20 @@ class GPUTransferBuffer(Derived)
 			transfer_ptr + write_offset,
 			cast(void*) set_data,
 			set_data[0].sizeof * set_data.length
+		);
+		return cast(Derived) this;
+	}
+
+	Derived set_data(void[] set_data, size_t write_offset, ulong set_size)
+	in (this.transfer_ptr !is null)
+	in (set_data[0].sizeof * set_data.length <= uint.max)
+	in (set_size <= uint.max)
+	in (set_size <= this.size)
+	{
+		memcpy(
+			transfer_ptr + write_offset,
+			cast(void*) set_data,
+			set_size
 		);
 		return cast(Derived) this;
 	}

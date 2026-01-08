@@ -9,7 +9,7 @@ dependency "bindbc-sdl" version="~>2.3.3"
 
 subConfiguration "bindbc-sdl" "static"
 
-targetType "library"
+targetType "sourceLibrary"
 targetName "kelp_sdl"
 targetPath "build"
 

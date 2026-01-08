@@ -34,8 +34,21 @@ class GPUText
 
 	typeof(this) release()
 	{
-		TTF_Destroy(this.text_handle);
+		TTF_DestroyText(this.text_handle);
 		this.text_handle = null;
+		return this;
+	}
+
+	TTF_GPUAtlasDrawSequence* get_draw_data()
+	out (draw_data_ptr; draw_data_ptr !is null)
+	{
+		return TTF_GetGPUTextDrawData(this.text_handle);
+	}
+
+	typeof(this) get_size(out int w, out int h)
+	{
+		TTF_GetTextSize(this.text_handle, &w, &h)
+			.catchSDLError();
 		return this;
 	}
 
@@ -44,6 +57,32 @@ class GPUText
 	{
 		TTF_SetTextColor(
 			this.text_handle, color.red, color.green, color.blue, color.alpha
+		).catchSDLError();
+		return this;
+	}
+
+	typeof(this) set_color(ColorF color)
+	in (this.text_handle !is null)
+	{
+		TTF_SetTextColorFloat(
+			this.text_handle, color.red, color.green, color.blue, color.alpha
+		).catchSDLError();
+		return this;
+	}
+
+	typeof(this) set_pos(int[2] xy)
+	in (this.text_handle !is null)
+	{
+		TTF_SetTextPosition(
+			this.text_handle, xy[0], xy[1],
+		).catchSDLError();
+		return this;
+	}
+
+	typeof(this) set_string(string str)
+	{
+		TTF_SetTextString(
+			this.text_handle, str.toStringz(), str.length
 		).catchSDLError();
 		return this;
 	}

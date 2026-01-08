@@ -347,56 +347,18 @@ struct GPUShaderCreateInfo
 	uint num_storage_buffers;
 	uint num_uniform_buffers;
 
-	this(ShaderCode shader_code, GPUShaderStage stage, GPUShaderArguments shader_args)
-	{
-		import std.string : toStringz;
-
-		this.code = cast(const(ubyte)*) shader_code.code;
-		this.code_size = shader_code.code.length;
-		this.entrypoint = toStringz(shader_code.entry_point);
-		this.format = shader_code.frontend_format;
-		this.stage = stage;
-		this.num_samplers = shader_args.sampler_count;
-		this.num_uniform_buffers = shader_args.uniform_buffer_count;
-		this.num_storage_buffers = shader_args.storage_buffer_count;
-		this.num_storage_textures = shader_args.storage_texture_count;
-		return;
-	}
-
-	this(
-		ShaderCode shader_code,
-		GPUShaderFormat frontend_format,
-		GPUShaderStage stage,
-		GPUShaderArguments shader_args
-	)
-	{
-		import std.string : toStringz;
-
-		this.code = cast(const(ubyte)*) shader_code.code;
-		this.code_size = shader_code.code.length;
-		this.entrypoint = toStringz(shader_code.entry_point);
-		this.format = frontend_format;
-		this.stage = stage;
-		this.num_samplers = shader_args.sampler_count;
-		this.num_uniform_buffers = shader_args.uniform_buffer_count;
-		this.num_storage_buffers = shader_args.storage_buffer_count;
-		this.num_storage_textures = shader_args.storage_texture_count;
-		return;
-	}
-
 	this(
 		ShaderFile shader_file,
-		GPUShaderStage stage,
 		GPUShaderArguments shader_args
 	)
 	{
 		import std.string : toStringz;
 
-		this.code = cast(const(ubyte)*) shader_file.code;
+		this.code = cast(const(ubyte*)) shader_file.code;
 		this.code_size = shader_file.code.length;
-		this.entrypoint = toStringz(shader_file.entry_point);
+		this.entrypoint = cast(const(char*)) toStringz(shader_file.entry_point);
 		this.format = shader_file.frontend_format;
-		this.stage = stage;
+		this.stage = shader_file.shader_stage;
 		this.num_samplers = shader_args.sampler_count;
 		this.num_uniform_buffers = shader_args.uniform_buffer_count;
 		this.num_storage_buffers = shader_args.storage_buffer_count;
@@ -505,6 +467,15 @@ struct GPUTextureSamplerBinding
 {
 	SDL_GPUTexture* texture;
 	SDL_GPUSampler* sampler;
+
+	this(SDL_GPUTexture* texture_handle, SDL_GPUSampler* sampler_handle)
+	in (texture_handle !is null)
+	in (sampler_handle !is null)
+	{
+		this.texture = texture_handle;
+		this.sampler = sampler_handle;
+		return;
+	}
 
 	this(GPUTexture texture, GPUSampler sampler)
 	in (texture !is null)
@@ -631,12 +602,13 @@ struct GPUTransferBufferLocation
 
 	this(
 		GPUBufferTransferBuffer transfer_buffer,
-		uint offset = 0,
+		ulong offset = 0u,
 	)
 	in (transfer_buffer.handle !is null)
+	in (offset <= uint.max)
 	{
 		this.transfer_buffer = transfer_buffer.handle;
-		this.offset = offset;
+		this.offset = cast(uint) offset;
 		return;
 	}
 }
@@ -669,6 +641,20 @@ struct GPUBufferRegion
 		this.buffer = buffer.handle;
 		this.offset = offset;
 		this.size = buffer.size;
+		return;
+	}
+
+	this(
+		GPUBuffer buffer,
+		uint offset,
+		ulong size,
+	)
+	in (buffer.handle !is null)
+	in (size <= uint.max)
+	{
+		this.buffer = buffer.handle;
+		this.offset = offset;
+		this.size = cast(uint) size;
 		return;
 	}
 }

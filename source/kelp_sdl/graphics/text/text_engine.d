@@ -4,15 +4,18 @@ import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.text;
 
 import bindbc.sdl;
+import sdl_ttf;
 
 import std.exception : enforce;
 
 class GPUTextEngine
 {
 	TTF_TextEngine* text_engine_handle;
+	GPUDevice device;
 
-	this()
+	this(GPUDevice device)
 	{
+		this.device = device;
 		return;
 	}
 
@@ -21,7 +24,7 @@ class GPUTextEngine
 		return this.text_engine_handle;
 	}
 
-	typeof(this) create(GPUDevice device)
+	typeof(this) create()
 	{
 		this.text_engine_handle = TTF_CreateGPUTextEngine(device.handle);
 		enforce(text_engine_handle !is null);
