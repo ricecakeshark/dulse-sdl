@@ -3,24 +3,25 @@ module kelp_sdl.graphics.text.text;
 import kelp_core.core;
 import kelp_sdl.core.util;
 import kelp_sdl.graphics.text;
+import kelp_sdl.image;
 
 import bindbc.sdl;
 
 import std.exception : enforce;
 import std.string : toStringz;
 
-class GPUText
+abstract class AbstractText
 {
 	TTF_Text* text_handle;
-	GPUTextEngine text_engine;
-	GPUTextFont text_font;
+	AbstractTextEngine text_engine;
+	TextFont text_font;
 
-	this(GPUTextEngine engine, GPUTextFont font)
+	/+this(GPUTextEngine engine, GPUTextFont font)
 	{
 		this.text_engine = engine;
 		this.text_font = font;
 		return;
-	}
+	}+/
 
 	typeof(this) create(string text_string)
 	{
@@ -37,12 +38,6 @@ class GPUText
 		TTF_DestroyText(this.text_handle);
 		this.text_handle = null;
 		return this;
-	}
-
-	TTF_GPUAtlasDrawSequence* get_draw_data()
-	out (draw_data_ptr; draw_data_ptr !is null)
-	{
-		return TTF_GetGPUTextDrawData(this.text_handle);
 	}
 
 	typeof(this) get_size(out int w, out int h)
@@ -84,6 +79,39 @@ class GPUText
 		TTF_SetTextString(
 			this.text_handle, str.toStringz(), str.length
 		).catchSDLError();
+		return this;
+	}
+}
+
+class GPUText : AbstractText
+{
+	this(GPUTextEngine engine, TextFont font)
+	{
+		this.text_engine = engine;
+		this.text_font = font;
+		return;
+	}
+
+	TTF_GPUAtlasDrawSequence* get_draw_data()
+	out (draw_data_ptr; draw_data_ptr !is null)
+	{
+		return TTF_GetGPUTextDrawData(this.text_handle);
+	}
+}
+
+class SurfaceText : AbstractText
+{
+	this(SurfaceTextEngine engine, TextFont font)
+	{
+		this.text_engine = engine;
+		this.text_font = font;
+		return;
+	}
+
+	typeof(this) draw(Surface surface, int x = 0, int y = 0)
+	{
+		TTF_DrawSurfaceText(this.text_handle, x, y, surface.handle)
+			.catchSDLError();
 		return this;
 	}
 }

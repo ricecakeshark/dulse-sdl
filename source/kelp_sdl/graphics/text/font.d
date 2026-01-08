@@ -7,7 +7,7 @@ import sdl_ttf;
 import std.exception;
 import std.string : toStringz, fromStringz;
 
-class GPUTextFont
+class TextFont
 {
 	TTF_Font* font_handle;
 

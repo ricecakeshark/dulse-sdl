@@ -8,20 +8,23 @@ import sdl_ttf;
 
 import std.exception : enforce;
 
-class GPUTextEngine
+abstract class AbstractTextEngine
 {
 	TTF_TextEngine* text_engine_handle;
 	GPUDevice device;
 
+	@property inout(TTF_TextEngine*) handle() inout pure nothrow @nogc @safe
+	{
+		return this.text_engine_handle;
+	}
+}
+
+class GPUTextEngine : AbstractTextEngine
+{
 	this(GPUDevice device)
 	{
 		this.device = device;
 		return;
-	}
-
-	@property inout(TTF_TextEngine*) handle() inout pure nothrow @nogc @safe
-	{
-		return this.text_engine_handle;
 	}
 
 	typeof(this) create()
@@ -34,6 +37,29 @@ class GPUTextEngine
 	typeof(this) release()
 	{
 		TTF_DestroyGPUTextEngine(this.text_engine_handle);
+		this.text_engine_handle = null;
+		return this;
+	}
+}
+
+class SurfaceTextEngine : AbstractTextEngine
+{
+	this(GPUDevice device)
+	{
+		this.device = device;
+		return;
+	}
+
+	typeof(this) create()
+	{
+		this.text_engine_handle = TTF_CreateSurfaceTextEngine();
+		enforce(text_engine_handle !is null);
+		return this;
+	}
+
+	typeof(this) release()
+	{
+		TTF_DestroySurfaceTextEngine(this.text_engine_handle);
 		this.text_engine_handle = null;
 		return this;
 	}
