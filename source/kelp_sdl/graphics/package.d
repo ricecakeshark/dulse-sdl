@@ -7,4 +7,3 @@ public import kelp_sdl.graphics.desc;
 public import kelp_sdl.graphics.rasterize;
 public import kelp_sdl.graphics.resource;
 public import kelp_sdl.graphics.sync;
-public import kelp_sdl.graphics.text;

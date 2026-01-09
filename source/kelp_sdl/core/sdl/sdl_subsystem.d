@@ -4,6 +4,8 @@ import kelp_core.core;
 import kelp_core.logger;
 import kelp_sdl.core;
 
+import std.format;
+
 class SDLSubsystem : Subsystem
 {
 	protected Core core;
@@ -33,12 +35,27 @@ class SDLSubsystem : Subsystem
 		sdl.initialize();
 		sdl_image.initialize();
 		sdl_ttf.initialize();
-		logger.log(cast(string)(sdl.compiled_version));
-		logger.log(cast(string)(sdl.linked_version));
-		logger.log(cast(string)(sdl_image.compiled_version));
-		logger.log(cast(string)(sdl_image.linked_version));
-		logger.log(cast(string)(sdl_ttf.compiled_version));
-		logger.log(cast(string)(sdl_ttf.linked_version));
+		logger.log(
+			format(
+				"SDL3 (linked:%s compiled:%s)",
+				cast(string)(sdl.linked_version),
+				cast(string)(sdl.compiled_version)
+		)
+		);
+		logger.log(
+			format(
+				"SDL3_image (linked:%s compiled:%s)",
+				cast(string)(sdl_image.compiled_version),
+				cast(string)(sdl_image.linked_version)
+		)
+		);
+		logger.log(
+			format(
+				"SDL3_ttf (linked:%s compiled:%s)",
+				cast(string)(sdl_ttf.compiled_version),
+				cast(string)(sdl_ttf.linked_version)
+		)
+		);
 		return;
 	}
 

@@ -1,8 +1,8 @@
-module kelp_sdl.graphics.text.text;
+module kelp_sdl.text.text;
 
 import kelp_core.core;
 import kelp_sdl.core.util;
-import kelp_sdl.graphics.text;
+import kelp_sdl.text;
 import kelp_sdl.image;
 
 import bindbc.sdl;

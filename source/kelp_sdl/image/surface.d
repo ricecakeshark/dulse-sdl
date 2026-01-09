@@ -1,6 +1,7 @@
 module kelp_sdl.image.surface;
 
 import bindbc.sdl;
+import kelp_core.core.data;
 import kelp_sdl.image;
 
 import std.string : toStringz;
@@ -134,11 +135,11 @@ class Surface
 		return this;
 	}
 
-	typeof(this) clear(float r, float g, float b, float a)
+	typeof(this) clear(ColorF color)
 	in (this.surface_handle !is null)
 	{
 		succeed = SDL_ClearSurface(
-			this.surface_handle, r, g, b, a
+			this.surface_handle, color.red, color.green, color.blue, color.alpha
 		);
 		return this;
 	}

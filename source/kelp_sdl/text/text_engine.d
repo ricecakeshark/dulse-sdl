@@ -1,10 +1,9 @@
-module kelp_sdl.graphics.text.text_engine;
+module kelp_sdl.text.text_engine;
 
 import kelp_sdl.graphics.core;
-import kelp_sdl.graphics.text;
+import kelp_sdl.text;
 
 import bindbc.sdl;
-import sdl_ttf;
 
 import std.exception : enforce;
 
