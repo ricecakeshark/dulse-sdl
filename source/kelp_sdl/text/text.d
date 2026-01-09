@@ -46,17 +46,24 @@ abstract class AbstractText
 			.catchSDLError();
 		return this;
 	}
-
-	typeof(this) set_color(ColorU color)
-	in (this.text_handle !is null)
+	// text color
+	typeof(this) get(ref ColorF color)
 	{
-		TTF_SetTextColor(
-			this.text_handle, color.red, color.green, color.blue, color.alpha
+		TTF_GetTextColorFloat(
+			this.text_handle, &(color.red), &(color.green), &(color.blue), &(color.alpha)
 		).catchSDLError();
 		return this;
 	}
 
-	typeof(this) set_color(ColorF color)
+	typeof(this) get(ref ColorU color)
+	{
+		TTF_GetTextColor(
+			this.text_handle, &(color.red), &(color.green), &(color.blue), &(color.alpha)
+		).catchSDLError();
+		return this;
+	}
+
+	typeof(this) set(ColorF color)
 	in (this.text_handle !is null)
 	{
 		TTF_SetTextColorFloat(
@@ -65,15 +72,48 @@ abstract class AbstractText
 		return this;
 	}
 
-	typeof(this) set_pos(int[2] xy)
+	typeof(this) set(ColorU color)
 	in (this.text_handle !is null)
 	{
-		TTF_SetTextPosition(
-			this.text_handle, xy[0], xy[1],
+		TTF_SetTextColor(
+			this.text_handle, color.red, color.green, color.blue, color.alpha
+		).catchSDLError();
+		return this;
+	}
+	// text direction
+	typeof(this) get(out TextDirection text_direction)
+	{
+		text_direction = cast(TextDirection) TTF_GetTextDirection(this.text_handle);
+		return this;
+	}
+
+	typeof(this) set(in TextDirection text_direction)
+	{
+		TTF_SetTextDirection(
+			this.text_handle, cast(TTF_Direction) text_direction
+		).catchSDLError();
+		return this;
+	}
+	// text position
+	typeof(this) get_pos(out int[2] pos)
+	in (this.text_handle !is null)
+	{
+		TTF_GetTextPosition(
+			this.text_handle, &(pos[0]), &(pos[1]),
 		).catchSDLError();
 		return this;
 	}
 
+	typeof(this) set_pos(in int[2] pos)
+	in (this.text_handle !is null)
+	{
+		TTF_SetTextPosition(
+			this.text_handle, pos[0], pos[1],
+		).catchSDLError();
+		return this;
+	}
+	// text string
+	// no getter string
 	typeof(this) set_string(string str)
 	{
 		TTF_SetTextString(

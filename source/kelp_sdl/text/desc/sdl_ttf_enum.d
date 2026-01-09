@@ -1,6 +1,6 @@
 module kelp_sdl.text.desc.sdl_ttf_enum;
 
-enum FontDirection : uint
+enum TextDirection : uint
 {
 	invalid = 0,
 	LTR = 4,
@@ -9,7 +9,7 @@ enum FontDirection : uint
 	BTT = 7,
 }
 
-enum FontAlign : int
+enum TextAlign : int
 {
 	invalid = -1,
 	left = 0,

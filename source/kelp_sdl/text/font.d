@@ -53,19 +53,26 @@ class TextFont
 			.catchSDLError();
 		return this;
 	}
-
-	typeof(this) set_align()
+	// font wrap align
+	@property TextAlign wrap_align()
 	{
-		TTF_SetFontWrapAlignment(this.font_handle, TTF_HORIZONTAL_ALIGN_CENTER);
+		return cast(TextAlign) TTF_GetFontWrapAlignment(this.font_handle);
+	}
+
+	typeof(this) set(TextAlign font_align)
+	{
+		TTF_SetFontWrapAlignment(
+			this.font_handle, cast(TTF_HorizontalAlignment) font_align
+		);
 		return this;
 	}
 	// Direction
-	@property FontDirection get_direction()
+	@property TextDirection direction()
 	{
-		return cast(FontDirection) TTF_GetFontDirection(this.font_handle);
+		return cast(TextDirection) TTF_GetFontDirection(this.font_handle);
 	}
 
-	typeof(this) set(FontDirection font_direction)
+	typeof(this) set(TextDirection font_direction)
 	{
 		TTF_SetFontDirection(this.font_handle, cast(TTF_Direction) font_direction)
 			.catchSDLError();
@@ -88,9 +95,22 @@ class TextFont
 		return cast(FontHinting) TTF_GetFontSize(this.font_handle);
 	}
 
-	typeof(this) set(float font_size)
+	typeof(this) get_size(out float size)
+	{
+		size = TTF_GetFontSize(this.font_handle);
+		return this;
+	}
+
+	typeof(this) set_size(in float font_size)
 	{
 		TTF_SetFontSize(this.font_handle, font_size)
+			.catchSDLError();
+		return this;
+	}
+	// string size
+	typeof(this) get_string_size(in string text, out int w, out int h)
+	{
+		TTF_GetStringSize(this.font_handle, toStringz(text), text.length, &w, &h)
 			.catchSDLError();
 		return this;
 	}
