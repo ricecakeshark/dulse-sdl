@@ -262,8 +262,8 @@ struct GPUGraphicsPipelineTargetInfo
 {
 	GPUColorTargetDescription* color_target_descriptions;
 	uint num_color_targets;
-	GPUTextureFormat depth_stencil_format = GPUTextureFormat.init;
-	bool has_depth_stencil_target;
+	GPUTextureFormat depth_stencil_format = GPUTextureFormat.invalid;
+	bool has_depth_stencil_target = false;
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;

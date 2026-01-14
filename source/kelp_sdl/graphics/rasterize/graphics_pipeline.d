@@ -2,7 +2,7 @@ module kelp_sdl.graphics.rasterize.graphics_pipeline;
 
 import bindbc.sdl;
 import kelp_sdl.graphics;
-import std.exception;
+import std.exception, std.string;
 
 class GPUGraphicsPipeline
 {
@@ -26,7 +26,7 @@ class GPUGraphicsPipeline
 			this.device.handle,
 			cast(SDL_GPUGraphicsPipelineCreateInfo*)&create_info,
 		);
-		enforce(this.pipeline_handle !is null);
+		enforce(this.pipeline_handle !is null, SDL_GetError().fromStringz());
 		return this;
 	}
 

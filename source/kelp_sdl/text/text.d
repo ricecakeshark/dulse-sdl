@@ -40,12 +40,6 @@ abstract class AbstractText
 		return this;
 	}
 
-	typeof(this) get_size(out int w, out int h)
-	{
-		TTF_GetTextSize(this.text_handle, &w, &h)
-			.catchSDLError();
-		return this;
-	}
 	// text color
 	typeof(this) get(ref ColorF color)
 	{
@@ -112,13 +106,25 @@ abstract class AbstractText
 		).catchSDLError();
 		return this;
 	}
+	// text size
+	typeof(this) get_size(out int w, out int h)
+	{
+		TTF_GetTextSize(this.text_handle, &w, &h)
+			.catchSDLError();
+		enforce(w >= 1);
+		enforce(h >= 1);
+		return this;
+	}
 	// text string
 	// no getter string
 	typeof(this) set_string(string str)
 	{
 		TTF_SetTextString(
-			this.text_handle, str.toStringz(), str.length
+			this.text_handle, str.toStringz(), 0
 		).catchSDLError();
+		/+TTF_SetTextString(
+			this.text_handle, str.toStringz(), str.length
+		).catchSDLError();+/
 		return this;
 	}
 }

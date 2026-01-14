@@ -58,10 +58,13 @@ class Surface
 		return cast(SurfaceFlags) this.surface_handle.flags;
 	}
 
-	typeof(this) create(int width, int height)
+	typeof(this) create(
+		int width, int height,
+		SDL_PixelFormat pixel_format = SDL_PIXELFORMAT_ABGR8888
+	)
 	in (this.surface_handle is null)
 	{
-		this.surface_handle = SDL_CreateSurface(width, height, SDL_PIXELFORMAT_RGBA32);
+		this.surface_handle = SDL_CreateSurface(width, height, pixel_format);
 		enforce(this.surface_handle !is null);
 		return this;
 	}

@@ -3,7 +3,7 @@ module kelp_sdl.graphics.resource.shader.shader;
 import bindbc.sdl;
 import kelp_sdl.graphics;
 import std.algorithm, std.exception, std.file, std.format;
-import std.string : toStringz;
+import std.string : fromStringz, toStringz;
 
 abstract class GPUShader(Derived)
 {
@@ -34,7 +34,7 @@ abstract class GPUShader(Derived)
 		this.shader_handle = SDL_CreateGPUShader(
 			this.device.handle, cast(SDL_GPUShaderCreateInfo*)&shader_create_info
 		);
-		enforce(this.shader_handle !is null, "failed to create shader");
+		enforce(this.shader_handle !is null, SDL_GetError().fromStringz());
 		return cast(Derived) this;
 	}
 
@@ -166,7 +166,18 @@ struct ShaderFile
 			shader_dir = "./shader/compiled/DXIL/";
 			shader_ext = ".dxil";
 			frontend_format = GPUShaderFormat.dxil;
-			entry_point = "VSMain";
+			entry_point = "main";
+			/+switch (file_name.extension)
+			{
+			case ".vert":
+				entry_point = "VSMain";
+				break;
+			case ".frag":
+				entry_point = "PSMain";
+				break;
+			default:
+				break;
+			}+/
 		}
 		else
 		{

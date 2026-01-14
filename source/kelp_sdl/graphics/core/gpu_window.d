@@ -27,14 +27,16 @@ class GPUWindow
 	typeof(this) create(int width, int height, string title)
 	in (this.handle is null)
 	{
-		this.window_handle = SDL_CreateWindow(toStringz(title), width, height, 0);
+		this.window_handle = SDL_CreateWindow(
+			toStringz(title), width, height, 0
+		);
 		enforce(this.window_handle !is null);
 		return this;
 	}
 
 	typeof(this) release()
 	{
-		if(this.window_handle is null)
+		if (this.window_handle is null)
 		{
 			return this;
 		}

@@ -66,6 +66,12 @@ enum GPUFrontFace
 	clockwise
 }
 
+enum GPUIndexElementSize
+{
+	_16bit,
+	_32bit,
+}
+
 enum GPULoadOp
 {
 	load,

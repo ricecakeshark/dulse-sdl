@@ -63,19 +63,6 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	deprecated Derived create_by_data(void[] data)
-	in (data[0].sizeof * data.length <= uint.max, "data is oversized than uint.max")
-	{
-		this._size = cast(uint)(data[0].sizeof * data.length);
-		SDL_GPUTransferBufferCreateInfo create_info = {
-			usage: SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
-			size: this.size,
-		};
-		this.buffer_handle = SDL_CreateGPUTransferBuffer(this.device.handle, &create_info);
-		enforce(this.buffer_handle !is null);
-		return cast(Derived) this;
-	}
-
 	Derived release()
 	{
 		if (this.buffer_handle is null || this.device.handle is null)
@@ -107,22 +94,22 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived set_data(void[] set_data, size_t write_offset = 0)
+	Derived set_data(Type)(Type[] set_data, size_t write_offset = 0)
 	in (this.transfer_ptr !is null)
-	in (set_data[0].sizeof * set_data.length <= uint.max)
-	in (write_offset + (set_data[0].sizeof * set_data.length) <= this.size)
+	in (Type.sizeof * set_data.length <= uint.max)
+	in (write_offset + (Type.sizeof * set_data.length) <= this.size)
 	{
 		memcpy(
 			transfer_ptr + write_offset,
 			cast(void*) set_data,
-			set_data[0].sizeof * set_data.length
+			Type.sizeof * set_data.length
 		);
 		return cast(Derived) this;
 	}
 
-	Derived set_data(void[] set_data, size_t write_offset, ulong set_size)
+	Derived set_data(Type)(Type[] set_data, size_t write_offset, ulong set_size)
 	in (this.transfer_ptr !is null)
-	in (set_data[0].sizeof * set_data.length <= uint.max)
+	in (Type.sizeof * set_data.length <= uint.max)
 	in (set_size <= uint.max)
 	in (set_size <= this.size)
 	{
@@ -156,16 +143,26 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return this;
 	}
 
-	typeof(this) set(void[] data, size_t write_offset = 0)
+	typeof(this) set(Type)(Type[] data, size_t write_offset)
 	in (this !is null)
 	in (this.buffer_handle !is null)
-	in (write_offset + (data[0].sizeof * data.length) <= this.size)
+	in (write_offset + (Type.sizeof * data.length) <= this.size)
 	{
 		super.set_data(data, write_offset);
 		return this;
 	}
 
-	typeof(this) set(TypeList...)(TypeList data_list)
+	typeof(this) set(Type)(Type[] data, size_t write_offset, size_t write_size)
+	in (this !is null)
+	in (this.buffer_handle !is null)
+	in (write_offset + (Type.sizeof * data.length) <= this.size)
+	{
+		super.set_data(data, write_offset, write_size);
+		return this;
+	}
+
+	/+typeof(this) set(TypeList...)(TypeList data_list)
+	if (TypeList.length >= 2)
 	in
 	{
 		assert(this.size >= 1);
@@ -181,11 +178,11 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		size_t temp_offset = 0;
 		foreach (data; data_list)
 		{
-			super.set_data(data, temp_offset);
+			super.set_data(data, temp_offset, data[0].sizeof * data.length);
 			temp_offset += (data[0].sizeof * data.length);
 		}
 		return this;
-	}
+	}+/
 }
 
 class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)

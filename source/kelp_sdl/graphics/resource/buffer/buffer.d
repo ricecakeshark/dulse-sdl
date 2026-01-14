@@ -47,26 +47,6 @@ public:
 	}
 
 protected:
-	deprecated typeof(this) create_by_data(
-		SDL_GPUBufferUsageFlags usage_flags,
-		void[] setting_data,
-	)
-	in (setting_data[0].sizeof * setting_data.length <= uint.max, "setting_data is oversized")
-	{
-		scope SDL_GPUBufferCreateInfo buffer_create_info;
-		buffer_create_info = SDL_GPUBufferCreateInfo(
-			usage_flags,
-			cast(uint)(setting_data[0].sizeof * setting_data.length)
-		);
-		this.buffer_handle = SDL_CreateGPUBuffer(
-			this.device.handle, &buffer_create_info
-		);
-		enforce(this.buffer_handle !is null);
-		this.data = setting_data;
-		this._size = cast(uint)(setting_data[0].sizeof * setting_data.length);
-		return this;
-	}
-
 	typeof(this) create_by_info(
 		GPUBufferCreateInfo create_info,
 	)
@@ -99,11 +79,4 @@ protected:
 		return this;
 	}
 
-	typeof(this) set_data(void[] setting_data)
-	in (this.handle !is null)
-	in (setting_data[0].sizeof * setting_data.length == this.size, "mismatched buffer size with setting size")
-	{
-		this.data = setting_data;
-		return this;
-	}
 }

@@ -65,21 +65,21 @@ public:
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint first_slot = 0)
+	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint slot_index)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUVertexUniformData(
-			this.handle, first_slot,
+			this.handle, slot_index,
 			cast(const(void*))&vertex_uniform_data, Type.sizeof,
 		);
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint first_slot, uint size)
+	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint slot_index, uint size)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUVertexUniformData(
-			this.handle, first_slot,
+			this.handle, slot_index,
 			cast(const(void*))&vertex_uniform_data, size,
 		);
 		return this;
@@ -111,10 +111,4 @@ public:
 		SDL_BlitGPUTexture(this.handle, cast(SDL_GPUBlitInfo*)&info);
 		return this;
 	}
-
-	/+typeof(this) blitTexture(ref GPUBlitInfo blit_info)
-	{
-		SDL_BlitGPUTexture(this.handle, cast(SDL_GPUBlitInfo*)&blit_info);
-		return this;
-	}+/
 }

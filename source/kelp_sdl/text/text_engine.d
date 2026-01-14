@@ -39,6 +39,12 @@ class GPUTextEngine : AbstractTextEngine
 		this.text_engine_handle = null;
 		return this;
 	}
+
+	typeof(this) set(TextEngineWinding winding)
+	{
+		TTF_SetGPUTextEngineWinding(this.handle, cast(TTF_GPUTextEngineWinding) winding);
+		return this;
+	}
 }
 
 class SurfaceTextEngine : AbstractTextEngine

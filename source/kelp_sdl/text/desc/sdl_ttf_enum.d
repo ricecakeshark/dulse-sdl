@@ -16,3 +16,10 @@ enum TextAlign : int
 	center,
 	right,
 }
+
+enum TextEngineWinding
+{
+	invalid = -1,
+	clockwise,
+	counter_clockwise,
+}
