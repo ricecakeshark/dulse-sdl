@@ -29,4 +29,13 @@ struct ParamPrimitiveIndirect
 {
 	uint offset;
 	uint draw_count;
+
+	this(ulong offset, ulong draw_count)
+	in (offset <= uint.max)
+	in (draw_count <= uint.max)
+	{
+		this.offset = cast(uint) offset;
+		this.draw_count = cast(uint) draw_count;
+		return;
+	}
 }
