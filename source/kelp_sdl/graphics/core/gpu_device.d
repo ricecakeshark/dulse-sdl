@@ -85,10 +85,10 @@ class GPUDevice
 		return this;
 	}
 
-	bool supportFormat(
-		SDL_GPUTextureFormat format,
-		SDL_GPUTextureType type,
-		SDL_GPUTextureUsageFlags usage
+	bool support_format(
+		in SDL_GPUTextureFormat format,
+		in SDL_GPUTextureType type,
+		in SDL_GPUTextureUsageFlags usage
 	)
 	in (this.handle !is null)
 	{

@@ -29,8 +29,8 @@ class GPUCopyPass
 	}
 
 	typeof(this) upload(
-		GPUTransferBufferLocation buffer_location,
-		GPUBufferRegion buffer_region,
+		in GPUTransferBufferLocation buffer_location,
+		in GPUBufferRegion buffer_region,
 	)
 	{
 		SDL_UploadToGPUBuffer(
@@ -43,8 +43,8 @@ class GPUCopyPass
 	}
 
 	typeof(this) upload(
-		GPUTextureTransferInfo transfer_info,
-		GPUTextureRegion texture_region,
+		in GPUTextureTransferInfo transfer_info,
+		in GPUTextureRegion texture_region,
 	)
 	{
 		SDL_UploadToGPUTexture(

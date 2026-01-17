@@ -13,7 +13,7 @@ class GPUVertexBuffer : GPUBuffer
 	}
 
 public:
-	typeof(this) create(size_t size)
+	typeof(this) create(in size_t size)
 	{
 		super.create_by_size(SDL_GPU_BUFFERUSAGE_VERTEX, size);
 		return this;

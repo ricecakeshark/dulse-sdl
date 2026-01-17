@@ -16,15 +16,15 @@ class GPUIndexBuffer : GPUBuffer
 	}
 
 public:
-	typeof(this) create(size_t size)
+	typeof(this) create(in size_t size)
 	{
 		super.create_by_size(SDL_GPU_BUFFERUSAGE_INDEX, size);
 		return this;
 	}
 
 	typeof(this) create(
-		size_t size,
-		GPUIndexElementSize element_size = GPUIndexElementSize._32bit
+		in size_t size,
+		in GPUIndexElementSize element_size = GPUIndexElementSize._32bit
 	)
 	{
 		this.element_size = element_size;

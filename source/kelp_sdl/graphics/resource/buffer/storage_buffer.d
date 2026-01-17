@@ -12,7 +12,7 @@ class GPUStorageBuffer : GPUBuffer
 		return;
 	}
 
-	typeof(this) create(uint size)
+	typeof(this) create(in uint size)
 	{
 		this.create_by_size(SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE, size);
 		return this;

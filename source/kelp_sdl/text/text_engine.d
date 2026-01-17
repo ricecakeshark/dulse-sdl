@@ -40,7 +40,7 @@ class GPUTextEngine : AbstractTextEngine
 		return this;
 	}
 
-	typeof(this) set(TextEngineWinding winding)
+	typeof(this) set(in TextEngineWinding winding)
 	{
 		TTF_SetGPUTextEngineWinding(this.handle, cast(TTF_GPUTextEngineWinding) winding);
 		return this;

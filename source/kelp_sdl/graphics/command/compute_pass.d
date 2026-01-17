@@ -7,7 +7,7 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer.storage_buffer;
 import kelp_sdl.graphics.resource.texture;
 
-import std.exception,std.string;
+import std.exception, std.string;
 
 class GPUComputePass
 {
@@ -30,7 +30,7 @@ class GPUComputePass
 
 	typeof(this) begin(
 		GPUCommandBuffer command_buffer,
-		GPUStorageTextureReadWriteBinding[] texture_binding_list,
+		in GPUStorageTextureReadWriteBinding[] texture_binding_list,
 	)
 	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
@@ -49,8 +49,8 @@ class GPUComputePass
 
 	typeof(this) begin(
 		GPUCommandBuffer command_buffer,
-		GPUStorageTextureReadWriteBinding[] texture_binding_list,
-		GPUStorageBufferReadWriteBinding[] buffer_binding_list,
+		in GPUStorageTextureReadWriteBinding[] texture_binding_list,
+		in GPUStorageBufferReadWriteBinding[] buffer_binding_list,
 	)
 	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
@@ -83,7 +83,10 @@ class GPUComputePass
 		return this;
 	}
 
-	typeof(this) bind(GPUStorageBuffer storage_buffer, uint first_slot)
+	typeof(this) bind(
+		in GPUStorageBuffer storage_buffer,
+		in uint first_slot
+	)
 	in (this.handle !is null)
 	in (storage_buffer.handle !is null)
 	{
@@ -94,7 +97,10 @@ class GPUComputePass
 		return this;
 	}
 
-	typeof(this) bind(GPUTextureSamplerBinding[] texture_sampler_binding, uint first_slot)
+	typeof(this) bind(
+		in GPUTextureSamplerBinding[] texture_sampler_binding,
+		in uint first_slot
+	)
 	in (this.handle !is null)
 	in (texture_sampler_binding.length >= 1)
 	{
@@ -106,7 +112,11 @@ class GPUComputePass
 		return this;
 	}
 
-	typeof(this) dispatch(int groupcount_x, int groupcount_y, int groupcount_z)
+	typeof(this) dispatch(
+		in int groupcount_x,
+		in int groupcount_y,
+		in int groupcount_z,
+	)
 	in (this.handle !is null)
 	{
 		SDL_DispatchGPUCompute(this.handle, groupcount_x, groupcount_y, groupcount_z);

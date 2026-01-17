@@ -27,7 +27,7 @@ class GPUComputePipeline
 		return this.pipeline_handle;
 	}
 
-	typeof(this) create(GPUComputePipelineCreateInfo create_info)
+	typeof(this) create(in GPUComputePipelineCreateInfo create_info)
 	{
 		this.pipeline_handle = SDL_CreateGPUComputePipeline(
 			this.device.handle,

@@ -22,7 +22,7 @@ final class GPUTexture : GPUAbstractTexture
 		return;
 	}
 
-	typeof(this) create(GPUTextureCreateInfo create_info)
+	typeof(this) create(in GPUTextureCreateInfo create_info)
 	in (create_info.width >= 1)
 	in (create_info.height >= 1)
 	{

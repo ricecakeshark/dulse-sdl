@@ -28,17 +28,17 @@ class Surface
 		return this.surface_handle;
 	}
 
-	@property int width() const pure nothrow @nogc @safe
+	@property inout(int) width() inout pure nothrow @nogc @safe
 	{
 		return this.surface_handle.w;
 	}
 
-	@property int height() const pure nothrow @nogc @safe
+	@property inout(int) height() inout pure nothrow @nogc @safe
 	{
 		return this.surface_handle.h;
 	}
 
-	@property int pitch() const pure nothrow @nogc @safe
+	@property inout(int) pitch() inout pure nothrow @nogc @safe
 	{
 		return this.surface_handle.pitch;
 	}
@@ -48,7 +48,7 @@ class Surface
 		return this.surface_handle.pixels;
 	}
 
-	@property size_t size() const pure nothrow @nogc @safe
+	@property inout(size_t) size() inout pure nothrow @nogc @safe
 	{
 		return (this.width * this.height * 4);
 	}
@@ -59,8 +59,9 @@ class Surface
 	}
 
 	typeof(this) create(
-		int width, int height,
-		SDL_PixelFormat pixel_format = SDL_PIXELFORMAT_ABGR8888
+		in int width,
+		in int height,
+		in SDL_PixelFormat pixel_format = SDL_PIXELFORMAT_ABGR8888,
 	)
 	in (this.surface_handle is null)
 	{
@@ -69,7 +70,7 @@ class Surface
 		return this;
 	}
 
-	typeof(this) load(string file_uri)
+	typeof(this) load(in string file_uri)
 	in (this.surface_handle is null)
 	{
 		enforce(isFile(file_uri), "the file is not exsist");
@@ -79,7 +80,7 @@ class Surface
 		return this;
 	}
 
-	typeof(this) load_for_gpu(string file_uri)
+	typeof(this) load_for_gpu(in string file_uri)
 	in (this.surface_handle is null)
 	{
 		enforce(isFile(file_uri), "the file is not exsist");
@@ -105,7 +106,7 @@ class Surface
 		return this;
 	}
 
-	int[4] opIndex(size_t x, size_t y)
+	int[4] opIndex(in size_t x, in size_t y)
 	in (this.surface_handle !is null)
 	in (x <= this.width)
 	in (y <= this.height)
@@ -128,7 +129,7 @@ class Surface
 		return this;
 	}+/
 
-	typeof(this) convert(SdlPixelFormat format)
+	typeof(this) convert(in SdlPixelFormat format)
 	in (this.surface_handle !is null)
 	{
 		this.surface_handle = SDL_ConvertSurface(
@@ -138,7 +139,7 @@ class Surface
 		return this;
 	}
 
-	typeof(this) clear(ColorF color)
+	typeof(this) clear(in ColorF color)
 	in (this.surface_handle !is null)
 	{
 		succeed = SDL_ClearSurface(

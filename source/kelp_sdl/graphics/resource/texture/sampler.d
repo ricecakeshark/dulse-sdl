@@ -52,5 +52,4 @@ class GPUSampler
 		this.sampler_handle = null;
 		return this;
 	}
-
 }

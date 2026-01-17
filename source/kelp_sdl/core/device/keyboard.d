@@ -45,23 +45,23 @@ class SDLKeyboard
 		return;
 	}
 
-	bool pressed(const Scancode scancode) const pure nothrow @nogc @safe
+	bool pressed(in Scancode scancode) const pure nothrow @nogc @safe
 	{
 		return (this.input_state[0].pressed(scancode)) ? true : false;
 	}
 
-	bool released(const Scancode scancode) const pure nothrow @nogc @safe
+	bool released(in Scancode scancode) const pure nothrow @nogc @safe
 	{
 		return (this.input_state[0].released(scancode)) ? true : false;
 	}
 
-	bool pressed_just(const Scancode scancode) const pure nothrow @nogc @safe
+	bool pressed_just(in Scancode scancode) const pure nothrow @nogc @safe
 	{
 		return (this.input_state[0].pressed(scancode)
 				&& this.input_state[1].released(scancode)) ? true : false;
 	}
 
-	bool released_just(const Scancode scancode) const pure nothrow @nogc @safe
+	bool released_just(in Scancode scancode) const pure nothrow @nogc @safe
 	{
 		return (this.input_state[0].released(scancode)
 				&& this.input_state[1].pressed(scancode)) ? true : false;

@@ -4,7 +4,7 @@ import bindbc.sdl;
 import std.stdio : writeln;
 import std.string : fromStringz;
 
-void catchSDLError(const bool succeed) @trusted
+void catchSDLError(in bool succeed) @trusted
 {
 	if (succeed == false)
 	{

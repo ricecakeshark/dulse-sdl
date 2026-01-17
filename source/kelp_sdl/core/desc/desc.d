@@ -9,7 +9,7 @@ struct SemVersion
 	int minor;
 	int micro;
 
-	this(int sdl_version)
+	this(in int sdl_version)
 	{
 		this.major = SDL_VERSIONNUM_MAJOR(sdl_version);
 		this.minor = SDL_VERSIONNUM_MINOR(sdl_version);

@@ -27,9 +27,7 @@ abstract class GPUShader(Derived)
 		return this.shader_handle;
 	}
 
-	protected Derived create(
-		GPUShaderCreateInfo shader_create_info
-	)
+	protected Derived create(in GPUShaderCreateInfo shader_create_info)
 	{
 		this.shader_handle = SDL_CreateGPUShader(
 			this.device.handle, cast(SDL_GPUShaderCreateInfo*)&shader_create_info
@@ -60,7 +58,7 @@ final class GPUVertexShader : GPUShader!(GPUVertexShader)
 
 	typeof(this) create(
 		ShaderFile shader_file,
-		GPUShaderArguments shader_args
+		in GPUShaderArguments shader_args
 	)
 	{
 		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
@@ -82,7 +80,7 @@ final class GPUFragmentShader : GPUShader!(GPUVertexShader)
 
 	typeof(this) create(
 		ShaderFile shader_file,
-		GPUShaderArguments shader_args
+		in GPUShaderArguments shader_args
 	)
 	{
 		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
@@ -91,46 +89,6 @@ final class GPUFragmentShader : GPUShader!(GPUVertexShader)
 		);
 		super.create(shader_create_info);
 		return this;
-	}
-}
-
-struct ShaderCode
-{
-	public ubyte[] code;
-	public string entry_point;
-	public GPUShaderFormat frontend_format;
-
-	this(GPUShaderFormat backend_formats, string shader_filename)
-	{
-		string shader_uri;
-		frontend_format = GPUShaderFormat.invalid;
-
-		if (backend_formats & GPUShaderFormat.spirv)
-		{
-			shader_uri = format("./shader/compiled/SPIRV/%s.spv", shader_filename);
-			frontend_format = GPUShaderFormat.spirv;
-			entry_point = "main";
-		}
-		else if (backend_formats & GPUShaderFormat.msl)
-		{
-			shader_uri = format("./shader/compiled/MSL/%s.msl", shader_filename);
-			frontend_format = GPUShaderFormat.msl;
-			entry_point = "main0";
-		}
-		else if (backend_formats & GPUShaderFormat.dxil)
-		{
-			shader_uri = format("./shader/compiled/DXIL/%s.dxil", shader_filename);
-			frontend_format = GPUShaderFormat.dxil;
-			entry_point = "main";
-		}
-		else
-		{
-			enforce(false, "unrecognized backend shader format");
-		}
-
-		enforce(isFile(shader_uri), "shader file was not found.(" ~ shader_uri ~ ")");
-		this.code = cast(ubyte[]) read(shader_uri);
-		return;
 	}
 }
 
@@ -145,7 +103,7 @@ struct ShaderFile
 	public ubyte[] code;
 	protected string shader_dir, shader_ext;
 
-	this(string file_name, GPUShaderFormat backend_formats)
+	this(string file_name, in GPUShaderFormat backend_formats)
 	{
 		if (backend_formats & GPUShaderFormat.spirv)
 		{
@@ -192,6 +150,8 @@ struct ShaderFile
 			break;
 		case ".frag":
 			shader_stage = GPUShaderStage.fragment;
+			break;
+		case ".comp":
 			break;
 		default:
 			throw new Exception("cannot set shader_stage");

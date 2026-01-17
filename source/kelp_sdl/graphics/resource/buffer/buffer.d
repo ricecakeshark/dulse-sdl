@@ -25,12 +25,12 @@ abstract class GPUBuffer
 	}
 
 public:
-	@property SDL_GPUBuffer* handle() pure nothrow @nogc @safe
+	@property inout(SDL_GPUBuffer*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.buffer_handle;
 	}
 
-	@property uint size() const pure nothrow @nogc @safe
+	@property inout(uint) size() inout pure nothrow @nogc @safe
 	{
 		return cast(uint)(this._size);
 	}
@@ -48,7 +48,7 @@ public:
 
 protected:
 	typeof(this) create_by_info(
-		GPUBufferCreateInfo create_info,
+		in GPUBufferCreateInfo create_info,
 	)
 	in (this.device.handle !is null)
 	{
@@ -61,8 +61,8 @@ protected:
 	}
 
 	typeof(this) create_by_size(
-		SDL_GPUBufferUsageFlags usage_flags,
-		size_t size,
+		in SDL_GPUBufferUsageFlags usage_flags,
+		in size_t size,
 	)
 	in (this.device.handle !is null)
 	in (size <= uint.max)

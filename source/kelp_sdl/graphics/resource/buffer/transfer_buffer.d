@@ -41,7 +41,7 @@ class GPUTransferBuffer(Derived)
 		return this._size;
 	}
 
-	Derived create_by_info(GPUTransferBufferCreateInfo create_info)
+	Derived create_by_info(const ref GPUTransferBufferCreateInfo create_info)
 	{
 		this._size = create_info.size;
 		this.buffer_handle = SDL_CreateGPUTransferBuffer(
@@ -51,7 +51,7 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived create_by_size(uint size)
+	Derived create_by_size(in uint size)
 	{
 		this._size = size;
 		SDL_GPUTransferBufferCreateInfo create_info = {
@@ -74,7 +74,7 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived map(bool cycle = false)
+	Derived map(in bool cycle = false)
 	in (this.handle !is null)
 	in (this.device.handle !is null)
 	{
@@ -94,7 +94,10 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived set_data(Type)(Type[] set_data, size_t write_offset = 0)
+	Derived set_data(Type)(
+		Type[] set_data,
+		in size_t write_offset = 0,
+	)
 	in (this.transfer_ptr !is null)
 	in (Type.sizeof * set_data.length <= uint.max)
 	in (write_offset + (Type.sizeof * set_data.length) <= this.size)
@@ -107,7 +110,11 @@ class GPUTransferBuffer(Derived)
 		return cast(Derived) this;
 	}
 
-	Derived set_data(Type)(Type[] set_data, size_t write_offset, ulong set_size)
+	Derived set_data(Type)(
+		Type[] set_data,
+		in size_t write_offset,
+		in ulong set_size,
+	)
 	in (this.transfer_ptr !is null)
 	in (Type.sizeof * set_data.length <= uint.max)
 	in (set_size <= uint.max)
@@ -130,20 +137,20 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return;
 	}
 
-	typeof(this) create(GPUTransferBufferCreateInfo create_info)
+	typeof(this) create(in GPUTransferBufferCreateInfo create_info)
 	{
 		super.create_by_info(create_info);
 		return this;
 	}
 
-	typeof(this) create(size_t size)
+	typeof(this) create(in size_t size)
 	in (size <= uint.max)
 	{
 		this.create_by_size(cast(uint) size);
 		return this;
 	}
 
-	typeof(this) set(Type)(Type[] data, size_t write_offset)
+	typeof(this) set(Type)(Type[] data, in size_t write_offset)
 	in (this !is null)
 	in (this.buffer_handle !is null)
 	in (write_offset + (Type.sizeof * data.length) <= this.size)
@@ -152,7 +159,7 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 		return this;
 	}
 
-	typeof(this) set(Type)(Type[] data, size_t write_offset, size_t write_size)
+	typeof(this) set(Type)(Type[] data, in size_t write_offset, in size_t write_size)
 	in (this !is null)
 	in (this.buffer_handle !is null)
 	in (write_offset + (Type.sizeof * data.length) <= this.size)
@@ -193,20 +200,20 @@ class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
 		return;
 	}
 
-	typeof(this) create(GPUTransferBufferCreateInfo create_info)
+	typeof(this) create(const ref GPUTransferBufferCreateInfo create_info)
 	{
 		super.create_by_info(create_info);
 		return this;
 	}
 
-	typeof(this) create(size_t size)
+	typeof(this) create(in size_t size)
 	in (size <= uint.max)
 	{
 		super.create_by_size(cast(uint) size);
 		return this;
 	}
 
-	typeof(this) set(Surface surface)
+	typeof(this) set(const ref Surface surface)
 	in (this !is null)
 	in (this.buffer_handle !is null)
 	{

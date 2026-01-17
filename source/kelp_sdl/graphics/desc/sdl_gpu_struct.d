@@ -203,14 +203,14 @@ struct GPUComputePipelineCreateInfo
 
 	SDL_PropertiesID props;
 
-	this(ShaderCode shader_code)
+	this(ShaderFile shader_file)
 	{
 		import std.string;
 
-		this.code = cast(const(ubyte)*) shader_code.code;
-		this.code_size = shader_code.code.length;
-		this.entrypoint = toStringz(shader_code.entry_point);
-		this.format = cast(GPUShaderFormat) shader_code.frontend_format;
+		this.code = cast(const(ubyte)*) shader_file.code;
+		this.code_size = shader_file.code.length;
+		this.entrypoint = toStringz(shader_file.entry_point);
+		this.format = cast(GPUShaderFormat) shader_file.frontend_format;
 		return;
 	}
 }

@@ -27,7 +27,7 @@ abstract class GPUAbstractTexture
 		return this._height;
 	}
 
-	uint sizeInBytes() const pure nothrow @nogc @safe
+	@property inout(uint) size() inout pure nothrow @nogc @safe
 	in (this.texture_handle !is null)
 	{
 		return cast(uint)(this.width * this.height * 4);

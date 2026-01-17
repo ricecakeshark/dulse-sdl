@@ -21,7 +21,7 @@ class TextFont
 		return this.font_handle;
 	}
 
-	typeof(this) create(string font_uri, float font_size)
+	typeof(this) create(in string font_uri, in float font_size)
 	{
 		font_handle = TTF_OpenFont(toStringz(font_uri), font_size);
 		enforce(font_handle !is null);

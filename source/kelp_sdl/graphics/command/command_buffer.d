@@ -65,7 +65,10 @@ public:
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint slot_index)
+	typeof(this) push_vertex(Type)(
+		Type vertex_uniform_data,
+		in uint slot_index
+	)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUVertexUniformData(
@@ -75,7 +78,11 @@ public:
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(Type vertex_uniform_data, uint slot_index, uint size)
+	typeof(this) push_vertex(Type)(
+		Type vertex_uniform_data,
+		in uint slot_index,
+		in uint size
+	)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUVertexUniformData(
@@ -85,7 +92,10 @@ public:
 		return this;
 	}
 
-	typeof(this) push_fragment(Type)(Type fragment_uniform_data, uint first_slot = 0)
+	typeof(this) push_fragment(Type)(
+		Type fragment_uniform_data,
+		in uint first_slot = 0
+	)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUFragmentUniformData(
@@ -95,7 +105,7 @@ public:
 		return this;
 	}
 
-	typeof(this) push_uniform(Type)(Type compute_uniform_data, uint first_slot = 0)
+	typeof(this) push_uniform(Type)(Type compute_uniform_data, in uint first_slot = 0)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUComputeUniformData(
@@ -105,7 +115,7 @@ public:
 		return this;
 	}
 
-	typeof(this) blit_texture(GPUBlitInfo info)
+	typeof(this) blit_texture(in GPUBlitInfo info)
 	in (this.handle !is null)
 	{
 		SDL_BlitGPUTexture(this.handle, cast(SDL_GPUBlitInfo*)&info);

@@ -23,7 +23,7 @@ abstract class AbstractText
 		return;
 	}+/
 
-	typeof(this) create(string text_string)
+	typeof(this) create(in string text_string)
 	{
 		this.text_handle = TTF_CreateText(
 			this.text_engine.handle, this.text_font.handle,
@@ -41,7 +41,7 @@ abstract class AbstractText
 	}
 
 	// text color
-	typeof(this) get(ref ColorF color)
+	typeof(this) get(out ColorF color)
 	{
 		TTF_GetTextColorFloat(
 			this.text_handle, &(color.red), &(color.green), &(color.blue), &(color.alpha)
@@ -49,7 +49,7 @@ abstract class AbstractText
 		return this;
 	}
 
-	typeof(this) get(ref ColorU color)
+	typeof(this) get(out ColorU color)
 	{
 		TTF_GetTextColor(
 			this.text_handle, &(color.red), &(color.green), &(color.blue), &(color.alpha)
@@ -57,7 +57,7 @@ abstract class AbstractText
 		return this;
 	}
 
-	typeof(this) set(ColorF color)
+	typeof(this) set(in ColorF color)
 	in (this.text_handle !is null)
 	{
 		TTF_SetTextColorFloat(
@@ -66,7 +66,7 @@ abstract class AbstractText
 		return this;
 	}
 
-	typeof(this) set(ColorU color)
+	typeof(this) set(in ColorU color)
 	in (this.text_handle !is null)
 	{
 		TTF_SetTextColor(
@@ -117,14 +117,11 @@ abstract class AbstractText
 	}
 	// text string
 	// no getter string
-	typeof(this) set_string(string str)
+	typeof(this) set_string(in string str)
 	{
 		TTF_SetTextString(
-			this.text_handle, str.toStringz(), 0
-		).catchSDLError();
-		/+TTF_SetTextString(
 			this.text_handle, str.toStringz(), str.length
-		).catchSDLError();+/
+		).catchSDLError();
 		return this;
 	}
 }
@@ -154,7 +151,7 @@ class SurfaceText : AbstractText
 		return;
 	}
 
-	typeof(this) draw(Surface surface, int x = 0, int y = 0)
+	typeof(this) draw(ref Surface surface, in int x = 0, in int y = 0)
 	{
 		TTF_DrawSurfaceText(this.text_handle, x, y, surface.handle)
 			.catchSDLError();

@@ -12,7 +12,7 @@ Event[] pollEvent()
 		.array();
 }
 
-Event normalize(SDL_Event event) pure nothrow @nogc @safe
+Event normalize(in SDL_Event event) pure nothrow @nogc @safe
 {
 	switch (event.type)
 	{

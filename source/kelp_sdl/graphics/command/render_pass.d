@@ -26,7 +26,7 @@ class GPURenderPass
 
 	typeof(this) begin(
 		GPUCommandBuffer command_buffer,
-		GPUColorTargetInfo[] color_target_info_list,
+		in GPUColorTargetInfo[] color_target_info_list,
 	)
 	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
@@ -43,8 +43,8 @@ class GPURenderPass
 
 	typeof(this) begin(
 		GPUCommandBuffer command_buffer,
-		GPUColorTargetInfo[] color_target_info_list,
-		GPUDepthStencilTargetInfo depth_stencil_target_info,
+		in GPUColorTargetInfo[] color_target_info_list,
+		in GPUDepthStencilTargetInfo depth_stencil_target_info,
 	)
 	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
@@ -75,7 +75,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, uint first_slot = 0)
+	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
 	in (this.handle !is null)
 	in (vertex_buffer_list.all!(buffer => buffer !is null))
 	in (vertex_buffer_list.all!(buffer => buffer.handle !is null))
@@ -110,7 +110,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUTexture[] texture_list, uint first_slot = 0u)
+	typeof(this) bind(GPUTexture[] texture_list, in uint first_slot = 0u)
 	{
 		SDL_GPUTexture*[] texture_binding_list;
 		texture_binding_list = texture_list.map!(texture => texture.handle).array();
@@ -123,7 +123,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot)
+	typeof(this) bind(in GPUTextureSamplerBinding[] binding_list, in uint first_slot)
 	in (this.handle !is null)
 	in (binding_list.length >= 1)
 	in (binding_list.length < uint.max)
@@ -137,21 +137,21 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) set(const GPUViewport viewport)
+	typeof(this) set(in GPUViewport viewport)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUViewport(this.handle, cast(const(SDL_GPUViewport*))&viewport);
 		return this;
 	}
 
-	typeof(this) set(const Rect scissor_rect)
+	typeof(this) set(in Rect scissor_rect)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUScissor(this.handle, cast(const(SDL_Rect*))&scissor_rect);
 		return this;
 	}
 
-	typeof(this) set(ubyte stencil_referensce)
+	typeof(this) set(in ubyte stencil_referensce)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
@@ -159,7 +159,7 @@ class GPURenderPass
 	}
 
 	typeof(this) draw(
-		ParamPrimitive param
+		in ParamPrimitive param
 	)
 	in (this.handle !is null)
 	{
@@ -174,7 +174,7 @@ class GPURenderPass
 	}
 
 	typeof(this) draw_indexed(
-		ParamIndexedPrimitive param
+		in ParamIndexedPrimitive param
 	)
 	in (this.handle !is null)
 	{
@@ -191,7 +191,7 @@ class GPURenderPass
 
 	typeof(this) draw_indirect(
 		GPUDrawBuffer draw_buffer,
-		ParamPrimitiveIndirect param
+		in ParamPrimitiveIndirect param
 	)
 	in (this.handle !is null)
 	in (draw_buffer.handle !is null)
@@ -207,7 +207,7 @@ class GPURenderPass
 
 	typeof(this) draw_indexed_indirect(
 		GPUDrawBuffer draw_buffer,
-		ParamPrimitiveIndirect param
+		in ParamPrimitiveIndirect param
 	)
 	in (this.handle !is null)
 	in (draw_buffer.handle !is null)
