@@ -4,12 +4,12 @@ import bindbc.sdl;
 import kelp_sdl.core;
 import kelp_sdl.graphics.core.gpu_device;
 
-class GPUFence
+class GpuFence
 {
 	SDL_GPUFence* fence_handle;
-	GPUDevice device;
+	GpuDevice device;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;

@@ -6,12 +6,12 @@ import kelp_sdl.graphics.desc;
 
 import std.exception : enforce;
 
-class GPUSampler
+class GpuSampler
 {
 	SDL_GPUSampler* sampler_handle;
-	GPUDevice device;
+	GpuDevice device;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -28,7 +28,7 @@ class GPUSampler
 		return this.sampler_handle;
 	}
 
-	typeof(this) create(in GPUSamplerCreateInfo create_info)
+	typeof(this) create(in GpuSamplerCreateInfo create_info)
 	in (this.device !is null)
 	{
 		this.sampler_handle = SDL_CreateGPUSampler(

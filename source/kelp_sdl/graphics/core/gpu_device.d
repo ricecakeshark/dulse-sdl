@@ -7,10 +7,10 @@ import kelp_sdl.graphics.core;
 
 import std.exception, std.string;
 
-class GPUDevice
+class GpuDevice
 {
 	SDL_GPUDevice* device_handle;
-	GPUWindow claimed_window;
+	GpuWindow claimed_window;
 
 	this()
 	{
@@ -50,7 +50,7 @@ class GPUDevice
 		return this;
 	}
 
-	typeof(this) claim(GPUWindow window)
+	typeof(this) claim(GpuWindow window)
 	in (this.handle !is null)
 	in (window !is null)
 	in (window.handle !is null)
@@ -59,7 +59,7 @@ class GPUDevice
 		return this;
 	}
 
-	typeof(this) release_window(GPUWindow window)
+	typeof(this) release_window(GpuWindow window)
 	in (this.device_handle !is null)
 	{
 		SDL_ReleaseWindowFromGPUDevice(this.handle, window.handle);
@@ -95,9 +95,9 @@ class GPUDevice
 		return SDL_GPUTextureSupportsFormat(this.handle, format, type, usage);
 	}
 
-	GPUShaderFormat get_shader_format()
+	GpuShaderFormat get_shader_format()
 	{
-		return cast(GPUShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
+		return cast(GpuShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
 			this.device_handle);
 	}
 

@@ -5,11 +5,11 @@ import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 
-class GPUIndexBuffer : GPUBuffer
+class GpuIndexBuffer : GpuBuffer
 {
-	GPUIndexElementSize element_size;
+	GpuIndexElementSize element_size;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		super(device);
 		return;
@@ -24,7 +24,7 @@ public:
 
 	typeof(this) create(
 		in size_t size,
-		in GPUIndexElementSize element_size = GPUIndexElementSize._32bit
+		in GpuIndexElementSize element_size = GpuIndexElementSize._32bit
 	)
 	{
 		this.element_size = element_size;

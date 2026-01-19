@@ -5,18 +5,18 @@ import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.texture;
 
-final class GPUSwapchainTexture : GPUAbstractTexture
+final class GpuSwapchainTexture : GpuAbstractTexture
 {
-	GPUWindow window;
+	GpuWindow window;
 
-	this(GPUDevice device, GPUWindow window)
+	this(GpuDevice device, GpuWindow window)
 	{
 		this.device = device;
 		this.window = window;
 		return;
 	}
 
-	typeof(this) acquire(GPUCommandBuffer command_buffer)
+	typeof(this) acquire(GpuCommandBuffer command_buffer)
 	{
 		bool succeed;
 		succeed = SDL_WaitAndAcquireGPUSwapchainTexture(

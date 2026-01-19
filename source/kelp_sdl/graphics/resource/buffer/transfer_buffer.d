@@ -12,14 +12,14 @@ import std.algorithm : map, sum;
 import std.traits : isArray;
 import core.stdc.string : memcpy;
 
-class GPUTransferBuffer(Derived)
+class GpuTransferBuffer(Derived)
 {
 	SDL_GPUTransferBuffer* buffer_handle;
-	GPUDevice device;
+	GpuDevice device;
 	uint _size;
 	void* transfer_ptr;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -41,7 +41,7 @@ class GPUTransferBuffer(Derived)
 		return this._size;
 	}
 
-	Derived create_by_info(const ref GPUTransferBufferCreateInfo create_info)
+	Derived create_by_info(const ref GpuTransferBufferCreateInfo create_info)
 	{
 		this._size = create_info.size;
 		this.buffer_handle = SDL_CreateGPUTransferBuffer(
@@ -129,15 +129,15 @@ class GPUTransferBuffer(Derived)
 	}
 }
 
-class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
+class GpuBufferTransferBuffer : GpuTransferBuffer!(GpuBufferTransferBuffer)
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		super(device);
 		return;
 	}
 
-	typeof(this) create(in GPUTransferBufferCreateInfo create_info)
+	typeof(this) create(in GpuTransferBufferCreateInfo create_info)
 	{
 		super.create_by_info(create_info);
 		return this;
@@ -192,15 +192,15 @@ class GPUBufferTransferBuffer : GPUTransferBuffer!(GPUBufferTransferBuffer)
 	}+/
 }
 
-class GPUTextureTransferBuffer : GPUTransferBuffer!(GPUTextureTransferBuffer)
+class GpuTextureTransferBuffer : GpuTransferBuffer!(GpuTextureTransferBuffer)
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		super(device);
 		return;
 	}
 
-	typeof(this) create(const ref GPUTransferBufferCreateInfo create_info)
+	typeof(this) create(const ref GpuTransferBufferCreateInfo create_info)
 	{
 		super.create_by_info(create_info);
 		return this;

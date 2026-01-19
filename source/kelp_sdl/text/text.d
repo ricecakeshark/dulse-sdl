@@ -16,7 +16,7 @@ abstract class AbstractText
 	AbstractTextEngine text_engine;
 	TextFont text_font;
 
-	/+this(GPUTextEngine engine, GPUTextFont font)
+	/+this(GpuTextEngine engine, GpuTextFont font)
 	{
 		this.text_engine = engine;
 		this.text_font = font;
@@ -126,9 +126,9 @@ abstract class AbstractText
 	}
 }
 
-class GPUText : AbstractText
+class GpuText : AbstractText
 {
-	this(GPUTextEngine engine, TextFont font)
+	this(GpuTextEngine engine, TextFont font)
 	{
 		this.text_engine = engine;
 		this.text_font = font;

@@ -10,7 +10,7 @@ import std.exception : enforce;
 abstract class AbstractTextEngine
 {
 	TTF_TextEngine* text_engine_handle;
-	GPUDevice device;
+	GpuDevice device;
 
 	@property inout(TTF_TextEngine*) handle() inout pure nothrow @nogc @safe
 	{
@@ -18,9 +18,9 @@ abstract class AbstractTextEngine
 	}
 }
 
-class GPUTextEngine : AbstractTextEngine
+class GpuTextEngine : AbstractTextEngine
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -49,7 +49,7 @@ class GPUTextEngine : AbstractTextEngine
 
 class SurfaceTextEngine : AbstractTextEngine
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;

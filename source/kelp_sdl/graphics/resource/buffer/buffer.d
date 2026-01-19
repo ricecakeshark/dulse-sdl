@@ -5,14 +5,14 @@ import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import std.exception : enforce;
 
-abstract class GPUBuffer
+abstract class GpuBuffer
 {
 	SDL_GPUBuffer* buffer_handle;
-	GPUDevice device;
+	GpuDevice device;
 	void[] data;
 	uint _size;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -48,7 +48,7 @@ public:
 
 protected:
 	typeof(this) create_by_info(
-		in GPUBufferCreateInfo create_info,
+		in GpuBufferCreateInfo create_info,
 	)
 	in (this.device.handle !is null)
 	{

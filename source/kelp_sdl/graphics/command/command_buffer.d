@@ -7,19 +7,19 @@ import kelp_sdl.graphics.resource.texture.swapchain_texture;
 
 import std.exception, std.string;
 
-class GPUCommandBuffer
+class GpuCommandBuffer
 {
 	SDL_GPUCommandBuffer* command_buffer_handle;
-	GPUDevice device;
-	GPUWindow window;
+	GpuDevice device;
+	GpuWindow window;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
 	}
 
-	this(GPUDevice device, GPUWindow window)
+	this(GpuDevice device, GpuWindow window)
 	{
 		this.device = device;
 		this.window = window;
@@ -42,7 +42,7 @@ public:
 	}
 
 	typeof(this) acquire_texture(
-		ref GPUSwapchainTexture swapchain_texture,
+		ref GpuSwapchainTexture swapchain_texture,
 	)
 	in (this.window !is null)
 	{
@@ -115,7 +115,7 @@ public:
 		return this;
 	}
 
-	typeof(this) blit_texture(in GPUBlitInfo info)
+	typeof(this) blit_texture(in GpuBlitInfo info)
 	in (this.handle !is null)
 	{
 		SDL_BlitGPUTexture(this.handle, cast(SDL_GPUBlitInfo*)&info);

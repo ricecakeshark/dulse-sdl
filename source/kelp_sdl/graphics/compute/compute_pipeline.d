@@ -5,12 +5,12 @@ import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import std.exception;
 
-class GPUComputePipeline
+class GpuComputePipeline
 {
 	protected SDL_GPUComputePipeline* pipeline_handle;
-	protected GPUDevice device;
+	protected GpuDevice device;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -27,7 +27,7 @@ class GPUComputePipeline
 		return this.pipeline_handle;
 	}
 
-	typeof(this) create(in GPUComputePipelineCreateInfo create_info)
+	typeof(this) create(in GpuComputePipelineCreateInfo create_info)
 	{
 		this.pipeline_handle = SDL_CreateGPUComputePipeline(
 			this.device.handle,

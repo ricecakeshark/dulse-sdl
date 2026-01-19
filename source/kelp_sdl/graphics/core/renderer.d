@@ -14,7 +14,7 @@ class Renderer
 		return;
 	}
 
-	this(GPUDevice device, GPUWindow window)
+	this(GpuDevice device, GpuWindow window)
 	{
 		this.renderer_handle = SDL_CreateGPURenderer(device.handle, window.handle);
 		return;

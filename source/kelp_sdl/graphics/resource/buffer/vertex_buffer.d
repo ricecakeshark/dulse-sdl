@@ -4,9 +4,9 @@ import bindbc.sdl;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.buffer;
 
-class GPUVertexBuffer : GPUBuffer
+class GpuVertexBuffer : GpuBuffer
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		super(device);
 		return;

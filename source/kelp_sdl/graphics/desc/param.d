@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.desc.param;
 
-struct GPUShaderArguments
+struct GpuShaderArguments
 {
 	uint sampler_count;
 	uint uniform_buffer_count;

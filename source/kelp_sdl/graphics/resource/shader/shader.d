@@ -5,12 +5,12 @@ import kelp_sdl.graphics;
 import std.algorithm, std.exception, std.file, std.format;
 import std.string : fromStringz, toStringz;
 
-abstract class GPUShader(Derived)
+abstract class GpuShader(Derived)
 {
 	SDL_GPUShader* shader_handle;
-	GPUDevice device;
+	GpuDevice device;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -27,7 +27,7 @@ abstract class GPUShader(Derived)
 		return this.shader_handle;
 	}
 
-	protected Derived create(in GPUShaderCreateInfo shader_create_info)
+	protected Derived create(in GpuShaderCreateInfo shader_create_info)
 	{
 		this.shader_handle = SDL_CreateGPUShader(
 			this.device.handle, cast(SDL_GPUShaderCreateInfo*)&shader_create_info
@@ -48,9 +48,9 @@ abstract class GPUShader(Derived)
 	}
 }
 
-final class GPUVertexShader : GPUShader!(GPUVertexShader)
+final class GpuVertexShader : GpuShader!(GpuVertexShader)
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		super(device);
 		return;
@@ -58,10 +58,10 @@ final class GPUVertexShader : GPUShader!(GPUVertexShader)
 
 	typeof(this) create(
 		ShaderFile shader_file,
-		in GPUShaderArguments shader_args
+		in GpuShaderArguments shader_args
 	)
 	{
-		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
+		GpuShaderCreateInfo shader_create_info = GpuShaderCreateInfo(
 			shader_file,
 			shader_args,
 		);
@@ -70,9 +70,9 @@ final class GPUVertexShader : GPUShader!(GPUVertexShader)
 	}
 }
 
-final class GPUFragmentShader : GPUShader!(GPUVertexShader)
+final class GpuFragmentShader : GpuShader!(GpuVertexShader)
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		super(device);
 		return;
@@ -80,10 +80,10 @@ final class GPUFragmentShader : GPUShader!(GPUVertexShader)
 
 	typeof(this) create(
 		ShaderFile shader_file,
-		in GPUShaderArguments shader_args
+		in GpuShaderArguments shader_args
 	)
 	{
-		GPUShaderCreateInfo shader_create_info = GPUShaderCreateInfo(
+		GpuShaderCreateInfo shader_create_info = GpuShaderCreateInfo(
 			shader_file,
 			shader_args,
 		);
@@ -97,33 +97,33 @@ import std.path;
 struct ShaderFile
 {
 	public string shader_uri;
-	GPUShaderFormat frontend_format = GPUShaderFormat.invalid;
-	GPUShaderStage shader_stage;
+	GpuShaderFormat frontend_format = GpuShaderFormat.invalid;
+	GpuShaderStage shader_stage;
 	public string entry_point;
 	public ubyte[] code;
 	protected string shader_dir, shader_ext;
 
-	this(string file_name, in GPUShaderFormat backend_formats)
+	this(string file_name, in GpuShaderFormat backend_formats)
 	{
-		if (backend_formats & GPUShaderFormat.spirv)
+		if (backend_formats & GpuShaderFormat.spirv)
 		{
 			shader_dir = "./shader/compiled/SPIRV/";
 			shader_ext = ".spv";
-			frontend_format = GPUShaderFormat.spirv;
+			frontend_format = GpuShaderFormat.spirv;
 			entry_point = "main";
 		}
-		else if (backend_formats & GPUShaderFormat.msl)
+		else if (backend_formats & GpuShaderFormat.msl)
 		{
 			shader_dir = "./shader/compiled/MSL/";
 			shader_ext = ".msl";
-			frontend_format = GPUShaderFormat.msl;
+			frontend_format = GpuShaderFormat.msl;
 			entry_point = "main0";
 		}
-		else if (backend_formats & GPUShaderFormat.dxil)
+		else if (backend_formats & GpuShaderFormat.dxil)
 		{
 			shader_dir = "./shader/compiled/DXIL/";
 			shader_ext = ".dxil";
-			frontend_format = GPUShaderFormat.dxil;
+			frontend_format = GpuShaderFormat.dxil;
 			entry_point = "main";
 			/+switch (file_name.extension)
 			{
@@ -146,10 +146,10 @@ struct ShaderFile
 		switch (file_name.extension)
 		{
 		case ".vert":
-			shader_stage = GPUShaderStage.vertex;
+			shader_stage = GpuShaderStage.vertex;
 			break;
 		case ".frag":
-			shader_stage = GPUShaderStage.fragment;
+			shader_stage = GpuShaderStage.fragment;
 			break;
 		case ".comp":
 			break;

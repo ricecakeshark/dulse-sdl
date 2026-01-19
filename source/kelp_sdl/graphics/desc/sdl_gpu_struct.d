@@ -6,23 +6,23 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import kelp_sdl.image.desc;
 
-struct GPUBlitInfo
+struct GpuBlitInfo
 {
-	GPUBlitRegion source;
-	GPUBlitRegion destination;
-	GPULoadOp load_op;
+	GpuBlitRegion source;
+	GpuBlitRegion destination;
+	GpuLoadOp load_op;
 	Color clear_color;
 	SdlFlipMode flip_mode;
-	GPUFilter filter;
+	GpuFilter filter;
 	bool cycle;
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
 
 	this(
-		GPUBlitRegion source,
-		GPUBlitRegion dest,
-		GPULoadOp load_op,
+		GpuBlitRegion source,
+		GpuBlitRegion dest,
+		GpuLoadOp load_op,
 		Color color = Color(0.0f, 0.0f, 0.0f, 1.0f),
 	)
 	{
@@ -34,7 +34,7 @@ struct GPUBlitInfo
 	}
 }
 
-struct GPUBlitRegion
+struct GpuBlitRegion
 {
 	SDL_GPUTexture* texture;
 	uint mip_level;
@@ -45,7 +45,7 @@ struct GPUBlitRegion
 	uint h;
 
 	this(
-		GPUAbstractTexture texture,
+		GpuAbstractTexture texture,
 		uint x, uint y,
 		uint w, uint h,
 	)
@@ -59,7 +59,7 @@ struct GPUBlitRegion
 	}
 
 	this(
-		GPUAbstractTexture texture,
+		GpuAbstractTexture texture,
 	)
 	{
 		this.texture = texture.handle;
@@ -71,7 +71,7 @@ struct GPUBlitRegion
 	}
 
 	this(
-		GPUAbstractTexture texture,
+		GpuAbstractTexture texture,
 		uint mip_level, uint layer_or_depth_plane,
 		uint x, uint y, uint w, uint h
 	)
@@ -87,12 +87,12 @@ struct GPUBlitRegion
 	}
 }
 
-struct GPUBufferBinding
+struct GpuBufferBinding
 {
 	SDL_GPUBuffer* buffer;
 	uint offset;
 
-	this(GPUBuffer buffer, uint offset = 0)
+	this(GpuBuffer buffer, uint offset = 0)
 	in (buffer.handle !is null)
 	{
 		this.buffer = buffer.handle;
@@ -101,14 +101,14 @@ struct GPUBufferBinding
 	}
 }
 
-struct GPUBufferCreateInfo
+struct GpuBufferCreateInfo
 {
-	GPUBufferUsageFlags usage;
+	GpuBufferUsageFlags usage;
 	uint size;
 
 	SDL_PropertiesID props;
 
-	this(GPUBufferUsageFlags flags, size_t size)
+	this(GpuBufferUsageFlags flags, size_t size)
 	in (size <= uint.max)
 	{
 		this.usage = flags;
@@ -117,35 +117,35 @@ struct GPUBufferCreateInfo
 	}
 }
 
-struct GPUColorTargetBlendState
+struct GpuColorTargetBlendState
 {
-	GPUBlendFactor src_color_blendfactor;
-	GPUBlendFactor dst_color_blendfactor;
-	GPUBlendOp color_blend_op;
-	GPUBlendFactor src_alpha_blendfactor;
-	GPUBlendFactor dst_alpha_blendfactor;
-	GPUBlendOp alpha_blend_op;
-	GPUColorComponentFlags color_write_mask;
+	GpuBlendFactor src_color_blendfactor;
+	GpuBlendFactor dst_color_blendfactor;
+	GpuBlendOp color_blend_op;
+	GpuBlendFactor src_alpha_blendfactor;
+	GpuBlendFactor dst_alpha_blendfactor;
+	GpuBlendOp alpha_blend_op;
+	GpuColorComponentFlags color_write_mask;
 	bool enable_blend;
 	bool enable_color_write_mask;
 	ubyte padding1;
 	ubyte padding2;
 }
 
-struct GPUColorTargetDescription
+struct GpuColorTargetDescription
 {
-	GPUTextureFormat format;
-	GPUColorTargetBlendState blend_state;
+	GpuTextureFormat format;
+	GpuColorTargetBlendState blend_state;
 }
 
-struct GPUColorTargetInfo
+struct GpuColorTargetInfo
 {
 	SDL_GPUTexture* texture;
 	uint mip_level;
 	uint layer_or_depth_plane;
 	Color clear_color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-	GPULoadOp load_op;
-	GPUStoreOp store_op;
+	GpuLoadOp load_op;
+	GpuStoreOp store_op;
 	SDL_GPUTexture* resolve_texture;
 	uint resolve_mip_level;
 	uint resolve_layer;
@@ -154,7 +154,7 @@ struct GPUColorTargetInfo
 	ubyte padding1;
 	ubyte padding2;
 
-	this(GPUAbstractTexture texture, GPULoadOp load_op, GPUStoreOp store_op)
+	this(GpuAbstractTexture texture, GpuLoadOp load_op, GpuStoreOp store_op)
 	{
 		this.texture = texture.handle;
 		this.load_op = load_op;
@@ -163,8 +163,8 @@ struct GPUColorTargetInfo
 	}
 
 	this(
-		GPUAbstractTexture texture,
-		GPULoadOp load_op, GPUStoreOp store_op,
+		GpuAbstractTexture texture,
+		GpuLoadOp load_op, GpuStoreOp store_op,
 		uint mip_level,
 		uint depth,
 	)
@@ -181,16 +181,16 @@ struct GPUColorTargetInfo
 	invariant
 	{
 		if (cycle == true)
-			assert(this.load_op != GPULoadOp.load);
+			assert(this.load_op != GpuLoadOp.load);
 	}
 }
 
-struct GPUComputePipelineCreateInfo
+struct GpuComputePipelineCreateInfo
 {
 	size_t code_size;
 	const ubyte* code;
 	const char* entrypoint;
-	GPUShaderFormat format;
+	GpuShaderFormat format;
 	uint num_samplers;
 	uint num_readonly_storage_textures;
 	uint num_readonly_storage_buffers;
@@ -210,16 +210,16 @@ struct GPUComputePipelineCreateInfo
 		this.code = cast(const(ubyte)*) shader_file.code;
 		this.code_size = shader_file.code.length;
 		this.entrypoint = toStringz(shader_file.entry_point);
-		this.format = cast(GPUShaderFormat) shader_file.frontend_format;
+		this.format = cast(GpuShaderFormat) shader_file.frontend_format;
 		return;
 	}
 }
 
-struct GPUDepthStencilState
+struct GpuDepthStencilState
 {
-	GPUCompareOp compare_op;
-	GPUStencilOpState back_stencil_state;
-	GPUStencilOpState front_stencil_state;
+	GpuCompareOp compare_op;
+	GpuStencilOpState back_stencil_state;
+	GpuStencilOpState front_stencil_state;
 	ubyte compare_mask;
 	ubyte write_mask;
 	bool enable_depth_test;
@@ -230,7 +230,7 @@ struct GPUDepthStencilState
 	ubyte padding3;
 }
 
-struct GPUDepthStencilTargetInfo
+struct GpuDepthStencilTargetInfo
 {
 	SDL_GPUTexture* texture;
 	float clear_depth = 0.0f;
@@ -244,47 +244,47 @@ struct GPUDepthStencilTargetInfo
 	ubyte layer;
 }
 
-struct GPUGraphicsPipelineCreateInfo
+struct GpuGraphicsPipelineCreateInfo
 {
 	SDL_GPUShader* vertex_shader;
 	SDL_GPUShader* fragment_shader;
-	GPUVertexInputState vertex_input_state;
+	GpuVertexInputState vertex_input_state;
 	SDL_GPUPrimitiveType primitive_type;
-	GPURasterizerState rasterizer_state;
-	GPUMultisampleState multisample_state;
-	GPUDepthStencilState depth_stencil_state;
-	GPUGraphicsPipelineTargetInfo target_info;
+	GpuRasterizerState rasterizer_state;
+	GpuMultisampleState multisample_state;
+	GpuDepthStencilState depth_stencil_state;
+	GpuGraphicsPipelineTargetInfo target_info;
 
 	SDL_PropertiesID props = 0;
 }
 
-struct GPUGraphicsPipelineTargetInfo
+struct GpuGraphicsPipelineTargetInfo
 {
-	GPUColorTargetDescription* color_target_descriptions;
+	GpuColorTargetDescription* color_target_descriptions;
 	uint num_color_targets;
-	GPUTextureFormat depth_stencil_format = GPUTextureFormat.invalid;
+	GpuTextureFormat depth_stencil_format = GpuTextureFormat.invalid;
 	bool has_depth_stencil_target = false;
 	ubyte padding1;
 	ubyte padding2;
 	ubyte padding3;
 
 	this(
-		GPUColorTargetDescription[] description_list
+		GpuColorTargetDescription[] description_list
 	)
 	in (description_list.length < uint.max)
 	{
-		this.color_target_descriptions = cast(GPUColorTargetDescription*) description_list.ptr;
+		this.color_target_descriptions = cast(GpuColorTargetDescription*) description_list.ptr;
 		this.num_color_targets = cast(uint) description_list.length;
 		return;
 	}
 
 	this(
-		GPUColorTargetDescription[] description_list,
-		GPUTextureFormat depth_stencil_format,
+		GpuColorTargetDescription[] description_list,
+		GpuTextureFormat depth_stencil_format,
 	)
 	in (description_list.length < uint.max)
 	{
-		this.color_target_descriptions = cast(GPUColorTargetDescription*) description_list.ptr;
+		this.color_target_descriptions = cast(GpuColorTargetDescription*) description_list.ptr;
 		this.num_color_targets = cast(uint) description_list.length;
 		this.depth_stencil_format = depth_stencil_format;
 		this.has_depth_stencil_target = true;
@@ -292,9 +292,9 @@ struct GPUGraphicsPipelineTargetInfo
 	}
 }
 
-struct GPUMultisampleState
+struct GpuMultisampleState
 {
-	GPUSampleCount sample_count;
+	GpuSampleCount sample_count;
 	uint sample_mask;
 	bool enable_mask;
 	bool enable_alpha_to_coverage;
@@ -302,11 +302,11 @@ struct GPUMultisampleState
 	ubyte padding3;
 }
 
-struct GPURasterizerState
+struct GpuRasterizerState
 {
-	GPUFillMode fill_mode;
-	GPUCullMode cull_mode;
-	GPUFrontFace front_face;
+	GpuFillMode fill_mode;
+	GpuCullMode cull_mode;
+	GpuFrontFace front_face;
 	float depth_bias_constant_factor = 0.0f;
 	float depth_bias_clamp = 0.0f;
 	float depth_bias_slope_factor = 0.0f;
@@ -316,17 +316,17 @@ struct GPURasterizerState
 	ubyte padding2;
 }
 
-struct GPUSamplerCreateInfo
+struct GpuSamplerCreateInfo
 {
-	GPUFilter min_filter;
-	GPUFilter mag_filter;
-	GPUSamplerMipmapMode mipmap_mode;
-	GPUSamplerAddressMode address_mode_u;
-	GPUSamplerAddressMode address_mode_v;
-	GPUSamplerAddressMode address_mode_w;
+	GpuFilter min_filter;
+	GpuFilter mag_filter;
+	GpuSamplerMipmapMode mipmap_mode;
+	GpuSamplerAddressMode address_mode_u;
+	GpuSamplerAddressMode address_mode_v;
+	GpuSamplerAddressMode address_mode_w;
 	float mip_lod_bias = 0.0f;
 	float max_anisotropy = 0.0f;
-	GPUCompareOp compare_op;
+	GpuCompareOp compare_op;
 	float min_lod = 0.0f;
 	float max_lod = 0.0f;
 	bool enable_anisotropy;
@@ -335,13 +335,13 @@ struct GPUSamplerCreateInfo
 	ubyte padding2;
 }
 
-struct GPUShaderCreateInfo
+struct GpuShaderCreateInfo
 {
 	size_t code_size;
 	const ubyte* code;
 	const char* entrypoint;
-	GPUShaderFormat format;
-	GPUShaderStage stage;
+	GpuShaderFormat format;
+	GpuShaderStage stage;
 	uint num_samplers;
 	uint num_storage_textures;
 	uint num_storage_buffers;
@@ -349,7 +349,7 @@ struct GPUShaderCreateInfo
 
 	this(
 		ShaderFile shader_file,
-		GPUShaderArguments shader_args
+		GpuShaderArguments shader_args
 	)
 	{
 		import std.string : toStringz;
@@ -367,15 +367,15 @@ struct GPUShaderCreateInfo
 	}
 }
 
-struct GPUStencilOpState
+struct GpuStencilOpState
 {
-	GPUStencilOp fail_op;
-	GPUStencilOp pass_op;
-	GPUStencilOp depth_fail_op;
-	GPUCompareOp compare_op;
+	GpuStencilOp fail_op;
+	GpuStencilOp pass_op;
+	GpuStencilOp depth_fail_op;
+	GpuCompareOp compare_op;
 }
 
-struct GPUStorageBufferReadWriteBinding
+struct GpuStorageBufferReadWriteBinding
 {
 	SDL_GPUBuffer* buffer;
 	bool cycle;
@@ -383,7 +383,7 @@ struct GPUStorageBufferReadWriteBinding
 	ubyte padding2;
 	ubyte padding3;
 
-	this(GPUBuffer buffer, bool cycle = false)
+	this(GpuBuffer buffer, bool cycle = false)
 	{
 		this.buffer = buffer.handle;
 		this.cycle = cycle;
@@ -391,7 +391,7 @@ struct GPUStorageBufferReadWriteBinding
 	}
 }
 
-struct GPUStorageTextureReadWriteBinding
+struct GpuStorageTextureReadWriteBinding
 {
 	SDL_GPUTexture* texture;
 	uint mip_level;
@@ -401,13 +401,13 @@ struct GPUStorageTextureReadWriteBinding
 	ubyte padding2;
 	ubyte padding3;
 
-	this(GPUTexture texture)
+	this(GpuTexture texture)
 	{
 		this.texture = texture.handle;
 		return;
 	}
 
-	this(GPUTexture texture, uint mip_level, uint layer, bool cycle = false)
+	this(GpuTexture texture, uint mip_level, uint layer, bool cycle = false)
 	{
 		this.texture = texture.handle;
 		this.mip_level = mip_level;
@@ -417,21 +417,21 @@ struct GPUStorageTextureReadWriteBinding
 	}
 }
 
-struct GPUTextureCreateInfo
+struct GpuTextureCreateInfo
 {
-	GPUTextureType type;
-	GPUTextureFormat format;
-	GPUTextureUsageFlags usage;
+	GpuTextureType type;
+	GpuTextureFormat format;
+	GpuTextureUsageFlags usage;
 	uint width;
 	uint height;
 	uint layer_count_or_depth = 1;
 	uint num_levels = 1;
-	GPUSampleCount sample_count;
+	GpuSampleCount sample_count;
 
 	SDL_PropertiesID props;
 }
 
-struct GPUTextureLocation
+struct GpuTextureLocation
 {
 	SDL_GPUTexture* texture;
 	uint mip_level;
@@ -441,7 +441,7 @@ struct GPUTextureLocation
 	uint z;
 }
 
-struct GPUTextureRegion
+struct GpuTextureRegion
 {
 	SDL_GPUTexture* texture;
 	uint mip_level;
@@ -453,7 +453,7 @@ struct GPUTextureRegion
 	uint h;
 	uint d;
 
-	/+this(GPUTexture texture)
+	/+this(GpuTexture texture)
 	{
 		this.texture = texture.handle;
 		this.w = texture.width;
@@ -463,7 +463,7 @@ struct GPUTextureRegion
 	}+/
 }
 
-struct GPUTextureSamplerBinding
+struct GpuTextureSamplerBinding
 {
 	SDL_GPUTexture* texture;
 	SDL_GPUSampler* sampler;
@@ -477,7 +477,7 @@ struct GPUTextureSamplerBinding
 		return;
 	}
 
-	this(GPUTexture texture, GPUSampler sampler)
+	this(GpuTexture texture, GpuSampler sampler)
 	in (texture !is null)
 	in (texture.handle !is null)
 	in (sampler !is null)
@@ -489,14 +489,14 @@ struct GPUTextureSamplerBinding
 	}
 }
 
-struct GPUTextureTransferInfo
+struct GpuTextureTransferInfo
 {
 	SDL_GPUTransferBuffer* transfer_buffer;
 	uint offset;
 	uint pixels_per_row;
 	uint rows_per_layer;
 
-	this(GPUTextureTransferBuffer texture_transfer_buffer, uint offset)
+	this(GpuTextureTransferBuffer texture_transfer_buffer, uint offset)
 	{
 		this.transfer_buffer = texture_transfer_buffer.handle;
 		this.offset = offset;
@@ -504,66 +504,76 @@ struct GPUTextureTransferInfo
 	}
 }
 
-struct GPUTransferBufferCreateInfo
+struct GpuTransferBufferCreateInfo
 {
-	GPUTransferBufferUsage usage;
+	GpuTransferBufferUsage usage;
 	uint size;
 
 	SDL_PropertiesID props;
 }
 
-struct GPUVertexBufferDescription
+struct GpuVertexBufferDescription
 {
 	uint slot;
 	uint pitch;
-	GPUVertexInputRate input_rate;
+	GpuVertexInputRate input_rate;
 	uint instance_step_rate;
 }
 
-struct GPUVertexAttribute
+struct GpuVertexAttribute
 {
 	uint location;
 	uint buffer_slot;
-	GPUVertexElementFormat format;
+	GpuVertexElementFormat format;
 	uint offset;
 }
 
-struct GPUVertexInputState
+struct GpuVertexInputState
 {
-	GPUVertexBufferDescription* vertex_buffer_descriptions;
+	GpuVertexBufferDescription* vertex_buffer_descriptions;
 	uint num_vertex_buffers;
-	GPUVertexAttribute* vertex_attributes;
+	GpuVertexAttribute* vertex_attributes;
 	uint num_vertex_attributes;
 
 	this(
-		GPUVertexBufferDescription[] description,
-		uint num_buffers,
-		GPUVertexAttribute[] attribute,
-		uint num_attributes,
+		in GpuVertexBufferDescription[] description,
+		in GpuVertexAttribute[] attribute
 	)
 	in (description.length < uint.max)
 	in (attribute.length < uint.max)
 	{
-		this.vertex_buffer_descriptions = cast(GPUVertexBufferDescription*) description;
-		this.num_vertex_buffers = cast(uint) num_buffers;
-		this.vertex_attributes = cast(GPUVertexAttribute*) attribute;
-		this.num_vertex_attributes = cast(uint) num_attributes;
-		return;
-	}
-
-	this(GPUVertexBufferDescription[] description, GPUVertexAttribute[] attribute)
-	in (description.length < uint.max)
-	in (attribute.length < uint.max)
-	{
-		this.vertex_buffer_descriptions = cast(GPUVertexBufferDescription*) description;
+		this.vertex_buffer_descriptions = cast(GpuVertexBufferDescription*) description;
 		this.num_vertex_buffers = cast(uint) description.length;
-		this.vertex_attributes = cast(GPUVertexAttribute*) attribute;
+		this.vertex_attributes = cast(GpuVertexAttribute*) attribute;
 		this.num_vertex_attributes = cast(uint) attribute.length;
 		return;
 	}
+
+	typeof(this) position_color_texture()
+	{
+		this.vertex_buffer_descriptions = cast(GpuVertexBufferDescription*)[
+			GpuVertexBufferDescription(
+				0, VertexPCT.sizeof, GpuVertexInputRate.vertex, 0
+			)
+		];
+		this.num_vertex_buffers = 1u;
+		this.vertex_attributes = cast(GpuVertexAttribute*)[
+			GpuVertexAttribute(
+				0, 0, GpuVertexElementFormat.float3, 0
+			),
+			GpuVertexAttribute(
+				1, 0, GpuVertexElementFormat.float4, float.sizeof * 3
+			),
+			GpuVertexAttribute(
+				2, 0, GpuVertexElementFormat.float2, float.sizeof * 7
+			),
+		];
+		this.num_vertex_attributes = 3u;
+		return this;
+	}
 }
 
-struct GPUViewport
+struct GpuViewport
 {
 	float x;
 	float y;
@@ -584,7 +594,7 @@ struct GPUViewport
 	}
 }
 
-struct GPUTransferBufferLocation
+struct GpuTransferBufferLocation
 {
 	SDL_GPUTransferBuffer* transfer_buffer;
 	uint offset;
@@ -601,7 +611,7 @@ struct GPUTransferBufferLocation
 	}
 
 	this(
-		GPUBufferTransferBuffer transfer_buffer,
+		GpuBufferTransferBuffer transfer_buffer,
 		ulong offset = 0u,
 	)
 	in (transfer_buffer.handle !is null)
@@ -613,7 +623,7 @@ struct GPUTransferBufferLocation
 	}
 }
 
-struct GPUBufferRegion
+struct GpuBufferRegion
 {
 	SDL_GPUBuffer* buffer;
 	uint offset;
@@ -633,7 +643,7 @@ struct GPUBufferRegion
 	}
 
 	this(
-		GPUBuffer buffer,
+		GpuBuffer buffer,
 		uint offset = 0,
 	)
 	in (buffer.handle !is null)
@@ -645,7 +655,7 @@ struct GPUBufferRegion
 	}
 
 	this(
-		GPUBuffer buffer,
+		GpuBuffer buffer,
 		uint offset,
 		ulong size,
 	)

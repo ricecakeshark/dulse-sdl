@@ -4,7 +4,7 @@ import bindbc.sdl;
 import kelp_sdl.graphics.core;
 import std.exception, std.string;
 
-class GPUWindow
+class GpuWindow
 {
 	SDL_Window* window_handle;
 

@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.desc.sdl_gpu_flags;
 
-enum GPUBufferUsageFlags : uint
+enum GpuBufferUsageFlags : uint
 {
 	vertex = 1u << 0,
 	index = 1u << 1,
@@ -10,7 +10,7 @@ enum GPUBufferUsageFlags : uint
 	compute_storage_write = 1u << 5,
 }
 
-enum GPUColorComponentFlags : ubyte
+enum GpuColorComponentFlags : ubyte
 {
 	r = 1u << 0,
 	g = 1u << 1,
@@ -18,7 +18,7 @@ enum GPUColorComponentFlags : ubyte
 	a = 1u << 3,
 }
 
-enum GPUShaderFormat : uint
+enum GpuShaderFormat : uint
 {
 	invalid = 0,
 	_private = (1u << 0),
@@ -29,7 +29,7 @@ enum GPUShaderFormat : uint
 	matllib = (1u << 5),
 }
 
-enum GPUTextureUsageFlags : uint
+enum GpuTextureUsageFlags : uint
 {
 	sampler = 1u << 0,
 	color_target = 1u << 1,

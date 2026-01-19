@@ -10,7 +10,7 @@ import kelp_sdl.graphics.resource;
 
 import std.array, std.algorithm;
 
-class GPURenderPass
+class GpuRenderPass
 {
 	SDL_GPURenderPass* pass_handle;
 
@@ -25,8 +25,8 @@ class GPURenderPass
 	}
 
 	typeof(this) begin(
-		GPUCommandBuffer command_buffer,
-		in GPUColorTargetInfo[] color_target_info_list,
+		GpuCommandBuffer command_buffer,
+		in GpuColorTargetInfo[] color_target_info_list,
 	)
 	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
@@ -42,9 +42,9 @@ class GPURenderPass
 	}
 
 	typeof(this) begin(
-		GPUCommandBuffer command_buffer,
-		in GPUColorTargetInfo[] color_target_info_list,
-		in GPUDepthStencilTargetInfo depth_stencil_target_info,
+		GpuCommandBuffer command_buffer,
+		in GpuColorTargetInfo[] color_target_info_list,
+		in GpuDepthStencilTargetInfo depth_stencil_target_info,
 	)
 	in (command_buffer !is null)
 	in (command_buffer.handle !is null)
@@ -66,7 +66,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUGraphicsPipeline pipeline)
+	typeof(this) bind(GpuGraphicsPipeline pipeline)
 	in (this.handle !is null)
 	in (pipeline !is null)
 	in (pipeline.handle !is null)
@@ -75,14 +75,14 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
+	typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
 	in (this.handle !is null)
 	in (vertex_buffer_list.all!(buffer => buffer !is null))
 	in (vertex_buffer_list.all!(buffer => buffer.handle !is null))
 	{
-		GPUBufferBinding[] buffer_binding_list;
+		GpuBufferBinding[] buffer_binding_list;
 		buffer_binding_list = vertex_buffer_list.map!(
-			vertex_buffer => GPUBufferBinding(vertex_buffer)
+			vertex_buffer => GpuBufferBinding(vertex_buffer)
 		)().array();
 		SDL_BindGPUVertexBuffers(
 			this.pass_handle,
@@ -94,14 +94,14 @@ class GPURenderPass
 	}
 
 	typeof(this) bind(
-		GPUIndexBuffer index_buffer
+		GpuIndexBuffer index_buffer
 	)
 	in (this.handle !is null)
 	in (index_buffer !is null)
 	in (index_buffer.handle !is null)
 	{
-		GPUBufferBinding buffer_binding;
-		buffer_binding = GPUBufferBinding(index_buffer, 0);
+		GpuBufferBinding buffer_binding;
+		buffer_binding = GpuBufferBinding(index_buffer, 0);
 		SDL_BindGPUIndexBuffer(
 			this.pass_handle,
 			cast(const(SDL_GPUBufferBinding*))&buffer_binding,
@@ -110,7 +110,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(GPUTexture[] texture_list, in uint first_slot = 0u)
+	typeof(this) bind(GpuTexture[] texture_list, in uint first_slot = 0u)
 	{
 		SDL_GPUTexture*[] texture_binding_list;
 		texture_binding_list = texture_list.map!(texture => texture.handle).array();
@@ -123,7 +123,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) bind(in GPUTextureSamplerBinding[] binding_list, in uint first_slot)
+	typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot)
 	in (this.handle !is null)
 	in (binding_list.length >= 1)
 	in (binding_list.length < uint.max)
@@ -137,7 +137,7 @@ class GPURenderPass
 		return this;
 	}
 
-	typeof(this) set(in GPUViewport viewport)
+	typeof(this) set(in GpuViewport viewport)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUViewport(this.handle, cast(const(SDL_GPUViewport*))&viewport);
@@ -190,7 +190,7 @@ class GPURenderPass
 	}
 
 	typeof(this) draw_indirect(
-		GPUDrawBuffer draw_buffer,
+		GpuDrawBuffer draw_buffer,
 		in ParamPrimitiveIndirect param
 	)
 	in (this.handle !is null)
@@ -206,7 +206,7 @@ class GPURenderPass
 	}
 
 	typeof(this) draw_indexed_indirect(
-		GPUDrawBuffer draw_buffer,
+		GpuDrawBuffer draw_buffer,
 		in ParamPrimitiveIndirect param
 	)
 	in (this.handle !is null)

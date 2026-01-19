@@ -5,7 +5,7 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 import bindbc.sdl;
 
-class GPUCopyPass
+class GpuCopyPass
 {
 	SDL_GPUCopyPass* pass_handle;
 
@@ -14,7 +14,7 @@ class GPUCopyPass
 		return this.pass_handle;
 	}
 
-	typeof(this) begin(GPUCommandBuffer command_buffer)
+	typeof(this) begin(GpuCommandBuffer command_buffer)
 	in (command_buffer.handle !is null)
 	{
 		this.pass_handle = SDL_BeginGPUCopyPass(command_buffer.handle);
@@ -29,8 +29,8 @@ class GPUCopyPass
 	}
 
 	typeof(this) upload(
-		in GPUTransferBufferLocation buffer_location,
-		in GPUBufferRegion buffer_region,
+		in GpuTransferBufferLocation buffer_location,
+		in GpuBufferRegion buffer_region,
 	)
 	{
 		SDL_UploadToGPUBuffer(
@@ -43,8 +43,8 @@ class GPUCopyPass
 	}
 
 	typeof(this) upload(
-		in GPUTextureTransferInfo transfer_info,
-		in GPUTextureRegion texture_region,
+		in GpuTextureTransferInfo transfer_info,
+		in GpuTextureRegion texture_region,
 	)
 	{
 		SDL_UploadToGPUTexture(

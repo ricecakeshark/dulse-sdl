@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.desc.sdl_gpu_enum;
 
-enum GPUBlendFactor
+enum GpuBlendFactor
 {
 	invalid,
 	zero, /**< 0 */
@@ -18,7 +18,7 @@ enum GPUBlendFactor
 	src_alpha_saturate /**< min(source alpha, 1 - destination alpha) */
 }
 
-enum GPUBlendOp
+enum GpuBlendOp
 {
 	invalid,
 	add,
@@ -28,7 +28,7 @@ enum GPUBlendOp
 	max,
 }
 
-enum GPUCompareOp
+enum GpuCompareOp
 {
 	invalid,
 	never, // = false
@@ -41,45 +41,45 @@ enum GPUCompareOp
 	always,
 }
 
-enum GPUCullMode
+enum GpuCullMode
 {
 	none,
 	front,
 	back
 }
 
-enum GPUFillMode
+enum GpuFillMode
 {
 	fill,
 	line
 }
 
-enum GPUFilter
+enum GpuFilter
 {
 	nearest,
 	linear,
 }
 
-enum GPUFrontFace
+enum GpuFrontFace
 {
 	counter_clockwise,
 	clockwise
 }
 
-enum GPUIndexElementSize
+enum GpuIndexElementSize
 {
 	_16bit,
 	_32bit,
 }
 
-enum GPULoadOp
+enum GpuLoadOp
 {
 	load,
 	clear,
 	dont_care,
 }
 
-enum GPUPrimitiveType
+enum GpuPrimitiveType
 {
 	triangle_list,
 	triangle_strip,
@@ -88,7 +88,7 @@ enum GPUPrimitiveType
 	point_list,
 }
 
-enum GPUSampleCount
+enum GpuSampleCount
 {
 	x1,
 	x2,
@@ -96,26 +96,26 @@ enum GPUSampleCount
 	x8
 }
 
-enum GPUSamplerAddressMode
+enum GpuSamplerAddressMode
 {
 	repeat,
 	mirrored_repeat,
 	clamp_to_edge,
 }
 
-enum GPUSamplerMipmapMode
+enum GpuSamplerMipmapMode
 {
 	nearest,
 	linear,
 }
 
-enum GPUShaderStage
+enum GpuShaderStage
 {
 	vertex,
 	fragment,
 }
 
-enum GPUStencilOp
+enum GpuStencilOp
 {
 	invalid,
 	keep,
@@ -128,7 +128,7 @@ enum GPUStencilOp
 	decrement_and_wrap,
 }
 
-enum GPUStoreOp
+enum GpuStoreOp
 {
 	store,
 	dont_care,
@@ -136,7 +136,7 @@ enum GPUStoreOp
 	resolve_and_store,
 }
 
-enum GPUTextureFormat : uint
+enum GpuTextureFormat : uint
 {
 	invalid,
 
@@ -261,7 +261,7 @@ enum GPUTextureFormat : uint
 	astc_12x12_float
 }
 
-enum GPUTextureType
+enum GpuTextureType
 {
 	_2d,
 	_2d_array,
@@ -270,13 +270,13 @@ enum GPUTextureType
 	cube_array
 }
 
-enum GPUTransferBufferUsage
+enum GpuTransferBufferUsage
 {
 	upload,
 	download,
 }
 
-enum GPUVertexElementFormat
+enum GpuVertexElementFormat
 {
 	invalid,
 
@@ -335,7 +335,7 @@ enum GPUVertexElementFormat
 	half4
 }
 
-enum GPUVertexInputRate
+enum GpuVertexInputRate
 {
 	vertex,
 	instance,

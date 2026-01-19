@@ -4,12 +4,12 @@ import bindbc.sdl;
 import kelp_sdl.graphics;
 import std.exception, std.string;
 
-class GPUGraphicsPipeline
+class GpuGraphicsPipeline
 {
 	SDL_GPUGraphicsPipeline* pipeline_handle;
-	protected GPUDevice device;
+	protected GpuDevice device;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -20,7 +20,7 @@ class GPUGraphicsPipeline
 		return this.pipeline_handle;
 	}
 
-	typeof(this) create(in GPUGraphicsPipelineCreateInfo create_info)
+	typeof(this) create(in GpuGraphicsPipelineCreateInfo create_info)
 	{
 		this.pipeline_handle = SDL_CreateGPUGraphicsPipeline(
 			this.device.handle,

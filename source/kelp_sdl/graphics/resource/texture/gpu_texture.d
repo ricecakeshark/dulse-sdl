@@ -8,9 +8,9 @@ import std.exception : enforce;
 import std.file : isFile;
 import std.string : toStringz;
 
-final class GPUTexture : GPUAbstractTexture
+final class GpuTexture : GpuAbstractTexture
 {
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
@@ -22,7 +22,7 @@ final class GPUTexture : GPUAbstractTexture
 		return;
 	}
 
-	typeof(this) create(in GPUTextureCreateInfo create_info)
+	typeof(this) create(in GpuTextureCreateInfo create_info)
 	in (create_info.width >= 1)
 	in (create_info.height >= 1)
 	{

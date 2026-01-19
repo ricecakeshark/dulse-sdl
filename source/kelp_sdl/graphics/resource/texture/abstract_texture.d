@@ -4,10 +4,10 @@ import bindbc.sdl;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.texture;
 
-abstract class GPUAbstractTexture
+abstract class GpuAbstractTexture
 {
 	SDL_GPUTexture* texture_handle;
-	GPUDevice device;
+	GpuDevice device;
 	uint _width, _height;
 
 	@property inout(SDL_GPUTexture*) handle() inout pure nothrow @nogc @safe
