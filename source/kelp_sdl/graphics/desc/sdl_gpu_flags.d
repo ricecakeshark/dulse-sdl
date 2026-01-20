@@ -50,7 +50,7 @@ unittest
 		])
 	{
 		mixin(
-			format("assert( GPU%s.sizeof == SDL_GPU%s.sizeof,\"%s\");", symbol, symbol, symbol)
+			format("assert( Gpu%s.sizeof == SDL_GPU%s.sizeof,\"%s\");", symbol, symbol, symbol)
 		);
 	}
 }

@@ -1,4 +1,4 @@
-module kelp_sdl.core.device.keyboard;
+module kelp_sdl.device.keyboard;
 
 import kelp_core.device;
 import bindbc.sdl;
@@ -7,7 +7,8 @@ import std.algorithm;
 class SDLKeyboard
 {
 	SDL_KeyboardID keyboard_id;
-	KeyboardInputState[2] input_state;
+	//KeyboardInputState[2] input_state;
+	DeviceSubsystem device_subsystem;
 
 	this()
 	{
@@ -16,7 +17,7 @@ class SDLKeyboard
 
 	void initialize()
 	{
-		this.tryOpen();
+		this.try_open();
 		return;
 	}
 
@@ -27,12 +28,14 @@ class SDLKeyboard
 
 	void process()
 	{
-		this.input_state[1] = this.input_state[0];
-		this.input_state[0] = getKeyboardState();
+		if(this.device_subsystem)
+		{
+			this.device_subsystem.keyboard.update(get_keyboard_state());
+		}
 		return;
 	}
 
-	void tryOpen()
+	void try_open()
 	{
 		int count;
 		SDL_KeyboardID* keyboard_ptr;
@@ -44,7 +47,7 @@ class SDLKeyboard
 		this.keyboard_id = keyboard_ptr[0];
 		return;
 	}
-
+	/+
 	bool pressed(in Scancode scancode) const pure nothrow @nogc @safe
 	{
 		return (this.input_state[0].pressed(scancode)) ? true : false;
@@ -65,10 +68,10 @@ class SDLKeyboard
 	{
 		return (this.input_state[0].released(scancode)
 				&& this.input_state[1].pressed(scancode)) ? true : false;
-	}
+	}+/
 }
 
-KeyboardInputState getKeyboardState()
+KeyboardInputState get_keyboard_state()
 {
 	int num_keys;
 	const bool* key_state_ptr = SDL_GetKeyboardState(&num_keys);

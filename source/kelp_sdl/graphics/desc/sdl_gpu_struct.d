@@ -681,7 +681,7 @@ unittest
 	{
 		mixin(
 			format(
-				"assert( GPU%s.sizeof == SDL_GPU%s.sizeof, \"GPU%s != SDL_GPU...\");",
+				"assert( Gpu%s.sizeof == SDL_GPU%s.sizeof, \"Gpu%s != SDL_GPU...\");",
 				symbol, symbol, symbol,
 		)
 		);
