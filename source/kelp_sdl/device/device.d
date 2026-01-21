@@ -10,57 +10,42 @@ class SDLDeviceSubsystem : Subsystem
 	Core core;
 	DeviceSubsystem device;
 	SDLKeyboard keyboard;
+	SDLMouse mouse;
+	SDLGamepad gamepad;
 
 	this(Core core)
 	{
 		this.core = core;
 		this.keyboard = new SDLKeyboard();
+		this.mouse = new SDLMouse();
+		this.gamepad = new SDLGamepad();
 		return;
 	}
 
 	void initialize()
 	{
 		this.device = core.subsystem.pool.query!(DeviceSubsystem);
-		this.keyboard.initialize();
 		this.keyboard.device_subsystem = this.device;
+		this.mouse.device = this.device;
+		this.keyboard.initialize();
+		this.mouse.initialize();
+		this.gamepad.initialize();
+		return;
 	}
 
 	void finalize()
 	{
 		this.keyboard.finalize();
+		this.mouse.finalize();
+		this.gamepad.finalize();
+		return;
 	}
 
 	void process()
 	{
-		MouseState temp_mouse = MouseState();
-
-		temp_mouse.update(
-			SDL_GetRelativeMouseState(
-				&temp_mouse.global.state.data[0], &temp_mouse.global.state.data[1]
-		)
-		);
-		this.device.mouse.update(temp_mouse);
-
 		this.keyboard.process();
-		//GamepadState temp_gamepad = GamepadState();
+		this.mouse.process();
+		this.gamepad.process();
 		return;
 	}
-}
-
-MouseState update(ref MouseState mouse_state, in SDL_MouseButtonFlags button_state)
-{
-	mouse_state.left = ButtonState((button_state & MouseButton.left) == 1);
-	mouse_state.middle = ButtonState((button_state & MouseButton.middle) == 1);
-	mouse_state.right = ButtonState((button_state & MouseButton.right) == 1);
-	mouse_state.x1 = ButtonState((button_state & MouseButton.x1) == 1);
-	mouse_state.x2 = ButtonState((button_state & MouseButton.x2) == 1);
-	return mouse_state;
-}
-
-GamepadState update(ref GamepadState gamepad_state)
-{
-	/+
-	SDL_GetGamepadAxis(SDL_Gamepad *gamepad, SDL_GamepadAxis axis)
-	+/
-	return gamepad_state;
 }
