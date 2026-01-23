@@ -1,13 +1,42 @@
 module kelp_sdl.core.event.event;
 
+import kelp_core.core;
 import kelp_core.event;
 import bindbc.sdl;
 
 import std.array, std.algorithm;
 
-Event[] pollEvent()
+class SDLEventSubsystem : Subsystem
 {
-	return pollSDLEvent()
+	Core core;
+	EventSubsystem event;
+
+	this(Core core)
+	{
+		this.core = core;
+	}
+
+	void initialize()
+	{
+		event = this.core.subsystem.pool.query!(EventSubsystem);
+		return;
+	}
+
+	void finalize()
+	{
+		return;
+	}
+
+	void process()
+	{
+		event.pool.append(poll_event());
+		return;
+	}
+}
+
+Event[] poll_event()
+{
+	return poll_sdl_event()
 		.map!(event => event.normalize())
 		.array();
 }
@@ -23,7 +52,7 @@ Event normalize(in SDL_Event event) pure nothrow @nogc @safe
 	}
 }
 
-SDL_Event[] pollSDLEvent()
+SDL_Event[] poll_sdl_event()
 {
 	import std.array : Appender;
 
