@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.core.gpu_window;
 
 import bindbc.sdl;
+import kelp_core.core;
 import kelp_sdl.graphics.core;
 import std.exception, std.string;
 

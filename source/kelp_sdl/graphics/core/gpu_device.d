@@ -35,6 +35,7 @@ class GpuDevice
 			SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
 			true, null,
 		);
+		// "vulkan".toStringz()
 		enforce(this.device_handle !is null, SDL_GetError().fromStringz());
 		return this;
 	}
@@ -99,6 +100,23 @@ class GpuDevice
 	{
 		return cast(GpuShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
 			this.device_handle);
+	}
+
+	string get_driver()
+	{
+		return cast(string)(SDL_GetGPUDeviceDriver(this.handle).fromStringz());
+	}
+
+	string[] get_driver_list()
+	{
+		string[] driver_list;
+		int driver_len = SDL_GetNumGPUDrivers();
+		driver_list.length = driver_len;
+		foreach (count; 0 .. driver_len)
+		{
+			driver_list[count] = cast(string)(SDL_GetGPUDriver(count).fromStringz());
+		}
+		return driver_list;
 	}
 
 	invariant

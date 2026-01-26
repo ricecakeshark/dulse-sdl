@@ -12,6 +12,7 @@ subConfiguration "bindbc-sdl" "static"
 targetType "sourceLibrary"
 targetName "kelp_sdl"
 targetPath "build"
+importPaths "source"
 
 versions "SDL_3_4_0" "SDL_Image_3_2" "SDL_TTF_3_2_2"
 libs "SDL3" "SDL3_image" "SDL3_ttf"
