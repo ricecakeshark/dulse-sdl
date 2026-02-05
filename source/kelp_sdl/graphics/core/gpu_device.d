@@ -28,13 +28,38 @@ class GpuDevice
 		return this.device_handle;
 	}
 
-	typeof(this) create()
+	typeof(this) create(GpuBackend backend_prior = GpuBackend.none)
 	in (this.handle is null)
 	{
-		this.device_handle = SDL_CreateGPUDevice(
-			SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-			true, null,
-		);
+		string backend_selector;
+		switch (backend_prior)
+		{
+		case GpuBackend.vulkan:
+			backend_selector = "vulkan";
+			break;
+		case GpuBackend.direct3d12:
+			backend_selector = "direct3d12";
+			break;
+		case GpuBackend.metal:
+			backend_selector = "metal";
+			break;
+		default:
+			break;
+		}
+		if (backend_selector)
+		{
+			this.device_handle = SDL_CreateGPUDevice(
+				SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+				true, backend_selector.toStringz(),
+			);
+		}
+		else
+		{
+			this.device_handle = SDL_CreateGPUDevice(
+				SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+				true, null,
+			);
+		}
 		// "vulkan".toStringz()
 		enforce(this.device_handle !is null, SDL_GetError().fromStringz());
 		return this;
