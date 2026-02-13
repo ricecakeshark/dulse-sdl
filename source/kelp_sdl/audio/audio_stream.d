@@ -1,5 +1,6 @@
 module kelp_sdl.audio.audio_stream;
 
+import kelp_core.audio;
 import kelp_sdl.audio;
 import bindbc.sdl;
 import std.exception;
@@ -7,6 +8,8 @@ import std.exception;
 class AudioStream
 {
 	SDL_AudioStream* audio_stream_handle;
+	SdlAudioSpec input_format;
+	SdlAudioSpec output_format;
 	bool last_result;
 
 	typeof(this) initialize()
@@ -35,12 +38,24 @@ class AudioStream
 		return this.audio_stream_handle;
 	}
 
+	@property int channels() inout pure nothrow @nogc @safe
+	{
+		return this.input_format.channels;
+	}
+
+	@property int sample_rate() inout pure nothrow @nogc @safe
+	{
+		return this.input_format.freq;
+	}
+
 	typeof(this) create(in SdlAudioSpec src_spec, in SdlAudioSpec dst_spec)
 	{
-		audio_stream_handle = SDL_CreateAudioStream(
+		this.audio_stream_handle = SDL_CreateAudioStream(
 			cast(SDL_AudioSpec*)&src_spec,
 			cast(SDL_AudioSpec*)&dst_spec,
 		);
+		enforce(this.audio_stream_handle !is null);
+		this.get_format(input_format, output_format);
 		return this;
 	}
 
@@ -60,6 +75,7 @@ class AudioStream
 			cast(SDL_AudioSpec*)&src_spec,
 			cast(SDL_AudioSpec*)&dst_spec,
 		);
+		enforce(last_result == true);
 		return this;
 	}
 
@@ -161,14 +177,14 @@ class AudioStream
 		return this;
 	}
 
-	typeof(this) put(Type)(in Type[] data_buffer)
+	typeof(this) put(in AudioFragment fragment)
 	in (this.is_valid)
-	in (data_buffer[0].sizeof * data_buffer.length < int.max)
+	in (fragment.size < int.max)
 	{
 		last_result = SDL_PutAudioStreamData(
-			this.audio_stream_handle,//cast(const(void*))&data_buffer,
-			data_buffer.ptr,
-			cast(int)(Type.sizeof * data_buffer.length),
+			this.audio_stream_handle, //cast(const(void*))&data_buffer,
+			fragment.buffer.ptr,
+			cast(int)(fragment.size),
 		);
 		enforce(last_result == true);
 		return this;
@@ -191,6 +207,15 @@ class AudioStream
 	typeof(this) pause()
 	{
 		last_result = SDL_PauseAudioStreamDevice(this.audio_stream_handle);
+		return this;
+	}
+
+	typeof(this) if_queueable(void delegate() dlg)
+	{
+		if (this.queued <= this.sample_rate * 0.05)
+		{
+			dlg();
+		}
 		return this;
 	}
 }
