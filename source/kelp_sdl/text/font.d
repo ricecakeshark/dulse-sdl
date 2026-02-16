@@ -47,12 +47,6 @@ class TextFont
 		return cast(string) TTF_GetFontFamilyName(this.font_handle).fromStringz();
 	}
 
-	typeof(this) set_SDF()
-	{
-		TTF_SetFontSDF(this.font_handle, true)
-			.catchSDLError();
-		return this;
-	}
 	// font wrap align
 	@property TextAlign wrap_align()
 	{
@@ -87,6 +81,18 @@ class TextFont
 	typeof(this) set(FontHinting font_hinting)
 	{
 		TTF_SetFontHinting(this.font_handle, cast(TTF_HintingFlags) font_hinting);
+		return this;
+	}
+	// SDF
+	@property bool SDF()
+	{
+		return TTF_GetFontSDF(this.font_handle);
+	}
+
+	typeof(this) set_SDF(in bool mode_SDF = true)
+	{
+		TTF_SetFontSDF(this.font_handle, mode_SDF)
+			.catchSDLError();
 		return this;
 	}
 	// Size
