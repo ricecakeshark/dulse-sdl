@@ -9,8 +9,7 @@ abstract class GpuBuffer
 {
 	SDL_GPUBuffer* buffer_handle;
 	GpuDevice device;
-	void[] data;
-	uint _size;
+	size_t _size;
 
 	this(GpuDevice device)
 	{
@@ -30,9 +29,9 @@ public:
 		return this.buffer_handle;
 	}
 
-	@property inout(uint) size() inout pure nothrow @nogc @safe
+	@property inout(size_t) bytes() inout pure nothrow @nogc @safe
 	{
-		return cast(uint)(this._size);
+		return this._size;
 	}
 
 	typeof(this) release()
@@ -68,15 +67,14 @@ protected:
 	in (size <= uint.max)
 	{
 		scope SDL_GPUBufferCreateInfo buffer_create_info;
+		this._size = size;
 		buffer_create_info = SDL_GPUBufferCreateInfo(
 			usage_flags, cast(uint) size,
 		);
-		this._size = cast(uint) size;
 		this.buffer_handle = SDL_CreateGPUBuffer(
 			this.device.handle, &buffer_create_info
 		);
 		enforce(this.buffer_handle !is null);
 		return this;
 	}
-
 }

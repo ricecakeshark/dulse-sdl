@@ -6,6 +6,8 @@ import kelp_sdl.graphics.resource.buffer;
 
 class GpuVertexBuffer : GpuBuffer
 {
+	size_t _count, _stride;
+
 	this(GpuDevice device)
 	{
 		super(device);
@@ -13,9 +15,11 @@ class GpuVertexBuffer : GpuBuffer
 	}
 
 public:
-	typeof(this) create(in size_t size)
+	typeof(this) create(in size_t count, in size_t stride)
 	{
-		super.create_by_size(SDL_GPU_BUFFERUSAGE_VERTEX, size);
+		this._count = count;
+		this._stride = stride;
+		super.create_by_size(SDL_GPU_BUFFERUSAGE_VERTEX, (count * stride));
 		return this;
 	}
 }
