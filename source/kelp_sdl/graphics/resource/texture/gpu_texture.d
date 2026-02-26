@@ -46,3 +46,29 @@ final class GpuTexture : GpuAbstractTexture
 		return this;
 	}
 }
+
+class GpuRefTexture : GpuAbstractTexture
+{
+	this(GpuDevice device)
+	{
+		this.device = device;
+		return;
+	}
+
+	~this()
+	{
+		return;
+	}
+
+	typeof(this) refer(SDL_GPUTexture* texture_ref) 
+	{
+		this.texture_handle = texture_ref;
+		return this;
+	}
+
+	typeof(this) unrefer() 
+	{
+		this.texture_handle = null;
+		return this;
+	}
+}
