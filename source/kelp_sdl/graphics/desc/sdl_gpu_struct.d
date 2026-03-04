@@ -650,7 +650,7 @@ struct GpuBufferRegion
 	{
 		this.buffer = buffer.handle;
 		this.offset = offset;
-		this.size = cast(uint) buffer.bytes;
+		this.size = cast(uint) buffer.size;
 		return;
 	}
 

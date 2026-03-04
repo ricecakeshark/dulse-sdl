@@ -15,6 +15,25 @@ class GpuVertexBuffer : GpuBuffer
 	}
 
 public:
+	@property size_t capacity() const pure nothrow @nogc @safe
+	in (this._count != 0)
+	in (this._stride != 0)
+	{
+		return this._count * this._stride;
+	}
+
+	@property size_t count() const pure nothrow @nogc @safe
+	in (this._count != 0)
+	{
+		return this._count;
+	}
+
+	@property size_t stride() const pure nothrow @nogc @safe
+	in (this._stride != 0)
+	{
+		return this._stride;
+	}
+
 	typeof(this) create(in size_t count, in size_t stride)
 	{
 		this._count = count;

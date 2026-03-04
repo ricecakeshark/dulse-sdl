@@ -29,7 +29,7 @@ public:
 		return this.buffer_handle;
 	}
 
-	@property inout(size_t) bytes() inout pure nothrow @nogc @safe
+	@property inout(size_t) size() inout pure nothrow @nogc @safe
 	{
 		return this._size;
 	}

@@ -19,19 +19,40 @@ class GpuDrawBuffer : GpuBuffer
 	}
 
 public:
-	@property size_t bytes() pure nothrow @nogc @safe
+	@property size_t size() pure nothrow @nogc @safe
 	{
-		return this.bytes_command + this.bytes_command_indexed;
+		return (this._stride_command * this._count_command) + (
+			this._stride_command_indexed * this._count_command_indexed);
 	}
 
-	@property size_t bytes_command() pure nothrow @nogc @safe
+	@property size_t size_command() pure nothrow @nogc @safe
 	{
 		return this._stride_command * this._count_command;
 	}
 
-	@property size_t bytes_command_indexed() pure nothrow @nogc @safe
+	@property size_t size_command_indexed() pure nothrow @nogc @safe
 	{
 		return this._stride_command_indexed * this._count_command_indexed;
+	}
+
+	@property size_t count_command() const pure nothrow @nogc @safe
+	{
+		return this._count_command;
+	}
+
+	@property size_t count_command_indexed() const pure nothrow @nogc @safe
+	{
+		return this._count_command_indexed;
+	}
+
+	@property size_t stride_command() const pure nothrow @nogc @safe
+	{
+		return this._stride_command;
+	}
+
+	@property size_t stride_command_indexed() const pure nothrow @nogc @safe
+	{
+		return this._stride_command_indexed;
 	}
 
 	typeof(this) create(
@@ -41,7 +62,12 @@ public:
 	{
 		this._count_command = count_command;
 		this._count_command_indexed = count_command_indexed;
-		super.create_by_size(SDL_GPU_BUFFERUSAGE_INDIRECT, this.bytes);
+		super.create_by_size(
+			SDL_GPU_BUFFERUSAGE_INDIRECT,
+			(this._stride_command_indexed * count_command_indexed)
+				+ (
+					this._stride_command * count_command),
+		);
 		return this;
 	}
 }
