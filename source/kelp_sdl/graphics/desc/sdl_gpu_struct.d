@@ -526,6 +526,41 @@ struct GpuVertexAttribute
 	uint buffer_slot;
 	GpuVertexElementFormat format;
 	uint offset;
+
+	this(
+		uint location,
+		uint buffer_slot,
+		GpuVertexElementFormat format,
+		uint offset,
+	)
+	{
+		this.location = location;
+		this.buffer_slot = buffer_slot;
+		this.format = format;
+		this.offset = offset;
+		return;
+	}
+
+	this(GpuVertexElementFormat format, uint buffer_slot = 0)
+	{
+		this.format = format;
+		this.buffer_slot = buffer_slot;
+		return;
+	}
+
+	this(
+		GpuVertexElementFormat format,
+		uint buffer_slot,
+		uint location,
+		uint offset,
+	)
+	{
+		this.format = format;
+		this.buffer_slot = buffer_slot;
+		this.location = location;
+		this.offset = offset;
+		return;
+	}
 }
 
 struct GpuVertexInputState
