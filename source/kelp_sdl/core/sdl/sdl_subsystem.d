@@ -31,7 +31,7 @@ class SDLSubsystem : Subsystem
 			return;
 		}
 		initialized = true;
-		this.logger = this.core.subsystem.query!(LoggerSubsystem);
+		this.core.subsystem.query(this.logger);
 		sdl.initialize();
 		sdl_image.initialize();
 		sdl_ttf.initialize();
