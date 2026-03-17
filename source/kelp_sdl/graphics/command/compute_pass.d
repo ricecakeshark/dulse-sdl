@@ -9,20 +9,11 @@ import kelp_sdl.graphics.resource.texture;
 
 import std.exception, std.string;
 
-class GpuComputePass
+struct GpuComputePass
 {
 	SDL_GPUComputePass* pass_handle;
-
-	this()
-	{
-		return;
-	}
-
-	~this()
-	{
-		return;
-	}
-
+	GpuCommandBuffer command_buffer;
+	
 	@property inout(SDL_GPUComputePass*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.pass_handle;
@@ -36,6 +27,7 @@ class GpuComputePass
 	in (command_buffer.handle !is null)
 	in (texture_binding_list.length < uint.max)
 	{
+		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPUComputePass(
 			command_buffer.handle,
 			cast(SDL_GPUStorageTextureReadWriteBinding*) texture_binding_list.ptr,
@@ -57,6 +49,7 @@ class GpuComputePass
 	in (texture_binding_list.length < uint.max)
 	in (buffer_binding_list.length < uint.max)
 	{
+		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPUComputePass(
 			command_buffer.handle,
 			cast(SDL_GPUStorageTextureReadWriteBinding*) texture_binding_list.ptr,
@@ -108,6 +101,21 @@ class GpuComputePass
 			this.handle, first_slot,
 			cast(SDL_GPUTextureSamplerBinding*) texture_sampler_binding.ptr,
 			cast(uint) texture_sampler_binding.length,
+		);
+		return this;
+	}
+
+	typeof(this) push_uniform(Type)(
+		Type compute_uniform_data,
+		in uint first_slot = 0
+	)
+	in (this.handle !is null)
+	in (this.command_buffer !is null)
+	in (this.command_buffer.handle !is null)
+	{
+		SDL_PushGPUComputeUniformData(
+			this.command_buffer.handle, first_slot,
+			cast(const(void*))&compute_uniform_data, Type.sizeof,
 		);
 		return this;
 	}

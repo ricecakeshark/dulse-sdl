@@ -9,15 +9,12 @@ import kelp_sdl.graphics.rasterize.graphics_pipeline;
 import kelp_sdl.graphics.resource;
 
 import std.array, std.algorithm;
+import std.exception;
 
-class GpuRenderPass
+struct GpuRenderPass
 {
 	SDL_GPURenderPass* pass_handle;
-
-	this()
-	{
-		return;
-	}
+	GpuCommandBuffer command_buffer;
 
 	@property SDL_GPURenderPass* handle() pure nothrow @nogc @safe
 	{
@@ -32,6 +29,7 @@ class GpuRenderPass
 	in (command_buffer.handle !is null)
 	in (color_target_info_list.length >= 1)
 	{
+		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPURenderPass(
 			command_buffer.handle,
 			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
@@ -50,6 +48,7 @@ class GpuRenderPass
 	in (command_buffer.handle !is null)
 	in (color_target_info_list.length >= 1)
 	{
+		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPURenderPass(
 			command_buffer.handle,
 			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
@@ -155,6 +154,49 @@ class GpuRenderPass
 	in (this.handle !is null)
 	{
 		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
+		return this;
+	}
+
+	typeof(this) push_vertex(Type)(
+		Type vertex_uniform_data,
+		in uint slot_index,
+		in uint size,
+	)
+	in (this.handle !is null)
+	in (this.command_buffer.handle !is null)
+	{
+		SDL_PushGPUVertexUniformData(
+			this.command_buffer.handle, slot_index,
+			cast(const(void*))&vertex_uniform_data, size,
+		);
+		return this;
+	}
+
+	typeof(this) push_vertex(Type)(
+		Type vertex_uniform_data,
+		in uint slot_index,
+	)
+	in (this.handle !is null)
+	in (this.command_buffer.handle !is null)
+	{
+		SDL_PushGPUVertexUniformData(
+			this.command_buffer.handle, slot_index,
+			cast(const(void*))&vertex_uniform_data, Type.sizeof,
+		);
+		return this;
+	}
+
+	typeof(this) push_fragment(Type)(
+		Type fragment_uniform_data,
+		in uint first_slot = 0
+	)
+	in (this.handle !is null)
+	in (this.command_buffer.handle !is null)
+	{
+		SDL_PushGPUFragmentUniformData(
+			this.command_buffer.handle, first_slot,
+			cast(const(void*))&fragment_uniform_data, Type.sizeof,
+		);
 		return this;
 	}
 

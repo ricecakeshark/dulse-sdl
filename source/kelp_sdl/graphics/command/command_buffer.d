@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.command.command_buffer;
 
 import bindbc.sdl;
+import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.texture.swapchain_texture;
@@ -52,6 +53,55 @@ public:
 			&(swapchain_texture._width),
 			&(swapchain_texture._height),
 		);
+		return this;
+	}
+
+	typeof(this) with_render_pass(
+		in GpuColorTargetInfo[] color_target_info_list,
+		in GpuDepthStencilTargetInfo depth_stencil_target_info,
+		void delegate(GpuRenderPass) dlg
+	)
+	{
+		scope GpuRenderPass render_pass;
+		render_pass.begin(
+			this,
+			color_target_info_list,
+			depth_stencil_target_info,
+		);
+		dlg(render_pass);
+		render_pass.end();
+		return this;
+	}
+
+	typeof(this) with_render_pass(
+		in GpuColorTargetInfo[] color_target_info_list,
+		void delegate(ref GpuRenderPass) dlg
+	)
+	{
+		scope GpuRenderPass render_pass;
+		render_pass.begin(
+			this,
+			color_target_info_list,
+		);
+		dlg(render_pass);
+		render_pass.end();
+		return this;
+	}
+
+	typeof(this) with_compute_pass(
+		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
+		in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
+		void delegate(ref GpuComputePass) dlg,
+	)
+	{
+		scope GpuComputePass compute_pass;
+		compute_pass.begin(
+			this,
+			texture_binding_list,
+			buffer_binding_list
+		);
+		dlg(compute_pass);
+		compute_pass.end();
 		return this;
 	}
 
