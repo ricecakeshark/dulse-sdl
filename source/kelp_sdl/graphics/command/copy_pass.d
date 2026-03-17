@@ -5,30 +5,50 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 import bindbc.sdl;
 
-class GpuCopyPass
+struct GpuCopyPass
 {
 	SDL_GPUCopyPass* pass_handle;
+	GpuCommandBuffer command_buffer;
+
+	@disable this(this);
+
+	this(GpuCommandBuffer command_buffer)
+	{
+		this.command_buffer = command_buffer;
+		return;
+	}
+
+	invariant
+	{
+		// this.pass_handle may be null
+		assert(this.command_buffer !is null);
+	}
+
+	@property bool is_valid() pure nothrow @nogc @safe
+	{
+		return (this.pass_handle !is null);
+	}
 
 	@property inout(SDL_GPUCopyPass*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.pass_handle;
 	}
 
-	typeof(this) begin(GpuCommandBuffer command_buffer)
+	ref typeof(this) begin()
 	in (command_buffer.handle !is null)
 	{
-		this.pass_handle = SDL_BeginGPUCopyPass(command_buffer.handle);
+		this.pass_handle = SDL_BeginGPUCopyPass(this.command_buffer.handle);
 		return this;
 	}
 
-	typeof(this) end()
+	ref typeof(this) end()
 	{
 		SDL_EndGPUCopyPass(this.pass_handle);
 		this.pass_handle = null;
 		return this;
 	}
 
-	typeof(this) upload(
+	ref typeof(this) upload(
 		in GpuTransferBufferLocation buffer_location,
 		in GpuBufferRegion buffer_region,
 	)
@@ -42,7 +62,7 @@ class GpuCopyPass
 		return this;
 	}
 
-	typeof(this) upload(
+	ref typeof(this) upload(
 		in GpuTextureTransferInfo transfer_info,
 		in GpuTextureRegion texture_region,
 	)

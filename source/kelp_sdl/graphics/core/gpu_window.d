@@ -20,6 +20,16 @@ class GpuWindow
 		return;
 	}
 
+	invariant
+	{
+		assert(this !is null);
+	}
+
+	@property bool is_valid() pure nothrow @nogc @safe
+	{
+		return (this.window_handle !is null);
+	}
+
 	@property inout(SDL_Window*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.window_handle;

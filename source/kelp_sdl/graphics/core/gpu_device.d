@@ -23,6 +23,16 @@ class GpuDevice
 		return;
 	}
 
+	invariant
+	{
+		assert(this !is null, "the instance is not initialized.");
+	}
+
+	@property bool is_valid() pure nothrow @nogc @safe
+	{
+		return (this.device_handle !is null);
+	}
+
 	@property inout(SDL_GPUDevice*) handle() inout pure @safe
 	{
 		return this.device_handle;
@@ -142,10 +152,5 @@ class GpuDevice
 			driver_list[count] = cast(string)(SDL_GetGPUDriver(count).fromStringz());
 		}
 		return driver_list;
-	}
-
-	invariant
-	{
-		assert(this !is null, "the instance is not initialized.");
 	}
 }

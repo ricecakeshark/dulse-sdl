@@ -13,23 +13,40 @@ struct GpuComputePass
 {
 	SDL_GPUComputePass* pass_handle;
 	GpuCommandBuffer command_buffer;
-	
+
+	@disable this(this);
+
+	this(GpuCommandBuffer command_buffer)
+	{
+		this.command_buffer = command_buffer;
+		return;
+	}
+
+	invariant
+	{
+		// this.pass_handle may be null
+		assert(this.command_buffer !is null);
+	}
+
+	@property bool is_valid() pure nothrow @nogc @safe
+	{
+		return (this.pass_handle !is null);
+	}
+
 	@property inout(SDL_GPUComputePass*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.pass_handle;
 	}
 
-	typeof(this) begin(
-		GpuCommandBuffer command_buffer,
+	ref typeof(this) begin(
 		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 	)
-	in (command_buffer !is null)
+	in (this.command_buffer.is_valid)
 	in (command_buffer.handle !is null)
 	in (texture_binding_list.length < uint.max)
 	{
-		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPUComputePass(
-			command_buffer.handle,
+			this.command_buffer.handle,
 			cast(SDL_GPUStorageTextureReadWriteBinding*) texture_binding_list.ptr,
 			cast(uint) texture_binding_list.length,
 			null,
@@ -39,19 +56,16 @@ struct GpuComputePass
 		return this;
 	}
 
-	typeof(this) begin(
-		GpuCommandBuffer command_buffer,
+	ref typeof(this) begin(
 		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 		in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
 	)
-	in (command_buffer !is null)
-	in (command_buffer.handle !is null)
+	in (this.command_buffer.is_valid)
 	in (texture_binding_list.length < uint.max)
 	in (buffer_binding_list.length < uint.max)
 	{
-		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPUComputePass(
-			command_buffer.handle,
+			this.command_buffer.handle,
 			cast(SDL_GPUStorageTextureReadWriteBinding*) texture_binding_list.ptr,
 			cast(uint) texture_binding_list.length,
 			cast(SDL_GPUStorageBufferReadWriteBinding*) buffer_binding_list.ptr,
@@ -61,14 +75,14 @@ struct GpuComputePass
 		return this;
 	}
 
-	typeof(this) end()
+	ref typeof(this) end()
 	{
 		SDL_EndGPUComputePass(this.pass_handle);
 		this.pass_handle = null;
 		return this;
 	}
 
-	typeof(this) bind(GpuComputePipeline compute_pipeline)
+	ref typeof(this) bind(GpuComputePipeline compute_pipeline)
 	in (this.handle !is null)
 	in (compute_pipeline.handle !is null)
 	{
@@ -76,7 +90,7 @@ struct GpuComputePass
 		return this;
 	}
 
-	typeof(this) bind(
+	ref typeof(this) bind(
 		in GpuStorageBuffer storage_buffer,
 		in uint first_slot
 	)
@@ -90,7 +104,7 @@ struct GpuComputePass
 		return this;
 	}
 
-	typeof(this) bind(
+	ref typeof(this) bind(
 		in GpuTextureSamplerBinding[] texture_sampler_binding,
 		in uint first_slot
 	)
@@ -105,7 +119,7 @@ struct GpuComputePass
 		return this;
 	}
 
-	typeof(this) push_uniform(Type)(
+	ref typeof(this) push_uniform(Type)(
 		Type compute_uniform_data,
 		in uint first_slot = 0
 	)
@@ -120,7 +134,7 @@ struct GpuComputePass
 		return this;
 	}
 
-	typeof(this) dispatch(
+	ref typeof(this) dispatch(
 		in int groupcount_x,
 		in int groupcount_y,
 		in int groupcount_z,

@@ -13,13 +13,13 @@ class GpuCommandBuffer
 	SDL_GPUCommandBuffer* command_buffer_handle;
 	GpuDevice device;
 	GpuWindow window;
-
+	// (copy pass)
 	this(GpuDevice device)
 	{
 		this.device = device;
 		return;
 	}
-
+	// need swapchain texture (render-pass, compute-pass)
 	this(GpuDevice device, GpuWindow window)
 	{
 		this.device = device;
@@ -27,7 +27,18 @@ class GpuCommandBuffer
 		return;
 	}
 
+	invariant
+	{
+		assert(this !is null);
+		assert(this.device !is null);
+	}
+
 public:
+	bool is_valid() pure nothrow @nogc @safe
+	{
+		return (this !is null && this.command_buffer_handle !is null);
+	}
+
 	@property inout(SDL_GPUCommandBuffer*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.command_buffer_handle;
@@ -45,6 +56,7 @@ public:
 	typeof(this) acquire_texture(
 		ref GpuSwapchainTexture swapchain_texture,
 	)
+	in (this.handle !is null)
 	in (this.window !is null)
 	{
 		SDL_WaitAndAcquireGPUSwapchainTexture(
@@ -55,16 +67,62 @@ public:
 		);
 		return this;
 	}
-
+	// Copy pass begin.
+	typeof(this) begin(
+		ref GpuCopyPass copy_pass,
+	)
+	{
+		enforce(copy_pass.handle is null);
+		copy_pass.begin();
+		return this;
+	}
+	// Copy pass end.
+	typeof(this) end(ref GpuCopyPass copy_pass,)
+	{
+		copy_pass.end();
+		return this;
+	}
+	// convenient with Copy pass
+	// begin() -> user code -> end() -> submit()
+	typeof(this) with_copy_pass(
+		void delegate(ref GpuCopyPass) dlg,
+	)
+	{
+		scope GpuCopyPass copy_pass = GpuCopyPass(this);
+		copy_pass.begin();
+		dlg(copy_pass);
+		copy_pass.end();
+		return this;
+	}
+	// Render Pass begin.
+	typeof(this) begin(
+		ref GpuRenderPass render_pass,
+		in GpuColorTargetInfo[] color_target_info_list,
+		in GpuDepthStencilTargetInfo depth_stencil_target_info,
+	)
+	{
+		enforce(render_pass.handle is null);
+		render_pass.begin(
+			color_target_info_list,
+			depth_stencil_target_info,
+		);
+		return this;
+	}
+	// Render Pass end.
+	typeof(this) end(ref GpuRenderPass render_pass)
+	{
+		render_pass.end();
+		return this;
+	}
+	// begin() -> process -> end() with Render pass.
 	typeof(this) with_render_pass(
 		in GpuColorTargetInfo[] color_target_info_list,
 		in GpuDepthStencilTargetInfo depth_stencil_target_info,
-		void delegate(GpuRenderPass) dlg
+		void delegate(ref GpuRenderPass) dlg
 	)
 	{
-		scope GpuRenderPass render_pass;
+		scope GpuRenderPass render_pass = GpuRenderPass(this);
 		render_pass.begin(
-			this,
 			color_target_info_list,
 			depth_stencil_target_info,
 		);
@@ -72,31 +130,51 @@ public:
 		render_pass.end();
 		return this;
 	}
-
+	// begin() -> process -> end() with Render pass. (simplified)
 	typeof(this) with_render_pass(
 		in GpuColorTargetInfo[] color_target_info_list,
 		void delegate(ref GpuRenderPass) dlg
 	)
 	{
-		scope GpuRenderPass render_pass;
+		scope GpuRenderPass render_pass = GpuRenderPass(this);
 		render_pass.begin(
-			this,
 			color_target_info_list,
 		);
 		dlg(render_pass);
 		render_pass.end();
 		return this;
 	}
-
+	// Compute Pass begin.
+	typeof(this) begin(
+		ref GpuComputePass compute_pass,
+		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
+		in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
+	)
+	{
+		enforce(compute_pass.handle is null);
+		compute_pass.begin(
+			texture_binding_list,
+			buffer_binding_list,
+		);
+		return this;
+	}
+	// compute pass end
+	typeof(this) end(
+		ref GpuComputePass compute_pass,
+	)
+	{
+		compute_pass.end();
+		return this;
+	}
+	// begin() -> process -> end() with Compute pass.
 	typeof(this) with_compute_pass(
 		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 		in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
 		void delegate(ref GpuComputePass) dlg,
 	)
 	{
-		scope GpuComputePass compute_pass;
+		scope GpuComputePass compute_pass = GpuComputePass(this);
 		compute_pass.begin(
-			this,
 			texture_binding_list,
 			buffer_binding_list
 		);
@@ -104,17 +182,7 @@ public:
 		compute_pass.end();
 		return this;
 	}
-
-	typeof(this) submit()
-	in (this.handle !is null)
-	{
-		bool succeed;
-		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
-		enforce(succeed, SDL_GetError().fromStringz());
-		this.command_buffer_handle = null;
-		return this;
-	}
-
+	// push vertex uniform data (only render_pass)
 	typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
 		in uint slot_index
@@ -127,7 +195,7 @@ public:
 		);
 		return this;
 	}
-
+	// push vertex uniform data with size manually (only render_pass)
 	typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
 		in uint slot_index,
@@ -141,7 +209,7 @@ public:
 		);
 		return this;
 	}
-
+	// push fragment uniform data (only render_pass)
 	typeof(this) push_fragment(Type)(
 		Type fragment_uniform_data,
 		in uint first_slot = 0
@@ -154,7 +222,7 @@ public:
 		);
 		return this;
 	}
-
+	// push compute uniform data (only compute_pass)
 	typeof(this) push_uniform(Type)(Type compute_uniform_data, in uint first_slot = 0)
 	in (this.handle !is null)
 	{
@@ -164,7 +232,17 @@ public:
 		);
 		return this;
 	}
-
+	// submit command buffer.
+	typeof(this) submit()
+	in (this.handle !is null)
+	{
+		bool succeed;
+		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
+		enforce(succeed, SDL_GetError().fromStringz());
+		this.command_buffer_handle = null;
+		return this;
+	}
+	// blit texture. (no need beginned ~~~_pass)
 	typeof(this) blit_texture(in GpuBlitInfo info)
 	in (this.handle !is null)
 	{

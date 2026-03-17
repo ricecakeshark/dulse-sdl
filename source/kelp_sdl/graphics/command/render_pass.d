@@ -16,22 +16,38 @@ struct GpuRenderPass
 	SDL_GPURenderPass* pass_handle;
 	GpuCommandBuffer command_buffer;
 
+	@disable this(this);
+
+	this(GpuCommandBuffer command_buffer)
+	{
+		this.command_buffer = command_buffer;
+		return;
+	}
+
+	invariant
+	{
+		// this.pass_handle may be null
+		assert(this.command_buffer !is null);
+	}
+
+	@property bool is_valid() pure nothrow @nogc @safe
+	{
+		return (this.pass_handle !is null);
+	}
+
 	@property SDL_GPURenderPass* handle() pure nothrow @nogc @safe
 	{
 		return this.pass_handle;
 	}
 
-	typeof(this) begin(
-		GpuCommandBuffer command_buffer,
+	ref typeof(this) begin(
 		in GpuColorTargetInfo[] color_target_info_list,
 	)
-	in (command_buffer !is null)
-	in (command_buffer.handle !is null)
+	in (this.command_buffer.is_valid)
 	in (color_target_info_list.length >= 1)
 	{
-		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPURenderPass(
-			command_buffer.handle,
+			this.command_buffer.handle,
 			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
 			cast(uint) color_target_info_list.length,
 			null,
@@ -39,18 +55,15 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) begin(
-		GpuCommandBuffer command_buffer,
+	ref typeof(this) begin(
 		in GpuColorTargetInfo[] color_target_info_list,
 		in GpuDepthStencilTargetInfo depth_stencil_target_info,
 	)
-	in (command_buffer !is null)
-	in (command_buffer.handle !is null)
+	in (this.command_buffer.is_valid)
 	in (color_target_info_list.length >= 1)
 	{
-		this.command_buffer = command_buffer;
 		this.pass_handle = SDL_BeginGPURenderPass(
-			command_buffer.handle,
+			this.command_buffer.handle,
 			cast(SDL_GPUColorTargetInfo*) color_target_info_list.ptr,
 			cast(uint) color_target_info_list.length,
 			cast(SDL_GPUDepthStencilTargetInfo*)&depth_stencil_target_info,
@@ -58,14 +71,14 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) end()
+	ref typeof(this) end()
 	{
 		SDL_EndGPURenderPass(this.handle);
 		this.pass_handle = null;
 		return this;
 	}
 
-	typeof(this) bind(GpuGraphicsPipeline pipeline)
+	ref typeof(this) bind(GpuGraphicsPipeline pipeline)
 	in (this.handle !is null)
 	in (pipeline !is null)
 	in (pipeline.handle !is null)
@@ -74,7 +87,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
+	ref typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
 	in (this.handle !is null)
 	in (vertex_buffer_list.all!(buffer => buffer !is null))
 	in (vertex_buffer_list.all!(buffer => buffer.handle !is null))
@@ -92,7 +105,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) bind(
+	ref typeof(this) bind(
 		GpuIndexBuffer index_buffer
 	)
 	in (this.handle !is null)
@@ -109,7 +122,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) bind(GpuTexture[] texture_list, in uint first_slot = 0u)
+	ref typeof(this) bind(GpuTexture[] texture_list, in uint first_slot = 0u)
 	{
 		SDL_GPUTexture*[] texture_binding_list;
 		texture_binding_list = texture_list.map!(texture => texture.handle).array();
@@ -122,7 +135,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot)
+	ref typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot)
 	in (this.handle !is null)
 	in (binding_list.length >= 1)
 	in (binding_list.length < uint.max)
@@ -136,28 +149,28 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) set(in GpuViewport viewport)
+	ref typeof(this) set(in GpuViewport viewport)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUViewport(this.handle, cast(const(SDL_GPUViewport*))&viewport);
 		return this;
 	}
 
-	typeof(this) set(in Rect scissor_rect)
+	ref typeof(this) set(in Rect scissor_rect)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUScissor(this.handle, cast(const(SDL_Rect*))&scissor_rect);
 		return this;
 	}
 
-	typeof(this) set(in ubyte stencil_referensce)
+	ref typeof(this) set(in ubyte stencil_referensce)
 	in (this.handle !is null)
 	{
 		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(
+	ref typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
 		in uint slot_index,
 		in uint size,
@@ -172,7 +185,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(
+	ref typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
 		in uint slot_index,
 	)
@@ -186,7 +199,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) push_fragment(Type)(
+	ref typeof(this) push_fragment(Type)(
 		Type fragment_uniform_data,
 		in uint first_slot = 0
 	)
@@ -200,7 +213,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) draw(
+	ref typeof(this) draw(
 		in ParamPrimitive param
 	)
 	in (this.handle !is null)
@@ -215,7 +228,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) draw_indexed(
+	ref typeof(this) draw_indexed(
 		in ParamIndexedPrimitive param
 	)
 	in (this.handle !is null)
@@ -231,7 +244,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) draw_indirect(
+	ref typeof(this) draw_indirect(
 		GpuDrawBuffer draw_buffer,
 		in ParamPrimitiveIndirect param
 	)
@@ -247,7 +260,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	typeof(this) draw_indexed_indirect(
+	ref typeof(this) draw_indexed_indirect(
 		GpuDrawBuffer draw_buffer,
 		in ParamPrimitiveIndirect param
 	)
