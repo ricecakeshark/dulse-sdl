@@ -36,7 +36,7 @@ class GpuCommandBuffer
 public:
 	bool is_valid() pure nothrow @nogc @safe
 	{
-		return (this !is null && this.command_buffer_handle !is null);
+		return (this.command_buffer_handle !is null);
 	}
 
 	@property inout(SDL_GPUCommandBuffer*) handle() inout pure nothrow @nogc @safe
