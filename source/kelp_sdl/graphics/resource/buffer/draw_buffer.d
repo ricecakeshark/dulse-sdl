@@ -3,6 +3,7 @@ module kelp_sdl.graphics.resource.buffer.draw_buffer;
 import bindbc.sdl;
 import kelp_core.graphics.resource.draw_command;
 import kelp_sdl.graphics.core;
+import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 
 class GpuDrawBuffer : GpuBuffer
@@ -63,7 +64,7 @@ public:
 		this._count_command = count_command;
 		this._count_command_indexed = count_command_indexed;
 		super.create_by_size(
-			SDL_GPU_BUFFERUSAGE_INDIRECT,
+			GpuBufferUsageFlags.indirect,
 			(this._stride_command_indexed * count_command_indexed)
 				+ (
 					this._stride_command * count_command),

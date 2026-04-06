@@ -3,6 +3,7 @@ module kelp_sdl.graphics.resource.buffer.storage_buffer;
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.buffer.buffer;
+import kelp_sdl.graphics.desc;
 
 class GpuStorageBuffer : GpuBuffer
 {
@@ -21,9 +22,10 @@ public:
 	}
 
 	typeof(this) create(in uint size)
+	in (this !is null)
 	{
 		this._capacity = size;
-		this.create_by_size(SDL_GPU_BUFFERUSAGE_COMPUTE_STORAGE_WRITE, size);
+		this.create_by_size(GpuBufferUsageFlags.graphics_storage_read, size);
 		return this;
 	}
 }

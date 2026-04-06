@@ -51,7 +51,7 @@ public:
 			this._stride = 4;
 			break;
 		}
-		super.create_by_size(SDL_GPU_BUFFERUSAGE_INDEX, (count * this._stride));
+		super.create_by_size(GpuBufferUsageFlags.index, (count * this._stride));
 		return this;
 	}
 }

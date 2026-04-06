@@ -86,7 +86,7 @@ struct GpuRenderPass
 		SDL_BindGPUGraphicsPipeline(this.handle, pipeline.handle);
 		return this;
 	}
-
+	// bind Vertex Buffer
 	ref typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
 	in (this.handle !is null)
 	in (vertex_buffer_list.all!(buffer => buffer !is null))
@@ -104,7 +104,7 @@ struct GpuRenderPass
 		);
 		return this;
 	}
-
+	// bind Index Buffer
 	ref typeof(this) bind(
 		GpuIndexBuffer index_buffer
 	)
@@ -118,6 +118,36 @@ struct GpuRenderPass
 			this.pass_handle,
 			cast(const(SDL_GPUBufferBinding*))&buffer_binding,
 			cast(SDL_GPUIndexElementSize) index_buffer.element_size,
+		);
+		return this;
+	}
+	// bind Storage Buffer
+	ref typeof(this) bind_to_vertex(
+		GpuStorageBuffer[] storage_buffer_list,
+		uint first_slot,
+	)
+	{
+		SDL_BindGPUVertexStorageBuffers(
+			this.pass_handle,
+			first_slot,
+			cast(SDL_GPUBuffer**) storage_buffer_list.map!(buffer => buffer.handle)
+				.array,
+				cast(uint) storage_buffer_list.length,
+		);
+		return this;
+	}
+	// bind Storage Buffer
+	ref typeof(this) bind_to_fragment(
+		GpuStorageBuffer[] storage_buffer_list,
+		uint first_slot,
+	)
+	{
+		SDL_BindGPUFragmentStorageBuffers(
+			this.pass_handle,
+			first_slot,
+			cast(SDL_GPUBuffer**) storage_buffer_list.map!(buffer => buffer.handle)
+				.array,
+				cast(uint) storage_buffer_list.length,
 		);
 		return this;
 	}
@@ -201,7 +231,7 @@ struct GpuRenderPass
 
 	ref typeof(this) push_fragment(Type)(
 		Type fragment_uniform_data,
-		in uint first_slot = 0
+		in uint first_slot
 	)
 	in (this.handle !is null)
 	in (this.command_buffer.handle !is null)
@@ -209,6 +239,22 @@ struct GpuRenderPass
 		SDL_PushGPUFragmentUniformData(
 			this.command_buffer.handle, first_slot,
 			cast(const(void*))&fragment_uniform_data, Type.sizeof,
+		);
+		return this;
+	}
+	// push uniform buffer object (Array)
+	ref typeof(this) push_fragment(Type : Type[])(
+		Type[] fragment_uniform_data,
+		in uint first_slot
+	)
+	in (this.handle !is null)
+	in (this.command_buffer.handle !is null)
+	{
+		SDL_PushGPUFragmentUniformData(
+			this.command_buffer.handle,
+			first_slot,
+			cast(const(void*)) fragment_uniform_data.ptr,
+			Type.sizeof * fragment_uniform_data.length,
 		);
 		return this;
 	}

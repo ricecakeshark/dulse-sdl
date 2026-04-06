@@ -8,6 +8,8 @@ import kelp_sdl.graphics.resource.buffer.storage_buffer;
 import kelp_sdl.graphics.resource.texture;
 
 import std.exception, std.string;
+import std.array : array;
+import std.algorithm : map;
 
 struct GpuComputePass
 {
@@ -89,17 +91,19 @@ struct GpuComputePass
 		SDL_BindGPUComputePipeline(this.pass_handle, compute_pipeline.handle);
 		return this;
 	}
-
+	// bind Storage Buffer List
 	ref typeof(this) bind(
-		in GpuStorageBuffer storage_buffer,
+		in GpuStorageBuffer[] storage_buffer_list,
 		in uint first_slot
 	)
 	in (this.handle !is null)
-	in (storage_buffer.handle !is null)
 	{
 		SDL_BindGPUComputeStorageBuffers(
-			this.handle, first_slot,
-			cast(SDL_GPUBuffer**)[storage_buffer.handle].ptr, 1,
+			this.handle,
+			first_slot,
+			cast(SDL_GPUBuffer**) storage_buffer_list.map!(buffer => buffer.handle)
+				.array,
+				cast(uint) storage_buffer_list.length,
 		);
 		return this;
 	}

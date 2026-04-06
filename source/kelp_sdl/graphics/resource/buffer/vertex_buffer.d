@@ -2,6 +2,7 @@ module kelp_sdl.graphics.resource.buffer.vertex_buffer;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
+import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 
 class GpuVertexBuffer : GpuBuffer
@@ -38,7 +39,7 @@ public:
 	{
 		this._count = count;
 		this._stride = stride;
-		super.create_by_size(SDL_GPU_BUFFERUSAGE_VERTEX, (count * stride));
+		super.create_by_size(GpuBufferUsageFlags.vertex, (count * stride));
 		return this;
 	}
 }

@@ -60,7 +60,7 @@ protected:
 	}
 
 	typeof(this) create_by_size(
-		in SDL_GPUBufferUsageFlags usage_flags,
+		in GpuBufferUsageFlags usage_flags,
 		in size_t size,
 	)
 	in (this.device.handle !is null)
@@ -69,7 +69,7 @@ protected:
 		scope SDL_GPUBufferCreateInfo buffer_create_info;
 		this._size = size;
 		buffer_create_info = SDL_GPUBufferCreateInfo(
-			usage_flags, cast(uint) size,
+			cast(SDL_GPUBufferUsageFlags) usage_flags, cast(uint) size,
 		);
 		this.buffer_handle = SDL_CreateGPUBuffer(
 			this.device.handle, &buffer_create_info
