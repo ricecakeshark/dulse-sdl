@@ -46,7 +46,28 @@ class GpuDevice
 		{
 		case GpuBackend.vulkan:
 			backend_selector = "vulkan";
-			break;
+			SDL_PropertiesID props = SDL_CreateProperties();
+			SDL_GPUVulkanOptions vkopts;
+			vkopts.vulkan_api_version = (1u << 22) | (2u << 12) | (0u);
+			SDL_SetPointerProperty(
+				props,
+				SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER,
+				&vkopts,
+			);
+			SDL_SetStringProperty(
+				props,
+				SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING,
+				"vulkan",
+			);
+			SDL_SetBooleanProperty(
+				props,
+				SDL_PROP_GPU_DEVICE_CREATE_SHADERS_SPIRV_BOOLEAN,
+				true,
+			);
+			this.device_handle = SDL_CreateGPUDeviceWithProperties(
+				cast(SDL_PropertiesID)props,
+			);
+			return this;
 		case GpuBackend.direct3d12:
 			backend_selector = "direct3d12";
 			break;
