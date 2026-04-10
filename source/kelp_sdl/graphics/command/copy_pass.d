@@ -47,7 +47,7 @@ struct GpuCopyPass
 		this.pass_handle = null;
 		return this;
 	}
-
+	// upload buffer
 	ref typeof(this) upload(
 		in GpuTransferBufferLocation buffer_location,
 		in GpuBufferRegion buffer_region,
@@ -61,7 +61,29 @@ struct GpuCopyPass
 		);
 		return this;
 	}
-
+	// upload buffer list
+	ref typeof(this) upload(TypeList...)(
+		in GpuBufferTransferBuffer transfer_buffer,
+		auto ref TypeList buffer_list,
+	)
+	{
+		scope GpuTransferBufferLocation buffer_location;
+		buffer_location = GpuTransferBufferLocation(transfer_buffer);
+		foreach (buffer; buffer_list)
+		{
+			scope GpuBufferRegion buffer_region;
+			buffer_region = GpuBufferRegion(buffer, 0u);
+			SDL_UploadToGPUBuffer(
+				this.handle,
+				cast(SDL_GPUTransferBufferLocation*)&buffer_location,
+				cast(SDL_GPUBufferRegion*)&buffer_region,
+				false,
+			);
+			buffer_location.offset += buffer.size;
+		}
+		return this;
+	}
+	// upload texture
 	ref typeof(this) upload(
 		in GpuTextureTransferInfo transfer_info,
 		in GpuTextureRegion texture_region,

@@ -496,6 +496,17 @@ struct GpuTextureTransferInfo
 	uint pixels_per_row;
 	uint rows_per_layer;
 
+	this(GpuTextureTransferBuffer texture_transfer_buffer,
+		uint width, uint height, uint offset = 0,
+	)
+	{
+		this.transfer_buffer = texture_transfer_buffer.handle;
+		this.offset = offset;
+		this.pixels_per_row = width;
+		this.rows_per_layer = height;
+		return;
+	}
+
 	this(GpuTextureTransferBuffer texture_transfer_buffer, uint offset)
 	{
 		this.transfer_buffer = texture_transfer_buffer.handle;
@@ -646,13 +657,13 @@ struct GpuTransferBufferLocation
 	}
 
 	this(
-		GpuBufferTransferBuffer transfer_buffer,
+		in GpuBufferTransferBuffer transfer_buffer,
 		ulong offset = 0u,
 	)
 	in (transfer_buffer.handle !is null)
 	in (offset <= uint.max)
 	{
-		this.transfer_buffer = transfer_buffer.handle;
+		this.transfer_buffer = cast(SDL_GPUTransferBuffer*) transfer_buffer.handle;
 		this.offset = cast(uint) offset;
 		return;
 	}
@@ -678,12 +689,12 @@ struct GpuBufferRegion
 	}
 
 	this(
-		GpuBuffer buffer,
+		in GpuBuffer buffer,
 		uint offset = 0,
 	)
 	in (buffer.handle !is null)
 	{
-		this.buffer = buffer.handle;
+		this.buffer = cast(SDL_GPUBuffer*) buffer.handle;
 		this.offset = offset;
 		this.size = cast(uint) buffer.size;
 		return;

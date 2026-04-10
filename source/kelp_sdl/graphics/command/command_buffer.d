@@ -67,19 +67,14 @@ public:
 		);
 		return this;
 	}
-	// Copy pass begin.
-	typeof(this) begin(
-		ref GpuCopyPass copy_pass,
-	)
+	// submit command buffer
+	typeof(this) submit()
+	in (this.handle !is null)
 	{
-		enforce(copy_pass.handle is null);
-		copy_pass.begin();
-		return this;
-	}
-	// Copy pass end.
-	typeof(this) end(ref GpuCopyPass copy_pass,)
-	{
-		copy_pass.end();
+		bool succeed;
+		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
+		enforce(succeed, SDL_GetError().fromStringz());
+		this.command_buffer_handle = null;
 		return this;
 	}
 	// convenient with Copy pass
@@ -92,26 +87,6 @@ public:
 		copy_pass.begin();
 		dlg(copy_pass);
 		copy_pass.end();
-		return this;
-	}
-	// Render Pass begin.
-	typeof(this) begin(
-		ref GpuRenderPass render_pass,
-		in GpuColorTargetInfo[] color_target_info_list,
-		in GpuDepthStencilTargetInfo depth_stencil_target_info,
-	)
-	{
-		enforce(render_pass.handle is null);
-		render_pass.begin(
-			color_target_info_list,
-			depth_stencil_target_info,
-		);
-		return this;
-	}
-	// Render Pass end.
-	typeof(this) end(ref GpuRenderPass render_pass)
-	{
-		render_pass.end();
 		return this;
 	}
 	// begin() -> process -> end() with Render pass.
@@ -142,28 +117,6 @@ public:
 		);
 		dlg(render_pass);
 		render_pass.end();
-		return this;
-	}
-	// Compute Pass begin.
-	typeof(this) begin(
-		ref GpuComputePass compute_pass,
-		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
-		in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
-	)
-	{
-		enforce(compute_pass.handle is null);
-		compute_pass.begin(
-			texture_binding_list,
-			buffer_binding_list,
-		);
-		return this;
-	}
-	// compute pass end
-	typeof(this) end(
-		ref GpuComputePass compute_pass,
-	)
-	{
-		compute_pass.end();
 		return this;
 	}
 	// begin() -> process -> end() with Compute pass.
@@ -230,16 +183,6 @@ public:
 			this.handle, first_slot,
 			cast(const(void*))&compute_uniform_data, Type.sizeof,
 		);
-		return this;
-	}
-	// submit command buffer.
-	typeof(this) submit()
-	in (this.handle !is null)
-	{
-		bool succeed;
-		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
-		enforce(succeed, SDL_GetError().fromStringz());
-		this.command_buffer_handle = null;
 		return this;
 	}
 	// blit texture. (no need beginned ~~~_pass)
