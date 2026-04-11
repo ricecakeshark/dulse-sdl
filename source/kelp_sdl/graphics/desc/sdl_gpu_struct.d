@@ -318,14 +318,14 @@ struct GpuRasterizerState
 
 struct GpuSamplerCreateInfo
 {
-	GpuFilter min_filter;
-	GpuFilter mag_filter;
-	GpuSamplerMipmapMode mipmap_mode;
-	GpuSamplerAddressMode address_mode_u;
-	GpuSamplerAddressMode address_mode_v;
-	GpuSamplerAddressMode address_mode_w;
+	GpuFilter min_filter = GpuFilter.linear;
+	GpuFilter mag_filter = GpuFilter.linear;
+	GpuSamplerMipmapMode mipmap_mode = GpuSamplerMipmapMode.linear;
+	GpuSamplerAddressMode address_mode_u = GpuSamplerAddressMode.clamp_to_edge;
+	GpuSamplerAddressMode address_mode_v = GpuSamplerAddressMode.clamp_to_edge;
+	GpuSamplerAddressMode address_mode_w = GpuSamplerAddressMode.clamp_to_edge;
 	float mip_lod_bias = 0.0f;
-	float max_anisotropy = 0.0f;
+	float max_anisotropy = 1.0f;
 	GpuCompareOp compare_op;
 	float min_lod = 0.0f;
 	float max_lod = 0.0f;
@@ -333,6 +333,20 @@ struct GpuSamplerCreateInfo
 	bool enable_compare;
 	ubyte padding1;
 	ubyte padding2;
+
+	this(
+		GpuFilter min_filter,
+		GpuFilter mag_filter,
+		GpuSamplerAddressMode addres_mode = GpuSamplerAddressMode.clamp_to_edge,
+	)
+	{
+		this.min_filter = min_filter,
+		this.mag_filter = mag_filter,
+		this.address_mode_u = addres_mode;
+		this.address_mode_v = addres_mode;
+		this.address_mode_w = addres_mode;
+		return;
+	}
 }
 
 struct GpuShaderCreateInfo
@@ -453,14 +467,14 @@ struct GpuTextureRegion
 	uint h;
 	uint d;
 
-	/+this(GpuTexture texture)
+	this(GpuTexture texture)
 	{
 		this.texture = texture.handle;
 		this.w = texture.width;
 		this.h = texture.height;
 		this.d = 1u;
 		return;
-	}+/
+	}
 }
 
 struct GpuTextureSamplerBinding
