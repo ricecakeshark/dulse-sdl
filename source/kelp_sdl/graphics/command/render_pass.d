@@ -165,7 +165,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	ref typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot)
+	ref typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot = 0)
 	in (this.handle !is null)
 	in (binding_list.length >= 1)
 	in (binding_list.length < uint.max)
