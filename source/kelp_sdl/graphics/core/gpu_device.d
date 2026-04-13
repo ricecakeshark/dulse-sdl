@@ -48,7 +48,7 @@ class GpuDevice
 			backend_selector = "vulkan";
 			SDL_PropertiesID props = SDL_CreateProperties();
 			SDL_GPUVulkanOptions vkopts;
-			vkopts.vulkan_api_version = (1u << 22) | (2u << 12) | (0u);
+			vkopts.vulkan_api_version = (1u << 22) | (4u << 12) | (0u);
 			SDL_SetPointerProperty(
 				props,
 				SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER,
