@@ -164,9 +164,12 @@ struct GpuColorTargetInfo
 
 	this(
 		GpuAbstractTexture texture,
-		GpuLoadOp load_op, GpuStoreOp store_op,
-		uint mip_level,
-		uint depth,
+		uint mip_level = 0,
+		uint depth = 0,
+		ColorF clear_color,
+		GpuLoadOp load_op = GpuLoadOp.load,
+		GpuStoreOp store_op = GpuStoreOp.store,
+
 	)
 	{
 		this.texture = texture.handle;
