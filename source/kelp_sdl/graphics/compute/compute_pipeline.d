@@ -18,7 +18,6 @@ class GpuComputePipeline
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 

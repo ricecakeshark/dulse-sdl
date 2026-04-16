@@ -16,13 +16,6 @@ abstract class AbstractText
 	AbstractTextEngine text_engine;
 	TextFont text_font;
 
-	/+this(GpuTextEngine engine, GpuTextFont font)
-	{
-		this.text_engine = engine;
-		this.text_font = font;
-		return;
-	}+/
-
 	typeof(this) create(in string text_string)
 	{
 		this.text_handle = TTF_CreateText(

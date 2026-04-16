@@ -19,7 +19,6 @@ class GpuSampler
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 

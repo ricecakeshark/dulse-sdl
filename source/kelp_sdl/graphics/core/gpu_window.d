@@ -16,7 +16,6 @@ class GpuWindow
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 

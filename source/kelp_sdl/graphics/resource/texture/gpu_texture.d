@@ -18,7 +18,6 @@ final class GpuTexture : GpuAbstractTexture
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 
@@ -60,13 +59,13 @@ class GpuRefTexture : GpuAbstractTexture
 		return;
 	}
 
-	typeof(this) refer(SDL_GPUTexture* texture_ref) 
+	typeof(this) refer(SDL_GPUTexture* texture_ref)
 	{
 		this.texture_handle = texture_ref;
 		return this;
 	}
 
-	typeof(this) unrefer() 
+	typeof(this) unrefer()
 	{
 		this.texture_handle = null;
 		return this;

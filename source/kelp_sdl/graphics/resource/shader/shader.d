@@ -18,7 +18,6 @@ abstract class GpuShader(Derived)
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 

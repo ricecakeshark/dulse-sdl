@@ -19,7 +19,6 @@ class GpuDevice
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 
@@ -65,7 +64,7 @@ class GpuDevice
 				true,
 			);
 			this.device_handle = SDL_CreateGPUDeviceWithProperties(
-				cast(SDL_PropertiesID)props,
+				cast(SDL_PropertiesID) props,
 			);
 			return this;
 		case GpuBackend.direct3d12:

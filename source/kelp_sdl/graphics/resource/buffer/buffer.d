@@ -19,7 +19,6 @@ abstract class GpuBuffer
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 
