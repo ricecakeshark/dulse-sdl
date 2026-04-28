@@ -252,7 +252,7 @@ struct GpuGraphicsPipelineCreateInfo
 	SDL_GPUShader* vertex_shader;
 	SDL_GPUShader* fragment_shader;
 	GpuVertexInputState vertex_input_state;
-	SDL_GPUPrimitiveType primitive_type;
+	GpuPrimitiveType primitive_type;
 	GpuRasterizerState rasterizer_state;
 	GpuMultisampleState multisample_state;
 	GpuDepthStencilState depth_stencil_state;
