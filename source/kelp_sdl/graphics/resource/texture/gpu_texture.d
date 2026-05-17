@@ -12,7 +12,7 @@ final class GpuTexture : GpuAbstractTexture
 {
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 
@@ -50,7 +50,7 @@ class GpuRefTexture : GpuAbstractTexture
 {
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 

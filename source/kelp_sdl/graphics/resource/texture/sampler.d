@@ -3,17 +3,17 @@ module kelp_sdl.graphics.resource.texture.sampler;
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
+import kelp_sdl.graphics.resource;
 
 import std.exception : enforce;
 
-class GpuSampler
+class GpuSampler : GpuResource , IGpuResource
 {
 	SDL_GPUSampler* sampler_handle;
-	GpuDevice device;
 
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 

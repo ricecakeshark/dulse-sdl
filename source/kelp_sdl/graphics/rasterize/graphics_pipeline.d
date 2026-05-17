@@ -4,14 +4,13 @@ import bindbc.sdl;
 import kelp_sdl.graphics;
 import std.exception, std.string;
 
-class GpuGraphicsPipeline
+class GpuGraphicsPipeline : GpuResource , IGpuResource
 {
 	SDL_GPUGraphicsPipeline* pipeline_handle;
-	protected GpuDevice device;
 
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 

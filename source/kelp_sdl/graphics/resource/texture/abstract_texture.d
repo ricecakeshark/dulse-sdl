@@ -2,13 +2,18 @@ module kelp_sdl.graphics.resource.texture.abstract_texture;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
-import kelp_sdl.graphics.resource.texture;
+import kelp_sdl.graphics.resource;
 
-abstract class GpuAbstractTexture
+abstract class GpuAbstractTexture : GpuResource , IGpuResource
 {
 	SDL_GPUTexture* texture_handle;
-	GpuDevice device;
 	uint _width, _height;
+
+	this(GpuDevice device)
+	{
+		super(device);
+		return;
+	}
 
 	@property inout(SDL_GPUTexture*) handle() inout pure nothrow @nogc @safe
 	{

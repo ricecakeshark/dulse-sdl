@@ -5,14 +5,13 @@ import kelp_sdl.graphics;
 import std.algorithm, std.exception, std.file, std.format;
 import std.string : fromStringz, toStringz;
 
-abstract class GpuShader(Derived)
+abstract class GpuShader(Derived) : GpuResource , IGpuResource
 {
 	SDL_GPUShader* shader_handle;
-	GpuDevice device;
 
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 

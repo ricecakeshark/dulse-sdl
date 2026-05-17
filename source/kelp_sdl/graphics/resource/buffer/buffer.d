@@ -3,23 +3,28 @@ module kelp_sdl.graphics.resource.buffer.buffer;
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
+import kelp_sdl.graphics.resource;
 import std.exception : enforce;
 
-abstract class GpuBuffer
+abstract class GpuBuffer : GpuResource , IGpuResource
 {
 	SDL_GPUBuffer* buffer_handle;
-	GpuDevice device;
 	size_t _size;
 
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 
 	~this()
 	{
 		return;
+	}
+
+	invariant
+	{
+		assert(this !is null);
 	}
 
 public:

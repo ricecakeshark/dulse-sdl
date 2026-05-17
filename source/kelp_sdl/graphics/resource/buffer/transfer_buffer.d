@@ -1,10 +1,9 @@
 module kelp_sdl.graphics.resource.buffer.transfer_buffer;
 
 import bindbc.sdl;
-import kelp_sdl.graphics.core.gpu_device;
+import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
-import kelp_sdl.graphics.resource.buffer;
-import kelp_sdl.graphics.resource.texture;
+import kelp_sdl.graphics.resource;
 import kelp_sdl.image;
 
 import std.exception : enforce;
@@ -12,16 +11,15 @@ import std.algorithm : map, sum;
 import std.traits : isArray;
 import core.stdc.string : memcpy;
 
-class GpuTransferBuffer(Derived)
+class GpuTransferBuffer(Derived) : GpuResource , IGpuResource
 {
 	SDL_GPUTransferBuffer* buffer_handle;
-	GpuDevice device;
 	uint _size;
 	void* transfer_ptr;
 
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 
