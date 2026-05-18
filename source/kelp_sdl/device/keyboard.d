@@ -34,7 +34,6 @@ class SDLKeyboard
 		}
 		return;
 	}
-
 	void try_open()
 	{
 		int count;
@@ -47,28 +46,25 @@ class SDLKeyboard
 		this.keyboard_id = keyboard_ptr[0];
 		return;
 	}
-	/+
-	bool pressed(in Scancode scancode) const pure nothrow @nogc @safe
+
+	typeof(this) reset()
 	{
-		return (this.input_state[0].pressed(scancode)) ? true : false;
+		SDL_ResetKeyboard();
+		return this;
 	}
 
-	bool released(in Scancode scancode) const pure nothrow @nogc @safe
+	
+	typeof(this) start_input(SDL_Window* window)
 	{
-		return (this.input_state[0].released(scancode)) ? true : false;
+		bool succeed = SDL_StartTextInput(window);
+		return this;
 	}
 
-	bool pressed_just(in Scancode scancode) const pure nothrow @nogc @safe
+	typeof(this) stop_input(SDL_Window* window)
 	{
-		return (this.input_state[0].pressed(scancode)
-				&& this.input_state[1].released(scancode)) ? true : false;
+		bool succeed = SDL_StopTextInput(window);
+		return this;
 	}
-
-	bool released_just(in Scancode scancode) const pure nothrow @nogc @safe
-	{
-		return (this.input_state[0].released(scancode)
-				&& this.input_state[1].pressed(scancode)) ? true : false;
-	}+/
 }
 
 KeyboardInputState get_keyboard_state()

@@ -7,7 +7,7 @@ import kelp_sdl.graphics.resource.buffer;
 
 class GpuVertexBuffer : GpuBuffer
 {
-	size_t _count, _stride;
+	//size_t _count, _stride;
 
 	this(GpuDevice device)
 	{
@@ -16,24 +16,12 @@ class GpuVertexBuffer : GpuBuffer
 	}
 
 public:
-	@property size_t capacity() const pure nothrow @nogc @safe
+	/+@property size_t capacity() const pure nothrow @nogc @safe
 	in (this._count != 0)
 	in (this._stride != 0)
 	{
 		return this._count * this._stride;
-	}
-
-	@property size_t count() const pure nothrow @nogc @safe
-	in (this._count != 0)
-	{
-		return this._count;
-	}
-
-	@property size_t stride() const pure nothrow @nogc @safe
-	in (this._stride != 0)
-	{
-		return this._stride;
-	}
+	}+/
 
 	typeof(this) create(in size_t count, in size_t stride)
 	{

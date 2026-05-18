@@ -176,7 +176,10 @@ public:
 		return this;
 	}
 	// push compute uniform data (only compute_pass)
-	typeof(this) push_uniform(Type)(Type compute_uniform_data, in uint first_slot = 0)
+	typeof(this) push_uniform(Type)(
+		Type compute_uniform_data,
+		in uint first_slot = 0
+	)
 	in (this.handle !is null)
 	{
 		SDL_PushGPUComputeUniformData(

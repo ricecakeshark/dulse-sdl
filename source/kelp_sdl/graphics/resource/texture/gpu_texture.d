@@ -31,6 +31,7 @@ final class GpuTexture : GpuAbstractTexture
 		enforce(this.texture_handle !is null);
 		this._width = create_info.width;
 		this._height = create_info.height;
+		this.format = create_info.format;
 		return this;
 	}
 

@@ -713,7 +713,7 @@ struct GpuBufferRegion
 	{
 		this.buffer = cast(SDL_GPUBuffer*) buffer.handle;
 		this.offset = offset;
-		this.size = cast(uint) buffer.size;
+		this.size = cast(uint) buffer.size_byte;
 		return;
 	}
 

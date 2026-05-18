@@ -7,7 +7,7 @@ import kelp_sdl.graphics.resource.buffer;
 
 class GpuIndexBuffer : GpuBuffer
 {
-	size_t _count, _stride;
+	//size_t _count, _stride;
 	GpuIndexElementSize element_size;
 
 	this(GpuDevice device)
@@ -17,7 +17,7 @@ class GpuIndexBuffer : GpuBuffer
 	}
 
 public:
-	@property size_t capacity() const pure nothrow @nogc @safe
+	/+@property size_t capacity() const pure nothrow @nogc @safe
 	in (this._count != 0)
 	in (this._stride != 0)
 	{
@@ -34,7 +34,7 @@ public:
 	in (this._stride != 0)
 	{
 		return this._stride;
-	}
+	}+/
 
 	typeof(this) create(
 		in size_t count,
@@ -51,7 +51,7 @@ public:
 			this._stride = 4;
 			break;
 		}
-		super.create_by_size(GpuBufferUsageFlags.index, (count * this._stride));
+		super.create(GpuBufferUsageFlags.index, count, this._stride);
 		return this;
 	}
 }

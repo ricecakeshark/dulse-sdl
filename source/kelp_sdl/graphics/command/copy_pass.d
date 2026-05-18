@@ -79,7 +79,7 @@ struct GpuCopyPass
 				cast(SDL_GPUBufferRegion*)&buffer_region,
 				false,
 			);
-			buffer_location.offset += buffer.size;
+			buffer_location.offset += buffer.size_byte;
 		}
 		return this;
 	}

@@ -4,7 +4,14 @@ import kelp_sdl.graphics.core.gpu_device;
 
 interface IGpuResource
 {
-	
+
+}
+
+interface IGpuResourceUpload
+{
+	@property inout(uint) stride() inout pure nothrow @nogc @safe;
+	@property inout(uint) count() inout pure nothrow @nogc @safe;
+	@property inout(uint) size_byte() inout pure nothrow @nogc @safe;
 }
 
 abstract class GpuResource
