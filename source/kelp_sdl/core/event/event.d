@@ -8,29 +8,29 @@ import std.array, std.algorithm;
 
 class SDLEventSubsystem : Subsystem
 {
-	Core core;
 	EventSubsystem event;
 
 	this(Core core)
 	{
-		this.core = core;
+		super(core);
+		return;
 	}
 
-	void initialize()
+	typeof(this) initialize()
 	{
 		event = this.core.subsystem.pool.query!(EventSubsystem);
-		return;
+		return this;
 	}
 
-	void finalize()
+	typeof(this) finalize()
 	{
-		return;
+		return this;
 	}
 
-	void process()
+	typeof(this) process()
 	{
 		event.pool.append(poll_event());
-		return;
+		return this;
 	}
 }
 

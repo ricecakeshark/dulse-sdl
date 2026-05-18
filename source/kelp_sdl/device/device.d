@@ -7,7 +7,6 @@ import bindbc.sdl;
 
 class SDLDeviceSubsystem : Subsystem
 {
-	Core core;
 	DeviceSubsystem device;
 	SDLKeyboard keyboard;
 	SDLMouse mouse;
@@ -15,14 +14,14 @@ class SDLDeviceSubsystem : Subsystem
 
 	this(Core core)
 	{
-		this.core = core;
+		super(core);
 		this.keyboard = new SDLKeyboard();
 		this.mouse = new SDLMouse();
 		this.gamepad = new SDLGamepad();
 		return;
 	}
 
-	void initialize()
+	typeof(this) initialize()
 	{
 		this.device = core.subsystem.pool.query!(DeviceSubsystem);
 		this.keyboard.device_subsystem = this.device;
@@ -30,22 +29,22 @@ class SDLDeviceSubsystem : Subsystem
 		this.keyboard.initialize();
 		this.mouse.initialize();
 		this.gamepad.initialize();
-		return;
+		return this;
 	}
 
-	void finalize()
+	typeof(this) finalize()
 	{
 		this.keyboard.finalize();
 		this.mouse.finalize();
 		this.gamepad.finalize();
-		return;
+		return this;
 	}
 
-	void process()
+	typeof(this) process()
 	{
 		this.keyboard.process();
 		this.mouse.process();
 		this.gamepad.process();
-		return;
+		return this;
 	}
 }

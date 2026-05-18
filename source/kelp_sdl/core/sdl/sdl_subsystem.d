@@ -8,7 +8,6 @@ import std.format;
 
 class SDLSubsystem : Subsystem
 {
-	protected Core core;
 	protected LibrarySDL sdl;
 	protected LibrarySDLImage sdl_image;
 	protected LibrarySDLTTF sdl_ttf;
@@ -17,18 +16,18 @@ class SDLSubsystem : Subsystem
 
 	this(Core core)
 	{
-		this.core = core;
+		super(core);
 		sdl = new LibrarySDL();
 		sdl_image = new LibrarySDLImage();
 		sdl_ttf = new LibrarySDLTTF();
 		return;
 	}
 
-	void initialize()
+	typeof(this) initialize()
 	{
 		if (initialized == true)
 		{
-			return;
+			return this;
 		}
 		initialized = true;
 		this.core.subsystem.query(this.logger);
@@ -56,19 +55,19 @@ class SDLSubsystem : Subsystem
 				cast(string)(sdl_ttf.linked_version)
 		)
 		);
-		return;
+		return this;
 	}
 
-	void finalize()
+	typeof(this) finalize()
 	{
 		sdl_ttf.finalize();
 		sdl_image.finalize();
 		sdl.finalize();
-		return;
+		return this;
 	}
 
-	void process()
+	typeof(this) process()
 	{
-		return;
+		return this;
 	}
 }

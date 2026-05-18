@@ -1,23 +1,30 @@
 module kelp_sdl.audio.audio_subsystem;
 
 import kelp_sdl.audio;
+import kelp_core.core.core;
 import kelp_core.core.subsystem;
 
 class AudioSubsystem : Subsystem
 {
-	void initialize()
+	this(Core core)
 	{
+		super(core);
 		return;
 	}
 
-	void finalize()
+	typeof(this) initialize()
 	{
-		return;
+		return this;
 	}
 
-	void process()
+	typeof(this) finalize()
 	{
-		return;
+		return this;
+	}
+
+	typeof(this) process()
+	{
+		return this;
 	}
 
 	AudioDevice open_device()
