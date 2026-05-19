@@ -7,11 +7,13 @@ import std.exception : enforce;
 
 class SDLGamepad
 {
-	DeviceSubsystem device;
+	Core core;
+	DeviceSubsystem device_subsystem;
 	private SdlGampepad[] gamepad_list;
 
-	this()
+	this(DeviceSubsystem device_subsystem)
 	{
+		this.device_subsystem = device_subsystem;
 		return;
 	}
 
@@ -28,11 +30,11 @@ class SDLGamepad
 	void process()
 	{
 		update_list();
-		if (this.device)
+		if (this.device_subsystem)
 		{
 			GamepadState temp;
 			temp = GamepadState();
-			this.device.gamepad.update(temp);
+			this.device_subsystem.gamepad.update(temp);
 		}
 		return;
 	}

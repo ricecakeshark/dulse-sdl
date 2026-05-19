@@ -6,10 +6,12 @@ import bindbc.sdl;
 
 class SDLMouse
 {
-	DeviceSubsystem device;
+	Core core;
+	DeviceSubsystem device_subsystem;
 
-	this()
+	this(DeviceSubsystem device_subsystem)
 	{
+		this.device_subsystem = device_subsystem;
 		return;
 	}
 
@@ -26,14 +28,15 @@ class SDLMouse
 	void process()
 	{
 		MouseState temp_mouse;
-		if (this.device)
+		if (this.device_subsystem)
 		{
 			temp_mouse.update(
 				SDL_GetRelativeMouseState(
-					&temp_mouse.global.state.data[0], &temp_mouse.global.state.data[1]
+					&temp_mouse.global.state.data[0],
+					&temp_mouse.global.state.data[1],
 			)
 			);
-			this.device.mouse.update(temp_mouse);
+			this.device_subsystem.mouse.update(temp_mouse);
 		}
 		return;
 	}

@@ -1,5 +1,6 @@
 module kelp_sdl.device.keyboard;
 
+import kelp_core.core;
 import kelp_core.device;
 import bindbc.sdl;
 import std.algorithm;
@@ -7,11 +8,11 @@ import std.algorithm;
 class SDLKeyboard
 {
 	SDL_KeyboardID keyboard_id;
-	//KeyboardInputState[2] input_state;
 	DeviceSubsystem device_subsystem;
 
-	this()
+	this(DeviceSubsystem device_subsystem)
 	{
+		this.device_subsystem = device_subsystem;
 		return;
 	}
 
@@ -28,7 +29,7 @@ class SDLKeyboard
 
 	void process()
 	{
-		if (this.device_subsystem)
+		if (this.device_subsystem !is null )
 		{
 			this.device_subsystem.keyboard.update(get_keyboard_state());
 		}
@@ -56,13 +57,15 @@ class SDLKeyboard
 
 	typeof(this) start_input(SDL_Window* window)
 	{
-		bool succeed = SDL_StartTextInput(window);
+		bool succeed;
+		succeed = SDL_StartTextInput(window);
 		return this;
 	}
 
 	typeof(this) stop_input(SDL_Window* window)
 	{
-		bool succeed = SDL_StopTextInput(window);
+		bool succeed;
+		succeed = SDL_StopTextInput(window);
 		return this;
 	}
 }
