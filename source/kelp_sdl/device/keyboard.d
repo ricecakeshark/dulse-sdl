@@ -34,6 +34,7 @@ class SDLKeyboard
 		}
 		return;
 	}
+
 	void try_open()
 	{
 		int count;
@@ -53,7 +54,6 @@ class SDLKeyboard
 		return this;
 	}
 
-	
 	typeof(this) start_input(SDL_Window* window)
 	{
 		bool succeed = SDL_StartTextInput(window);
