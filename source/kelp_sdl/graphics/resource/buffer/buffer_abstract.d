@@ -69,7 +69,7 @@ protected:
 		return this;
 	}
 
-	deprecated typeof(this) create_by_size(
+	typeof(this) create_by_size(
 		in GpuBufferUsageFlags usage_flags,
 		in size_t size,
 	)
