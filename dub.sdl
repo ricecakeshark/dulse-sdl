@@ -5,7 +5,7 @@ copyright "Copyright © 2025, RiceShark"
 license "proprietary"
 
 dependency "kelp-core" path="..\\kelp_core"
-dependency "bindbc-sdl" version="~>2.4.0"
+dependency "bindbc-sdl" version="~>2.4.2"
 
 subConfiguration "bindbc-sdl" "static"
 
@@ -15,7 +15,7 @@ targetPath "build"
 sourcePaths "source"
 importPaths "source"
 
-versions "SDL_3_4_4" "SDL_Image_3_2" "SDL_Mixer_3_2_2" "SDL_TTF_3_2_2"
+versions "SDL_3_4_10" "SDL_Image_3_2" "SDL_Mixer_3_2_2" "SDL_TTF_3_2_2"
 libs "SDL3" "SDL3_image" "SDL3_mixer" "SDL3_ttf"
 
 dflags "-preview=in"
