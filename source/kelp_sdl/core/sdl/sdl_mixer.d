@@ -2,10 +2,6 @@ module kelp_sdl.core.sdl.sdl_mixer;
 
 import bindbc.sdl;
 import kelp_sdl.core;
-/+
-bool MIX_Init();
-void MIX_Quit();
-int MIX_Version();
 
 class LibrarySDLMixer
 {
@@ -36,4 +32,4 @@ class LibrarySDLMixer
 		linked_version = SemVersion(MIX_Version());
 		return;
 	}
-}+/
+}
