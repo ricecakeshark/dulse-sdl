@@ -83,7 +83,7 @@ struct GpuComputePass
 		this.pass_handle = null;
 		return this;
 	}
-
+	// bind compute pipeline
 	ref typeof(this) bind(GpuComputePipeline compute_pipeline)
 	in (this.handle !is null)
 	in (compute_pipeline.handle !is null)
@@ -107,7 +107,7 @@ struct GpuComputePass
 		);
 		return this;
 	}
-
+	// bind texture sampler
 	ref typeof(this) bind(
 		in GpuTextureSamplerBinding[] texture_sampler_binding,
 		in uint first_slot
@@ -123,7 +123,7 @@ struct GpuComputePass
 		return this;
 	}
 
-	ref typeof(this) push_uniform(Type)(
+	ref typeof(this) push(Type)(
 		Type compute_uniform_data,
 		in uint first_slot = 0
 	)

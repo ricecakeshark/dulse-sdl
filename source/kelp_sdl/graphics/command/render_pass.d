@@ -80,7 +80,7 @@ struct GpuRenderPass
 
 	ref typeof(this) bind(GpuGraphicsPipeline pipeline)
 	in (this.handle !is null)
-	in (pipeline !is null)
+	in (pipeline !is null, "Pipeline is null")
 	in (pipeline.handle !is null)
 	{
 		SDL_BindGPUGraphicsPipeline(this.handle, pipeline.handle);

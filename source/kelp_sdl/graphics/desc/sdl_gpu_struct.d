@@ -212,7 +212,7 @@ struct GpuComputePipelineCreateInfo
 
 		this.code = cast(const(ubyte)*) shader_file.code;
 		this.code_size = shader_file.code.length;
-		this.entrypoint = toStringz(shader_file.entry_point);
+		this.entrypoint = shader_file.entry_point.ptr;
 		this.format = cast(GpuShaderFormat) shader_file.frontend_format;
 		return;
 	}
