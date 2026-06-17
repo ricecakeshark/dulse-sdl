@@ -110,7 +110,7 @@ struct GpuComputePass
 	// bind texture sampler
 	ref typeof(this) bind(
 		in GpuTextureSamplerBinding[] texture_sampler_binding,
-		in uint first_slot
+		in uint first_slot = 0,
 	)
 	in (this.handle !is null)
 	in (texture_sampler_binding.length >= 1)

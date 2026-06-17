@@ -321,9 +321,9 @@ struct GpuRasterizerState
 
 struct GpuSamplerCreateInfo
 {
-	GpuFilter min_filter = GpuFilter.linear;
-	GpuFilter mag_filter = GpuFilter.linear;
-	GpuSamplerMipmapMode mipmap_mode = GpuSamplerMipmapMode.linear;
+	GpuFilter min_filter = GpuFilter.nearest;
+	GpuFilter mag_filter = GpuFilter.nearest;
+	GpuSamplerMipmapMode mipmap_mode = GpuSamplerMipmapMode.nearest;
 	GpuSamplerAddressMode address_mode_u = GpuSamplerAddressMode.clamp_to_edge;
 	GpuSamplerAddressMode address_mode_v = GpuSamplerAddressMode.clamp_to_edge;
 	GpuSamplerAddressMode address_mode_w = GpuSamplerAddressMode.clamp_to_edge;
