@@ -109,6 +109,32 @@ struct GpuComputePass
 	}
 	// bind texture sampler
 	ref typeof(this) bind(
+		in uint first_slot = 0,
+		in GpuTextureSamplerBinding[] texture_sampler_binding...
+	)
+	in (this.handle !is null)
+	in (texture_sampler_binding.length >= 1)
+	{
+		SDL_BindGPUComputeSamplers(
+			this.handle, first_slot,
+			cast(SDL_GPUTextureSamplerBinding*) texture_sampler_binding.ptr,
+			cast(uint) texture_sampler_binding.length,
+		);
+		return this;
+	}
+	// bind texture sampler
+	ref typeof(this) bind(
+		in GpuTextureSamplerBinding[] texture_sampler_binding...
+	)
+	in (this.handle !is null)
+	in (texture_sampler_binding.length >= 1)
+	{
+		this.bind(0, texture_sampler_binding);
+		return this;
+	}
+	// bind texture sampler
+	/+
+	deprecated ref typeof(this) bind(
 		in GpuTextureSamplerBinding[] texture_sampler_binding,
 		in uint first_slot = 0,
 	)
@@ -121,18 +147,42 @@ struct GpuComputePass
 			cast(uint) texture_sampler_binding.length,
 		);
 		return this;
+	}+/
+	// push uniform data list to compute shader
+	ref typeof(this) push(Type...)(
+		in uint first_slot,
+		Type uniform_data_list,
+	)
+	in
+	{
+		assert(this.handle !is null);
+		assert(this.command_buffer !is null);
+		assert(this.command_buffer.handle !is null);
+		// SDL3 limitation (maybe)
+		assert(first_slot + uniform_data_list.length <= 4);
 	}
-
+	do
+	{
+		foreach (uint index, uniform_data; uniform_data_list)
+		{
+			this.push(uniform_data, first_slot + index);
+		}
+		return this;
+	}
+	// push uniform data to compute shader
 	ref typeof(this) push(Type)(
 		Type compute_uniform_data,
-		in uint first_slot = 0
+		in uint slot_index = 0
 	)
-	in (this.handle !is null)
-	in (this.command_buffer !is null)
-	in (this.command_buffer.handle !is null)
+	in
+	{
+		assert(this.is_valid);
+		assert(this.is_valid);
+	}
+	do
 	{
 		SDL_PushGPUComputeUniformData(
-			this.command_buffer.handle, first_slot,
+			this.command_buffer.handle, slot_index,
 			cast(const(void*))&compute_uniform_data, Type.sizeof,
 		);
 		return this;

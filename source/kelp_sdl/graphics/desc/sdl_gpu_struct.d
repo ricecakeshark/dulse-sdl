@@ -237,10 +237,10 @@ struct GpuDepthStencilTargetInfo
 {
 	SDL_GPUTexture* texture;
 	float clear_depth = 0.0f;
-	GpuLoadOp load_op;
-	GpuStoreOp store_op;
-	GpuLoadOp stencil_load_op;
-	GpuStoreOp stencil_store_op;
+	GpuLoadOp load_op = GpuLoadOp.dont_care;
+	GpuStoreOp store_op = GpuStoreOp.dont_care;
+	GpuLoadOp stencil_load_op = GpuLoadOp.dont_care;
+	GpuStoreOp stencil_store_op = GpuStoreOp.dont_care;
 	bool cycle = false;
 	ubyte clear_stencil;
 	ubyte mip_level;

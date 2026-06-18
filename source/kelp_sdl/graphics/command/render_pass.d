@@ -199,7 +199,44 @@ struct GpuRenderPass
 		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
 		return this;
 	}
-
+	// push uniform data list to vertex shader
+	ref typeof(this) push_vertex(TypeList...)(
+		in uint first_slot = 0,
+		TypeList uniform_data_list,
+	)
+	in
+	{
+		assert(this.is_valid);
+		assert(this.command_buffer.is_valid);
+		assert(first_slot + uniform_data_list.length <= 4);
+	}
+	do
+	{
+		foreach (uint index, uniform_data; uniform_data_list)
+		{
+			this.push_vertex(uniform_data, first_slot + index);
+		}
+		return this;
+	}
+	// push uniform data list to vertex shader
+	ref typeof(this) push_vertex(Type)(
+		Type vertex_uniform_data,
+		in uint slot_index,
+	)
+	in
+	{
+		assert(this.is_valid);
+		assert(this.command_buffer.is_valid);
+	}
+	do
+	{
+		SDL_PushGPUVertexUniformData(
+			this.command_buffer.handle, slot_index,
+			cast(const(void*))&vertex_uniform_data, Type.sizeof,
+		);
+		return this;
+	}
+	// push manually uniform data list to vertex shader
 	ref typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
 		in uint slot_index,
@@ -214,47 +251,41 @@ struct GpuRenderPass
 		);
 		return this;
 	}
-
-	ref typeof(this) push_vertex(Type)(
-		Type vertex_uniform_data,
-		in uint slot_index,
+	// push uniform data list to fragment shader
+	ref typeof(this) push_fragment(Type...)(
+		in uint first_slot,
+		Type uniform_data_list,
 	)
-	in (this.handle !is null)
-	in (this.command_buffer.handle !is null)
+	in
 	{
-		SDL_PushGPUVertexUniformData(
-			this.command_buffer.handle, slot_index,
-			cast(const(void*))&vertex_uniform_data, Type.sizeof,
-		);
+		assert(this.is_valid);
+		assert(this.command_buffer.is_valid);
+		// SDL3's limitation ...?
+		assert(first_slot + uniform_data_list.length <= 4);
+	}
+	do
+	{
+		foreach (uint index, uniform_data; uniform_data_list)
+		{
+			this.push_fragment(uniform_data, first_slot + index);
+		}
 		return this;
 	}
-
+	// push uniform data to fragment shader
 	ref typeof(this) push_fragment(Type)(
 		Type fragment_uniform_data,
 		in uint first_slot
 	)
-	in (this.handle !is null)
-	in (this.command_buffer.handle !is null)
+	in
+	{
+		assert(this.is_valid);
+		assert(this.command_buffer.is_valid);
+	}
+	do
 	{
 		SDL_PushGPUFragmentUniformData(
 			this.command_buffer.handle, first_slot,
 			cast(const(void*))&fragment_uniform_data, Type.sizeof,
-		);
-		return this;
-	}
-	// push uniform buffer object (Array)
-	ref typeof(this) push_fragment(Type : Type[])(
-		Type[] fragment_uniform_data,
-		in uint first_slot
-	)
-	in (this.handle !is null)
-	in (this.command_buffer.handle !is null)
-	{
-		SDL_PushGPUFragmentUniformData(
-			this.command_buffer.handle,
-			first_slot,
-			cast(const(void*)) fragment_uniform_data.ptr,
-			Type.sizeof * fragment_uniform_data.length,
 		);
 		return this;
 	}
