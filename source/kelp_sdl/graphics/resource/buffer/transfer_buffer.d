@@ -1,6 +1,7 @@
 module kelp_sdl.graphics.resource.buffer.transfer_buffer;
 
 import bindbc.sdl;
+import kelp_core.graphics.resource;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
@@ -11,7 +12,7 @@ import std.algorithm : map, sum;
 import std.traits : isArray;
 import core.stdc.string : memcpy;
 
-class GpuTransferBuffer(Derived) : GpuResource , IGpuResource
+class GpuTransferBuffer(Derived) : GpuResource, IGpuResource
 {
 	SDL_GPUTransferBuffer* buffer_handle;
 	uint _size;
@@ -133,6 +134,16 @@ class GpuBufferTransferBuffer : GpuTransferBuffer!(GpuBufferTransferBuffer)
 	{
 		super(device);
 		return;
+	}
+
+	typeof(this) create(G : GfxGeometry!(V, I), V, I)(G geometry, bool cycle = false)
+	{
+		this.create_by_size(cast(uint)geometry.size)
+			.map(cycle)
+			.set(geometry.vertices, geometry.offset_vertex)
+			.set(geometry.indices, geometry.offset_index)
+			.unmap();
+		return this;
 	}
 
 	typeof(this) create(in GpuTransferBufferCreateInfo create_info)
