@@ -78,6 +78,16 @@ struct GpuRenderPass
 		return this;
 	}
 
+	ref typeof(this) bind(TypeList...)(TypeList bind_list)
+	in (this.handle !is null)
+	{
+		foreach (bindable; bind_list)
+		{
+			this.bind(bindable);
+		}
+		return this;
+	}
+
 	ref typeof(this) bind(GpuGraphicsPipeline pipeline)
 	in (this.handle !is null)
 	in (pipeline !is null, "Pipeline is null")
