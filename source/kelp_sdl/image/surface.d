@@ -43,6 +43,11 @@ class Surface
 		return this.surface_handle.pitch;
 	}
 
+	@property inout(SdlPixelFormat) format() inout pure nothrow @nogc @safe
+	{
+		return cast(SdlPixelFormat) this.surface_handle.format;
+	}
+
 	@property void* data_ptr()
 	{
 		return this.surface_handle.pixels;

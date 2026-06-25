@@ -21,11 +21,19 @@ public:
 		return this._capacity;
 	}
 
-	typeof(this) create(in uint size)
+	typeof(this) create(in size_t count, in size_t stride)
+	in (this !is null)
+	{
+		this._capacity = count * stride;
+		super.create(GpuBufferUsageFlags.graphics_storage_read, count, stride);
+		return this;
+	}
+
+	typeof(this) create(in size_t size)
 	in (this !is null)
 	{
 		this._capacity = size;
-		this.create_by_size(GpuBufferUsageFlags.graphics_storage_read, size);
+		super.create(GpuBufferUsageFlags.graphics_storage_read, size, 1u);
 		return this;
 	}
 }

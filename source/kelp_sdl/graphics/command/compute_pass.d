@@ -2,9 +2,9 @@ module kelp_sdl.graphics.command.compute_pass;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.command;
-import kelp_sdl.graphics.compute;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer.storage_buffer;
+import kelp_sdl.graphics.resource.pipeline;
 import kelp_sdl.graphics.resource.texture;
 
 import std.exception, std.string;

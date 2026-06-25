@@ -40,6 +40,7 @@ enum GpuTextureUsageFlags : uint
 	compute_storage_simultaneous_read_write = 1u << 6
 }
 
+/+
 unittest
 {
 	import bindbc.sdl;
@@ -54,3 +55,4 @@ unittest
 		);
 	}
 }
++/

@@ -136,9 +136,9 @@ class GpuBufferTransferBuffer : GpuTransferBuffer!(GpuBufferTransferBuffer)
 		return;
 	}
 
-	typeof(this) create(G : GfxGeometry!(V, I), V, I)(G geometry, bool cycle = false)
+	typeof(this) prepare(G : GfxGeometry!(V, I), V, I)(G geometry, bool cycle = false)
 	{
-		this.create_by_size(cast(uint)geometry.size)
+		this.create_by_size(cast(uint) geometry.size)
 			.map(cycle)
 			.set(geometry.vertices, geometry.offset_vertex)
 			.set(geometry.indices, geometry.offset_index)

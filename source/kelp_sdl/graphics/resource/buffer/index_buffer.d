@@ -31,7 +31,7 @@ public:
 			this._stride = 4;
 			break;
 		}
-		super.create(GpuBufferUsageFlags.index, count, this._stride);
+		super.create(GpuBufferUsageFlags.index, cast(uint)count, cast(uint)this._stride);
 		return this;
 	}
 }

@@ -9,9 +9,9 @@ import kelp_sdl.graphics.resource.buffer;
 class GpuDrawBuffer : GpuBuffer
 {
 	size_t _count_command;
-	size_t _stride_command = DrawCommandIndirect.sizeof;
+	uint _stride_command = DrawCommandIndirect.sizeof;
 	size_t _count_command_indexed;
-	size_t _stride_command_indexed = DrawCommandIndexedIndirect.sizeof;
+	uint _stride_command_indexed = DrawCommandIndexedIndirect.sizeof;
 
 	this(GpuDevice device)
 	{
@@ -46,12 +46,12 @@ public:
 		return this._count_command_indexed;
 	}
 
-	@property size_t stride_command() const pure nothrow @nogc @safe
+	@property uint stride_command() const pure nothrow @nogc @safe
 	{
 		return this._stride_command;
 	}
 
-	@property size_t stride_command_indexed() const pure nothrow @nogc @safe
+	@property uint stride_command_indexed() const pure nothrow @nogc @safe
 	{
 		return this._stride_command_indexed;
 	}

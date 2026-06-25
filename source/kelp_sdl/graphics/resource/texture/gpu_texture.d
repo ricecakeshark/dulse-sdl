@@ -22,8 +22,13 @@ final class GpuTexture : GpuAbstractTexture
 	}
 
 	typeof(this) create(in GpuTextureCreateInfo create_info)
-	in (create_info.width >= 1)
-	in (create_info.height >= 1)
+	in
+	{
+		assert(create_info.width >= 1);
+		assert(create_info.height >= 1);
+		assert(create_info.format != GpuTextureFormat.invalid);
+	}
+	do
 	{
 		this.texture_handle = SDL_CreateGPUTexture(
 			this.device.handle, cast(SDL_GPUTextureCreateInfo*)&create_info
@@ -31,7 +36,7 @@ final class GpuTexture : GpuAbstractTexture
 		enforce(this.texture_handle !is null);
 		this._width = create_info.width;
 		this._height = create_info.height;
-		this.format = create_info.format;
+		this._format = create_info.format;
 		return this;
 	}
 

@@ -29,7 +29,7 @@ class SDLKeyboard
 
 	void process()
 	{
-		if (this.device_subsystem !is null )
+		if (this.device_subsystem !is null)
 		{
 			this.device_subsystem.keyboard.update(get_keyboard_state());
 		}

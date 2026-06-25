@@ -1,4 +1,4 @@
-module kelp_sdl.graphics.compute.compute_pipeline;
+module kelp_sdl.graphics.resource.pipeline.compute_pipeline;
 
 import bindbc.sdl;
 import kelp_sdl.graphics.core;
@@ -6,7 +6,7 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import std.exception;
 
-class GpuComputePipeline : GpuResource , IGpuResource
+class GpuComputePipeline : GpuResource, IGpuResource
 {
 	protected SDL_GPUComputePipeline* pipeline_handle;
 

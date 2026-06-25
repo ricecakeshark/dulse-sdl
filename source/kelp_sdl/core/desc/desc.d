@@ -1,24 +1,13 @@
 module kelp_sdl.core.desc.desc;
 
 import bindbc.sdl;
-import std.format;
+import kelp_core.core.data;
 
-struct SemVersion
+Ver3 from_sdl_version(in int sdl_version)
 {
-	int major;
-	int minor;
-	int micro;
-
-	this(in int sdl_version)
-	{
-		this.major = SDL_VERSIONNUM_MAJOR(sdl_version);
-		this.minor = SDL_VERSIONNUM_MINOR(sdl_version);
-		this.micro = SDL_VERSIONNUM_MICRO(sdl_version);
-		return;
-	}
-
-	string opCast(T : string)() const
-	{
-		return format!("[%2d,%2d,%2d]")(major, minor, micro);
-	}
+	return Ver3(
+		SDL_VERSIONNUM_MAJOR(sdl_version),
+		SDL_VERSIONNUM_MINOR(sdl_version),
+		SDL_VERSIONNUM_MICRO(sdl_version),
+	);
 }

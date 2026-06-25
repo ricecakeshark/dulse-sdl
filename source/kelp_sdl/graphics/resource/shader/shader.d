@@ -2,10 +2,14 @@ module kelp_sdl.graphics.resource.shader.shader;
 
 import bindbc.sdl;
 import kelp_sdl.graphics;
-import std.algorithm, std.exception, std.file, std.format;
+import std.algorithm;
+import std.exception : enforce;
+import std.file : isFile, read;
+import std.format : format;
+import std.path : extension;
 import std.string : fromStringz, toStringz;
 
-abstract class GpuShader(Derived) : GpuResource , IGpuResource
+abstract class GpuShader(Derived) : GpuResource, IGpuResource
 {
 	SDL_GPUShader* shader_handle;
 
@@ -89,8 +93,6 @@ final class GpuFragmentShader : GpuShader!(GpuVertexShader)
 		return this;
 	}
 }
-
-import std.path;
 
 struct ShaderFile
 {

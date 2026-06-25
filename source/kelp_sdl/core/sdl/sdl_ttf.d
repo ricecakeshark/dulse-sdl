@@ -1,12 +1,13 @@
 module kelp_sdl.core.sdl.sdl_ttf;
 
 import bindbc.sdl;
+import kelp_core.core;
 import kelp_sdl.core;
 
 class LibrarySDLTTF
 {
-	SemVersion compiled_version;
-	SemVersion linked_version;
+	Ver3 compiled_version;
+	Ver3 linked_version;
 
 	this()
 	{
@@ -28,8 +29,8 @@ class LibrarySDLTTF
 
 	void get_version()
 	{
-		compiled_version = SemVersion(SDL_TTF_VERSION);
-		linked_version = SemVersion(TTF_Version());
+		compiled_version = from_sdl_version(SDL_TTF_VERSION);
+		linked_version = from_sdl_version(TTF_Version());
 		return;
 	}
 }

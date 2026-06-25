@@ -1,12 +1,13 @@
 module kelp_sdl.core.sdl.sdl_image;
 
 import bindbc.sdl;
+import kelp_core.core;
 import kelp_sdl.core;
 
 class LibrarySDLImage
 {
-	SemVersion compiled_version;
-	SemVersion linked_version;
+	Ver3 compiled_version;
+	Ver3 linked_version;
 
 	this()
 	{
@@ -28,8 +29,8 @@ class LibrarySDLImage
 
 	void get_version()
 	{
-		compiled_version = SemVersion(SDL_IMAGE_VERSION);
-		linked_version = SemVersion(IMG_Version());
+		compiled_version = from_sdl_version(SDL_IMAGE_VERSION);
+		linked_version = from_sdl_version(IMG_Version());
 		return;
 	}
 }

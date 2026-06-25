@@ -1,7 +1,9 @@
 module kelp_sdl.graphics.desc.sdl_gpu_struct;
 
 import bindbc.sdl;
-import kelp_core;
+import kelp_core.core.data;
+import kelp_core.graphics;
+import kelp_core.math;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import kelp_sdl.image.desc;
@@ -22,7 +24,7 @@ struct GpuBlitInfo
 	this(
 		GpuBlitRegion source,
 		GpuBlitRegion dest,
-		GpuLoadOp load_op,
+		GpuLoadOp load_op = GpuLoadOp.dont_care,
 		Color color = Color(0.0f, 0.0f, 0.0f, 1.0f),
 	)
 	{
@@ -166,7 +168,7 @@ struct GpuColorTargetInfo
 		GpuAbstractTexture texture,
 		uint mip_level = 0,
 		uint depth = 0,
-		ColorF clear_color,
+		ColorF clear_color = ColorF(1.0f, 0.0f, 1.0f, 0.0f),
 		GpuLoadOp load_op = GpuLoadOp.load,
 		GpuStoreOp store_op = GpuStoreOp.store,
 
@@ -208,8 +210,6 @@ struct GpuComputePipelineCreateInfo
 
 	this(ShaderFile shader_file)
 	{
-		import std.string;
-
 		this.code = cast(const(ubyte)*) shader_file.code;
 		this.code_size = shader_file.code.length;
 		this.entrypoint = shader_file.entry_point.ptr;

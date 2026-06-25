@@ -4,7 +4,7 @@ import kelp_sdl.graphics.core;
 
 import bindbc.sdl;
 
-class Renderer
+@disable class Renderer
 {
 	SDL_Renderer* renderer_handle;
 

@@ -1,10 +1,11 @@
-module kelp_sdl.graphics.rasterize.graphics_pipeline;
+module kelp_sdl.graphics.resource.pipeline.graphics_pipeline;
 
 import bindbc.sdl;
 import kelp_sdl.graphics;
-import std.exception, std.string;
+import std.exception : enforce;
+import std.string : fromStringz;
 
-class GpuGraphicsPipeline : GpuResource , IGpuResource
+class GpuGraphicsPipeline : GpuResource, IGpuResource
 {
 	SDL_GPUGraphicsPipeline* pipeline_handle;
 

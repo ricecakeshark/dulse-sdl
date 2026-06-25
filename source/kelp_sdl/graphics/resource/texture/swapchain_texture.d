@@ -5,6 +5,7 @@ import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.texture;
+import std.exception : enforce;
 
 final class GpuSwapchainTexture : GpuAbstractTexture
 {
@@ -27,6 +28,8 @@ final class GpuSwapchainTexture : GpuAbstractTexture
 			&(this._width),
 			&(this._height),
 		);
+		enforce(succeed, "failed to acquire swapchain texture");
+		this._format = this.get_format();
 		return this;
 	}
 

@@ -18,7 +18,7 @@ public:
 	{
 		this._count = count;
 		this._stride = stride;
-		super.create(GpuBufferUsageFlags.vertex, count, stride);
+		super.create(GpuBufferUsageFlags.vertex, cast(uint) count, cast(uint) stride);
 		return this;
 	}
 }

@@ -3,13 +3,14 @@ module kelp_sdl.graphics.command.render_pass;
 import bindbc.sdl;
 import std.exception;
 
+import kelp_core.math.geometry;
 import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
-import kelp_sdl.graphics.rasterize.graphics_pipeline;
 import kelp_sdl.graphics.resource;
 
-import std.array, std.algorithm;
-import std.exception;
+import std.array : array;
+import std.algorithm : all, map;
+import std.exception : enforce;
 
 struct GpuRenderPass
 {
@@ -140,7 +141,8 @@ struct GpuRenderPass
 		SDL_BindGPUVertexStorageBuffers(
 			this.pass_handle,
 			first_slot,
-			cast(SDL_GPUBuffer**) storage_buffer_list.map!(buffer => buffer.handle)
+			cast(SDL_GPUBuffer**) storage_buffer_list
+				.map!(buffer => buffer.handle)
 				.array,
 				cast(uint) storage_buffer_list.length,
 		);
@@ -155,7 +157,8 @@ struct GpuRenderPass
 		SDL_BindGPUFragmentStorageBuffers(
 			this.pass_handle,
 			first_slot,
-			cast(SDL_GPUBuffer**) storage_buffer_list.map!(buffer => buffer.handle)
+			cast(SDL_GPUBuffer**) storage_buffer_list
+				.map!(buffer => buffer.handle)
 				.array,
 				cast(uint) storage_buffer_list.length,
 		);
@@ -183,7 +186,7 @@ struct GpuRenderPass
 		SDL_BindGPUFragmentSamplers(
 			this.pass_handle,
 			first_slot,
-			cast(const(SDL_GPUTextureSamplerBinding*)) binding_list,
+			cast(const(SDL_GPUTextureSamplerBinding*)) binding_list.ptr,
 			cast(uint) binding_list.length,
 		);
 		return this;
@@ -209,6 +212,16 @@ struct GpuRenderPass
 		SDL_SetGPUStencilReference(this.handle, stencil_referensce);
 		return this;
 	}
+
+	ref typeof(this) set(TypeList...)(TypeList configure)
+	{
+		foreach (conf; configure)
+		{
+			this.set(conf);
+		}
+		return this;
+	}
+
 	// push uniform data list to vertex shader
 	ref typeof(this) push_vertex(TypeList...)(
 		in uint first_slot = 0,
