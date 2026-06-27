@@ -15,6 +15,7 @@ targetPath "build"
 sourcePaths "source"
 importPaths "source"
 
+lflags "/LIBPATH:$PACKAGE_DIR\\lib\\"
 versions "SDL_3_4_10" "SDL_Image_3_2" "SDL_Mixer_3_2_2" "SDL_TTF_3_2_2"
 libs "SDL3" "SDL3_image" "SDL3_mixer" "SDL3_ttf"
 

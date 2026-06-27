@@ -1,4 +1,4 @@
-module kelp_sdl.text.text;
+module kelp_sdl.text.resource.text;
 
 import kelp_core.core;
 import kelp_sdl.core.util;

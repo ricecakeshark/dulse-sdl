@@ -1,4 +1,4 @@
-module kelp_sdl.text.font;
+module kelp_sdl.text.resource.font;
 
 import bindbc.sdl;
 import kelp_sdl.core.util : catchSDLError;

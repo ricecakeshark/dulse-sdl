@@ -77,65 +77,9 @@ public:
 		this.command_buffer_handle = null;
 		return this;
 	}
-	// convenient with Copy pass
-	// begin() -> user code -> end() -> submit()
-	typeof(this) with_copy_pass(
-		void delegate(ref GpuCopyPass) dlg,
-	)
-	{
-		scope GpuCopyPass copy_pass = GpuCopyPass(this);
-		copy_pass.begin();
-		dlg(copy_pass);
-		copy_pass.end();
-		return this;
-	}
-	// begin() -> process -> end() with Render pass.
-	typeof(this) with_render_pass(
-		in GpuColorTargetInfo[] color_target_info_list,
-		in GpuDepthStencilTargetInfo depth_stencil_target_info,
-		void delegate(ref GpuRenderPass) dlg
-	)
-	{
-		scope GpuRenderPass render_pass = GpuRenderPass(this);
-		render_pass.begin(
-			color_target_info_list,
-			depth_stencil_target_info,
-		);
-		dlg(render_pass);
-		render_pass.end();
-		return this;
-	}
-	// begin() -> process -> end() with Render pass. (simplified)
-	typeof(this) with_render_pass(
-		in GpuColorTargetInfo[] color_target_info_list,
-		void delegate(ref GpuRenderPass) dlg
-	)
-	{
-		scope GpuRenderPass render_pass = GpuRenderPass(this);
-		render_pass.begin(
-			color_target_info_list,
-		);
-		dlg(render_pass);
-		render_pass.end();
-		return this;
-	}
-	// begin() -> process -> end() with Compute pass.
-	typeof(this) with_compute_pass(
-		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
-		in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
-		void delegate(ref GpuComputePass) dlg,
-	)
-	{
-		scope GpuComputePass compute_pass = GpuComputePass(this);
-		compute_pass.begin(
-			texture_binding_list,
-			buffer_binding_list
-		);
-		dlg(compute_pass);
-		compute_pass.end();
-		return this;
-	}
-	// push vertex uniform data (only render_pass)
+
+	alias push_vert = push_vertex;
+	// push single uniform to render_pass
 	typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
 		in uint slot_index
@@ -146,6 +90,22 @@ public:
 			this.handle, slot_index,
 			cast(const(void*))&vertex_uniform_data, Type.sizeof,
 		);
+		return this;
+	}
+	// push multiple uniform to render_pass
+	typeof(this) push_vertex(TypeList...)(
+		in uint first_slot,
+		TypeList vertex_uniform_list,
+	)
+	in (this.handle !is null)
+	{
+		foreach (uint index, uniform; vertex_uniform_list)
+		{
+			SDL_PushGPUVertexUniformData(
+				this.handle, first_slot + index,
+				cast(const(void*))&uniform, uniform.sizeof,
+			);
+		}
 		return this;
 	}
 	// push vertex uniform data with size manually (only render_pass)
@@ -162,6 +122,8 @@ public:
 		);
 		return this;
 	}
+
+	alias push_drag = push_fragment;
 	// push fragment uniform data (only render_pass)
 	typeof(this) push_fragment(Type)(
 		Type fragment_uniform_data,
@@ -175,8 +137,26 @@ public:
 		);
 		return this;
 	}
-	// push compute uniform data (only compute_pass)
-	typeof(this) push_uniform(Type)(
+	// push multiple uniform to fragment
+	typeof(this) push_fragment(TypeList)(
+		in uint first_slot = 0,
+		TypeList fragment_uniform_list,
+	)
+	in (this.handle !is null)
+	{
+		foreach (uint index, uniform; fragment_uniform_list)
+		{
+			SDL_PushGPUFragmentUniformData(
+				this.handle, first_slot + index,
+				cast(const(void*))&uniform, uniform.sizeof,
+			);
+		}
+		return this;
+	}
+
+	alias push_comp = push_compute;
+	// push single uniform to compute pass 
+	typeof(this) push_compute(Type)(
 		Type compute_uniform_data,
 		in uint first_slot = 0
 	)
@@ -188,7 +168,24 @@ public:
 		);
 		return this;
 	}
+	// push multiple uniform to compute pass 
+	typeof(this) push_compute(TypeList...)(
+		in uint first_slot = 0,
+		TypeList compute_uniform_list,
+	)
+	in (this.handle !is null)
+	{
+		foreach (uint index, uniform; compute_uniform_list)
+		{
+			SDL_PushGPUComputeUniformData(
+				this.handle, first_slot + index,
+				cast(const(void*))&compute_uniform_data, Type.sizeof,
+			);
+		}
+		return this;
+	}
 	// blit texture. (no need beginned ~~~_pass)
+	alias blit = blit_texture;
 	typeof(this) blit_texture(in GpuBlitInfo info)
 	in (this.handle !is null)
 	{
