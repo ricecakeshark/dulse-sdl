@@ -5,6 +5,7 @@ import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.texture.swapchain_texture;
+import kelp_sdl.graphics.resource.fence;
 
 import std.exception, std.string;
 
@@ -74,6 +75,15 @@ public:
 		bool succeed;
 		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
 		enforce(succeed, SDL_GetError().fromStringz());
+		this.command_buffer_handle = null;
+		return this;
+	}
+	// submit command and acquire 
+	typeof(this) submit(ref GpuFence fence)
+	in (this.handle !is null)
+	{
+		fence.wrap(SDL_SubmitGPUCommandBufferAndAcquireFence(this.command_buffer_handle));
+		enforce(fence.handle !is null, SDL_GetError().fromStringz());
 		this.command_buffer_handle = null;
 		return this;
 	}

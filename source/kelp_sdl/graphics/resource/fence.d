@@ -1,4 +1,4 @@
-module kelp_sdl.graphics.sync.fence;
+module kelp_sdl.graphics.resource.fence;
 
 import bindbc.sdl;
 import kelp_sdl.core;
@@ -21,6 +21,11 @@ class GpuFence
 		return;
 	}
 
+	@property SDL_GPUFence* handle()
+	{
+		return this.fence_handle;
+	}
+
 	typeof(this) wrap(SDL_GPUFence* fence_handle)
 	in (this.device !is null)
 	{
@@ -30,10 +35,12 @@ class GpuFence
 
 	typeof(this) release()
 	{
-		if (this.device.handle !is null && this.fence_handle !is null)
+		if (this.device.handle is null || this.fence_handle is null)
 		{
-			SDL_ReleaseGPUFence(this.device.handle, this.fence_handle);
+			return this;
 		}
+		SDL_ReleaseGPUFence(this.device.handle, this.fence_handle);
+		this.fence_handle = null;
 		return this;
 	}
 
