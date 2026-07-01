@@ -136,16 +136,6 @@ class GpuBufferTransferBuffer : GpuTransferBuffer!(GpuBufferTransferBuffer)
 		return;
 	}
 
-	typeof(this) prepare(G : GfxGeometry!(V, I), V, I)(G geometry, bool cycle = false)
-	{
-		this.create_by_size(cast(uint) geometry.size)
-			.map(cycle)
-			.set(geometry.vertices, geometry.offset_vertex)
-			.set(geometry.indices, geometry.offset_index)
-			.unmap();
-		return this;
-	}
-
 	typeof(this) create(in GpuTransferBufferCreateInfo create_info)
 	{
 		super.create_by_info(create_info);
@@ -201,6 +191,20 @@ class GpuBufferTransferBuffer : GpuTransferBuffer!(GpuBufferTransferBuffer)
 	}+/
 }
 
+GpuBufferTransferBuffer prepare(G : GfxGeometry!(V, I), V, I)(
+	GpuBufferTransferBuffer buffer,
+	G geometry, bool cycle = false,
+)
+{
+	buffer
+		.create_by_size(cast(uint) geometry.size)
+		.map(cycle)
+		.set(geometry.vertices, geometry.offset_vertex)
+		.set(geometry.indices, geometry.offset_index)
+		.unmap();
+	return buffer;
+}
+
 class GpuTextureTransferBuffer : GpuTransferBuffer!(GpuTextureTransferBuffer)
 {
 	this(GpuDevice device)
@@ -233,4 +237,14 @@ class GpuTextureTransferBuffer : GpuTransferBuffer!(GpuTextureTransferBuffer)
 		);
 		return this;
 	}
+}
+
+GpuTextureTransferBuffer prepare(GpuTextureTransferBuffer buffer, Surface surface)
+{
+	buffer
+		.create(surface.size)
+		.map()
+		.set(surface)
+		.unmap();
+	return buffer;
 }
