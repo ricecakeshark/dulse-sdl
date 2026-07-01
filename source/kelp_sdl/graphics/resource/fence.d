@@ -3,21 +3,20 @@ module kelp_sdl.graphics.resource.fence;
 import bindbc.sdl;
 import kelp_sdl.core;
 import kelp_sdl.graphics.core.gpu_device;
+import kelp_sdl.graphics.resource.gpu_resource;
 
-class GpuFence
+class GpuFence : GpuResource
 {
 	SDL_GPUFence* fence_handle;
-	GpuDevice device;
 
 	this(GpuDevice device)
 	{
-		this.device = device;
+		super(device);
 		return;
 	}
 
 	~this()
 	{
-		this.release();
 		return;
 	}
 
@@ -35,12 +34,15 @@ class GpuFence
 
 	typeof(this) release()
 	{
-		if (this.device.handle is null || this.fence_handle is null)
+		if (this.device.handle is null)
 		{
 			return this;
 		}
-		SDL_ReleaseGPUFence(this.device.handle, this.fence_handle);
-		this.fence_handle = null;
+		if (this.device.handle !is null)
+		{
+			SDL_ReleaseGPUFence(this.device.handle, this.fence_handle);
+			this.fence_handle = null;
+		}
 		return this;
 	}
 
