@@ -6,7 +6,7 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import std.exception : enforce;
 
-abstract class GpuBuffer : GpuResource, IGpuResource, IGpuResourceUpload
+abstract class GpuBuffer : GpuResource!(GpuBuffer), IGpuResourceUpload
 {
 	SDL_GPUBuffer* buffer_handle;
 	protected size_t _count, _stride;

@@ -5,7 +5,7 @@ import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 
-abstract class GpuAbstractTexture : GpuResource, IGpuResource
+abstract class GpuAbstractTexture : GpuResource!(GpuAbstractTexture)
 {
 	SDL_GPUTexture* texture_handle;
 	uint _width, _height;

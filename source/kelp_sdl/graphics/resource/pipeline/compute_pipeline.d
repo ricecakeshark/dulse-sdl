@@ -6,7 +6,7 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import std.exception;
 
-class GpuComputePipeline : GpuResource, IGpuResource
+class GpuComputePipeline : GpuResource!(GpuComputePipeline)
 {
 	protected SDL_GPUComputePipeline* pipeline_handle;
 

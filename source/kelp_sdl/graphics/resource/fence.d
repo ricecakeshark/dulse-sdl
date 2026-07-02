@@ -4,8 +4,9 @@ import bindbc.sdl;
 import kelp_sdl.core;
 import kelp_sdl.graphics.core.gpu_device;
 import kelp_sdl.graphics.resource.gpu_resource;
+import std.exception : enforce;
 
-class GpuFence : GpuResource
+class GpuFence : GpuResource!(GpuFence)
 {
 	SDL_GPUFence* fence_handle;
 
@@ -48,6 +49,7 @@ class GpuFence : GpuResource
 
 	bool query()
 	{
+		enforce(this.fence_handle !is null);
 		return SDL_QueryGPUFence(this.device.handle, this.fence_handle);
 	}
 

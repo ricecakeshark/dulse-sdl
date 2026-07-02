@@ -7,7 +7,7 @@ import kelp_sdl.graphics.resource;
 
 import std.exception : enforce;
 
-class GpuSampler : GpuResource, IGpuResource
+class GpuSampler : GpuResource!(GpuSampler)
 {
 	SDL_GPUSampler* sampler_handle;
 

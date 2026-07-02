@@ -12,7 +12,7 @@ import std.algorithm : map, sum;
 import std.traits : isArray;
 import core.stdc.string : memcpy;
 
-class GpuTransferBuffer(Derived) : GpuResource, IGpuResource
+class GpuTransferBuffer(Derived) : GpuResource!(GpuTransferBuffer)
 {
 	SDL_GPUTransferBuffer* buffer_handle;
 	uint _size;

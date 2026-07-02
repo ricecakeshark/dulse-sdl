@@ -5,7 +5,7 @@ import kelp_sdl.graphics;
 import std.exception : enforce;
 import std.string : fromStringz;
 
-class GpuGraphicsPipeline : GpuResource, IGpuResource
+class GpuGraphicsPipeline : GpuResource!(GpuGraphicsPipeline)
 {
 	SDL_GPUGraphicsPipeline* pipeline_handle;
 

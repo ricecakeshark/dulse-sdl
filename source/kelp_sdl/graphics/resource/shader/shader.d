@@ -9,7 +9,7 @@ import std.format : format;
 import std.path : extension;
 import std.string : fromStringz, toStringz;
 
-abstract class GpuShader(Derived) : GpuResource, IGpuResource
+abstract class GpuShader(Derived) : GpuResource!(GpuShader)
 {
 	SDL_GPUShader* shader_handle;
 

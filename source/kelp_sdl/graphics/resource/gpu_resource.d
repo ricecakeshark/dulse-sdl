@@ -4,7 +4,7 @@ import kelp_sdl.graphics.core.gpu_device;
 
 interface IGpuResource
 {
-
+	IGpuResource release();
 }
 
 interface IGpuResourceUpload
@@ -14,7 +14,7 @@ interface IGpuResourceUpload
 	@property inout(uint) size_byte() inout pure nothrow @nogc @safe;
 }
 
-abstract class GpuResource
+abstract class GpuResource(Derived) : IGpuResource
 {
 	protected GpuDevice device;
 
