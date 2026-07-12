@@ -33,12 +33,40 @@ final class GpuSwapchainTexture : GpuAbstractTexture
 		return this;
 	}
 
+	typeof(this) set(
+		in GpuSwapchainComposition composition,
+		in GpuPresentMode present_mode = GpuPresentMode.immediate,
+	)
+	in (this.device.is_valid)
+	in (this.window.is_valid)
+	{
+		bool succeed = SDL_SetGPUSwapchainParameters(
+			this.device.handle,
+			this.window.handle,
+			cast(SDL_GPUSwapchainComposition) composition,
+			cast(SDL_GPUPresentMode) present_mode,
+		);
+		enforce(succeed);
+		return this;
+	}
+
 	GpuTextureFormat get_format()
 	in (this.device.is_valid)
 	in (this.window.is_valid)
 	{
 		return cast(GpuTextureFormat) SDL_GetGPUSwapchainTextureFormat(
 			this.device.handle, this.window.handle
+		);
+	}
+
+	bool get_composition(in GpuSwapchainComposition composition)
+	in (this.device.is_valid)
+	in (this.window.is_valid)
+	{
+		return SDL_WindowSupportsGPUSwapchainComposition(
+			this.device.handle,
+			this.window.handle,
+			cast(SDL_GPUSwapchainComposition) composition,
 		);
 	}
 }

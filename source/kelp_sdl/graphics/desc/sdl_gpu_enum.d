@@ -79,6 +79,13 @@ enum GpuLoadOp
 	dont_care,
 }
 
+enum GpuPresentMode
+{
+	vsync,
+	immediate,
+	mailbox,
+}
+
 enum GpuPrimitiveType
 {
 	triangle_list,
@@ -134,6 +141,14 @@ enum GpuStoreOp
 	dont_care,
 	resolve,
 	resolve_and_store,
+}
+
+enum GpuSwapchainComposition
+{
+	SDR,
+	SDR_linear,
+	HDR_extended_linear,
+	HDR10_ST2084,
 }
 
 enum GpuTextureFormat : uint
