@@ -189,13 +189,16 @@ struct GpuComputePass
 	}
 
 	ref typeof(this) dispatch(
-		in int groupcount_x,
-		in int groupcount_y,
-		in int groupcount_z,
+		in int[3] group_count_list...
 	)
 	in (this.handle !is null)
 	{
-		SDL_DispatchGPUCompute(this.handle, groupcount_x, groupcount_y, groupcount_z);
+		SDL_DispatchGPUCompute(
+			this.handle,
+			group_count_list[0],
+			group_count_list[1],
+			group_count_list[2],
+		);
 		return this;
 	}
 }

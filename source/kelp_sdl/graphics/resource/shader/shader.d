@@ -3,11 +3,18 @@ module kelp_sdl.graphics.resource.shader.shader;
 import bindbc.sdl;
 import kelp_sdl.graphics;
 import std.algorithm;
+import std.array : join;
 import std.exception : enforce;
 import std.file : isFile, read;
 import std.format : format;
 import std.path : extension;
 import std.string : fromStringz, toStringz;
+
+immutable shader_dir = "shader";
+immutable build_dir = "build";
+immutable dxil_dir = "dxil";
+immutable spirv_dir = "spirv";
+immutable msl_dir = "msl";
 
 abstract class GpuShader(Derived) : GpuResource!(GpuShader)
 {
@@ -101,27 +108,28 @@ struct ShaderFile
 	GpuShaderStage shader_stage;
 	public string entry_point;
 	public ubyte[] code;
-	protected string shader_dir, shader_ext;
 
 	this(string file_name, in GpuShaderFormat backend_formats)
 	{
+		scope string path_to_shader;
+		scope string shader_ext;
 		if (backend_formats & GpuShaderFormat.spirv)
 		{
-			shader_dir = "./shader/compiled/SPIRV/";
+			path_to_shader = [shader_dir, build_dir, spirv_dir].join("/");
 			shader_ext = ".spv";
 			frontend_format = GpuShaderFormat.spirv;
 			entry_point = "main";
 		}
 		else if (backend_formats & GpuShaderFormat.msl)
 		{
-			shader_dir = "./shader/compiled/MSL/";
+			path_to_shader = "./shader/build/MSL/";
 			shader_ext = ".msl";
 			frontend_format = GpuShaderFormat.msl;
 			entry_point = "main0";
 		}
 		else if (backend_formats & GpuShaderFormat.dxil)
 		{
-			shader_dir = "./shader/compiled/DXIL/";
+			path_to_shader = "./shader/build/DXIL/";
 			shader_ext = ".dxil";
 			frontend_format = GpuShaderFormat.dxil;
 			entry_point = "main";
@@ -141,7 +149,7 @@ struct ShaderFile
 		{
 			enforce(false, "unrecognized backend shader format");
 		}
-		shader_uri = shader_dir ~ file_name ~ shader_ext;
+		shader_uri = path_to_shader ~ "/" ~ file_name ~ shader_ext;
 
 		switch (file_name.extension)
 		{

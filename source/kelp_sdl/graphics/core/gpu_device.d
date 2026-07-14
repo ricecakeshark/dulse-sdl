@@ -5,7 +5,8 @@ import kelp_sdl.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
 
-import std.exception, std.string;
+import std.exception : enforce;
+import std.string : fromStringz, toStringz;
 
 class GpuDevice
 {
