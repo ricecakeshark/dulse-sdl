@@ -15,7 +15,7 @@ targetPath "build"
 sourcePaths "source"
 importPaths "source"
 
-lflags "/LIBPATH:$PACKAGE_DIR\\lib\\"
+//lflags "/LIBPATH:$PACKAGE_DIR\\lib\\"
 lflags "/LIBPATH:$PACKAGE_DIR\\lib\\win_x86-64" platform="windows-x86_64"
 copyFiles "lib\\win_x86-64\\*.dll" platform="windows-x86_64"
 versions "SDL_3_4_10" "SDL_Image_3_2" "SDL_Mixer_3_2_2" "SDL_TTF_3_2_2"
