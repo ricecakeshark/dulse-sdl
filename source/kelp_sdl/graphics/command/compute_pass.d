@@ -132,26 +132,10 @@ struct GpuComputePass
 		this.bind(0, texture_sampler_binding);
 		return this;
 	}
-	// bind texture sampler
-	/+
-	deprecated ref typeof(this) bind(
-		in GpuTextureSamplerBinding[] texture_sampler_binding,
-		in uint first_slot = 0,
-	)
-	in (this.handle !is null)
-	in (texture_sampler_binding.length >= 1)
-	{
-		SDL_BindGPUComputeSamplers(
-			this.handle, first_slot,
-			cast(SDL_GPUTextureSamplerBinding*) texture_sampler_binding.ptr,
-			cast(uint) texture_sampler_binding.length,
-		);
-		return this;
-	}+/
 	// push uniform data list to compute shader
-	ref typeof(this) push(Type...)(
+	ref typeof(this) push(TypeList...)(
 		in uint first_slot,
-		Type uniform_data_list,
+		in TypeList uniform_data_list,
 	)
 	in
 	{
@@ -171,7 +155,7 @@ struct GpuComputePass
 	}
 	// push uniform data to compute shader
 	ref typeof(this) push(Type)(
-		Type compute_uniform_data,
+		in Type compute_uniform_data,
 		in uint slot_index = 0
 	)
 	in
