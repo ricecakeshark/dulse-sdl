@@ -16,7 +16,7 @@ Event convert(SDL_Event in_event)
 			in_event.quit.timestamp,
 			QuitEvent(),
 		);
-	/+case EventTypeMajor.window:
+		/+case EventTypeMajor.window:
 		switch (event_type_minor(cast(SDL_EventType) in_event.type))
 		{
 		case EventTypeMinor.window_minimized:
@@ -32,6 +32,7 @@ Event convert(SDL_Event in_event)
 		return event(
 			in_event.key.timestamp,
 			KeyboardKeyEvent(
+				cast(MonoTime) in_event.key.timestamp,
 				cast(Scancode) in_event.key.scancode,
 				in_event.key.down,
 				in_event.key.repeat,
