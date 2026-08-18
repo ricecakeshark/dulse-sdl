@@ -6,7 +6,7 @@ import kelp_sdl.core;
 
 class LibrarySDL
 {
-	const SDL_InitFlags init_flags = SDL_InitFlags.audio | SDL_InitFlags.video | SDL_InitFlags
+	const SDL_InitFlags init_flags = SDL_InitFlags.audio | SDL_InitFlags.video | SDL_InitFlags.events | SDL_InitFlags
 		.gamepad;
 	Ver3 compiled_version;
 	Ver3 linked_version;
