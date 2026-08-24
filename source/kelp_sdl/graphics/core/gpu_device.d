@@ -1,6 +1,8 @@
 module kelp_sdl.graphics.core.gpu_device;
 
-import bindbc.sdl;
+import sdl.error;
+import sdl.gpu;
+import sdl.properties;
 import kelp_sdl.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
@@ -10,15 +12,10 @@ import std.string : fromStringz, toStringz;
 
 class GpuDevice
 {
-	SDL_GPUDevice* device_handle;
-	GpuWindow claimed_window;
+	private SDL_GPUDevice* device_handle;
+	private GpuWindow claimed_window;
 
 	this()
-	{
-		return;
-	}
-
-	~this()
 	{
 		return;
 	}
@@ -33,7 +30,7 @@ class GpuDevice
 		return (this.device_handle !is null);
 	}
 
-	@property inout(SDL_GPUDevice*) handle() inout pure @safe
+	@property inout(SDL_GPUDevice*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.device_handle;
 	}
@@ -123,22 +120,10 @@ class GpuDevice
 		return this;
 	}
 
-	deprecated typeof(this) release_window()
-	in (this.device_handle !is null)
-	{
-		if (this.claimed_window !is null && this.claimed_window.handle !is null)
-		{
-			return this;
-		}
-		SDL_ReleaseWindowFromGPUDevice(this.handle, this.claimed_window.handle);
-		this.claimed_window = null;
-		return this;
-	}
-
 	typeof(this) wait()
 	in (this.handle !is null)
 	{
-		SDL_WaitForGPUIdle(this.device_handle).catchSDLError();
+		SDL_WaitForGPUIdle(this.device_handle).catch_sdl_error();
 		return this;
 	}
 
@@ -160,17 +145,17 @@ class GpuDevice
 
 	string get_driver()
 	{
-		return cast(string)(SDL_GetGPUDeviceDriver(this.handle).fromStringz());
+		return SDL_GetGPUDeviceDriver(this.handle).fromStringz().idup;
 	}
 
 	string[] get_driver_list()
 	{
-		string[] driver_list;
-		int driver_len = SDL_GetNumGPUDrivers();
+		scope string[] driver_list;
+		scope const int driver_len = SDL_GetNumGPUDrivers();
 		driver_list.length = driver_len;
-		foreach (count; 0 .. driver_len)
+		foreach (const count; 0 .. driver_len)
 		{
-			driver_list[count] = cast(string)(SDL_GetGPUDriver(count).fromStringz());
+			driver_list[count] = SDL_GetGPUDriver(count).fromStringz().idup;
 		}
 		return driver_list;
 	}

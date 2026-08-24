@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.resource.texture.sampler;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;

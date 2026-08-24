@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.resource.buffer.draw_buffer;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_core.graphics.resource.draw_command;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
@@ -13,7 +13,7 @@ class GpuDrawBuffer : GpuBuffer
 	size_t _count_command_indexed;
 	uint _stride_command_indexed = DrawCommandIndexedIndirect.sizeof;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

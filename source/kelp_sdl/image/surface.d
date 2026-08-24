@@ -1,11 +1,12 @@
 module kelp_sdl.image.surface;
 
-import bindbc.sdl;
+import sdl.blendmode, sdl.pixels, sdl.surface;
+import sdl_image;
 import kelp_core.core.data;
 import kelp_sdl.image;
 
 import std.string : toStringz;
-import std.exception;
+import std.exception : enforce;
 import std.file : isFile;
 
 class Surface

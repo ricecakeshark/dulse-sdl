@@ -3,16 +3,16 @@ module kelp_sdl.graphics.command.copy_pass;
 import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
-import bindbc.sdl;
+import sdl.gpu;
 
 struct GpuCopyPass
 {
-	SDL_GPUCopyPass* pass_handle;
-	GpuCommandBuffer command_buffer;
+	private SDL_GPUCopyPass* pass_handle;
+	private GpuCommandBuffer command_buffer;
 
 	@disable this(this);
 
-	this(GpuCommandBuffer command_buffer)
+	this(GpuCommandBuffer command_buffer) pure nothrow @nogc @safe
 	{
 		this.command_buffer = command_buffer;
 		return;

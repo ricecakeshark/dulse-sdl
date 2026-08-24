@@ -1,20 +1,15 @@
 module kelp_sdl.text.resource.font;
 
-import bindbc.sdl;
-import kelp_sdl.core.util : catchSDLError;
+import sdl_ttf;
+import kelp_sdl.core.util : catch_sdl_error;
 import kelp_sdl.text;
 
-import std.exception;
+import std.exception : enforce;
 import std.string : toStringz, fromStringz;
 
 class TextFont
 {
 	TTF_Font* font_handle;
-
-	this()
-	{
-		return;
-	}
 
 	@property inout(TTF_Font*) handle() inout pure nothrow @nogc @safe
 	{
@@ -53,7 +48,7 @@ class TextFont
 		return cast(TextAlign) TTF_GetFontWrapAlignment(this.font_handle);
 	}
 
-	typeof(this) set(TextAlign font_align)
+	typeof(this) set(in TextAlign font_align)
 	{
 		TTF_SetFontWrapAlignment(
 			this.font_handle, cast(TTF_HorizontalAlignment) font_align
@@ -66,10 +61,10 @@ class TextFont
 		return cast(TextDirection) TTF_GetFontDirection(this.font_handle);
 	}
 
-	typeof(this) set(TextDirection font_direction)
+	typeof(this) set(in TextDirection font_direction)
 	{
 		TTF_SetFontDirection(this.font_handle, cast(TTF_Direction) font_direction)
-			.catchSDLError();
+			.catch_sdl_error();
 		return this;
 	}
 	// Hinting
@@ -78,7 +73,7 @@ class TextFont
 		return cast(FontHinting) TTF_GetFontHinting(this.font_handle);
 	}
 
-	typeof(this) set(FontHinting font_hinting)
+	typeof(this) set(in FontHinting font_hinting)
 	{
 		TTF_SetFontHinting(this.font_handle, cast(TTF_HintingFlags) font_hinting);
 		return this;
@@ -92,7 +87,7 @@ class TextFont
 	typeof(this) set_SDF(in bool mode_SDF = true)
 	{
 		TTF_SetFontSDF(this.font_handle, mode_SDF)
-			.catchSDLError();
+			.catch_sdl_error();
 		return this;
 	}
 	// Size
@@ -110,14 +105,14 @@ class TextFont
 	typeof(this) set_size(in float font_size)
 	{
 		TTF_SetFontSize(this.font_handle, font_size)
-			.catchSDLError();
+			.catch_sdl_error();
 		return this;
 	}
 	// string size
 	typeof(this) get_string_size(in string text, out int w, out int h)
 	{
 		TTF_GetStringSize(this.font_handle, toStringz(text), text.length, &w, &h)
-			.catchSDLError();
+			.catch_sdl_error();
 		return this;
 	}
 
@@ -127,7 +122,7 @@ class TextFont
 		return cast(FontStyle) TTF_GetFontStyle(this.font_handle);
 	}
 
-	typeof(this) set(FontStyle font_style)
+	typeof(this) set(in FontStyle font_style)
 	{
 		TTF_SetFontStyle(this.font_handle, font_style);
 		return this;

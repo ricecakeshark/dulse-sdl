@@ -18,9 +18,10 @@ abstract class GpuResource(Derived) : IGpuResource
 {
 	protected GpuDevice device;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		this.device = device;
+		return;
 	}
 
 	invariant

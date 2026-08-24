@@ -1,9 +1,9 @@
 module kelp_sdl.audio.audio_device;
 
 import kelp_sdl.audio;
-import bindbc.sdl;
-import std.array;
-import std.algorithm;
+import sdl.audio;
+import std.array : array;
+import std.algorithm : map;
 import std.exception : enforce;
 import std.string : fromStringz;
 

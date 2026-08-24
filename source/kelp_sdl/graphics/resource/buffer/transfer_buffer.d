@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.resource.buffer.transfer_buffer;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_core.graphics.resource;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
@@ -18,7 +18,7 @@ class GpuTransferBuffer(Derived) : GpuResource!(GpuTransferBuffer)
 	uint _size;
 	void* transfer_ptr;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

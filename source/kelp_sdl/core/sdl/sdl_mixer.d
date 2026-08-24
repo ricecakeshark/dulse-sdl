@@ -1,7 +1,7 @@
 module kelp_sdl.core.sdl.sdl_mixer;
 
-import bindbc.sdl;
-import kelp_core.core;
+import sdl_mixer;
+import kelp_core.core.data.version_;
 import kelp_sdl.core;
 
 class LibrarySDLMixer
@@ -16,7 +16,7 @@ class LibrarySDLMixer
 
 	void initialize()
 	{
-		MIX_Init().catchSDLError();
+		MIX_Init().catch_sdl_error();
 		get_version();
 		return;
 	}

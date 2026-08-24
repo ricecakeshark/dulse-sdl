@@ -1,7 +1,7 @@
 module kelp_sdl.graphics.command.render_pass;
 
-import bindbc.sdl;
-import std.exception;
+import sdl.gpu;
+import sdl.rect;
 
 import kelp_core.math.geometry;
 import kelp_sdl.graphics.command;
@@ -14,12 +14,12 @@ import std.exception : enforce;
 
 struct GpuRenderPass
 {
-	SDL_GPURenderPass* pass_handle;
-	GpuCommandBuffer command_buffer;
+	private SDL_GPURenderPass* pass_handle;
+	private GpuCommandBuffer command_buffer;
 
 	@disable this(this);
 
-	this(GpuCommandBuffer command_buffer)
+	this(GpuCommandBuffer command_buffer) pure nothrow @nogc @safe
 	{
 		this.command_buffer = command_buffer;
 		return;
@@ -27,7 +27,7 @@ struct GpuRenderPass
 
 	invariant
 	{
-		// this.pass_handle may be null
+		// this.pass_handle may have null 
 		assert(this.command_buffer !is null);
 	}
 

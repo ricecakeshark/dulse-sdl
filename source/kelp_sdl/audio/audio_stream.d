@@ -2,8 +2,8 @@ module kelp_sdl.audio.audio_stream;
 
 import kelp_core.audio;
 import kelp_sdl.audio;
-import bindbc.sdl;
-import std.exception;
+import sdl.audio;
+import std.exception : enforce;
 
 class AudioStream
 {

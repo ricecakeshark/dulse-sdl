@@ -26,7 +26,7 @@ enum GpuShaderFormat : uint
 	dxbc = (1u << 2),
 	dxil = (1u << 3),
 	msl = (1u << 4),
-	matllib = (1u << 5),
+	metallib = (1u << 5),
 }
 
 enum GpuTextureUsageFlags : uint
@@ -39,20 +39,3 @@ enum GpuTextureUsageFlags : uint
 	compute_storage_write = 1u << 5,
 	compute_storage_simultaneous_read_write = 1u << 6
 }
-
-/+
-unittest
-{
-	import bindbc.sdl;
-	import std.format;
-
-	static foreach (symbol; [
-			"ColorComponentFlags", "ShaderFormat", "TextureUsageFlags"
-		])
-	{
-		mixin(
-			format("assert( Gpu%s.sizeof == SDL_GPU%s.sizeof,\"%s\");", symbol, symbol, symbol)
-		);
-	}
-}
-+/

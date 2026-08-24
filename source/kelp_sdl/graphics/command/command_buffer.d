@@ -1,37 +1,39 @@
 module kelp_sdl.graphics.command.command_buffer;
 
-import bindbc.sdl;
+import sdl.gpu, sdl.error;
 import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.texture.swapchain_texture;
 import kelp_sdl.graphics.resource.fence;
 
-import std.exception, std.string;
+import std.exception : enforce;
+import std.string : fromStringz;
 
 class GpuCommandBuffer
 {
-	SDL_GPUCommandBuffer* command_buffer_handle;
-	GpuDevice device;
-	GpuWindow window;
+	private SDL_GPUCommandBuffer* command_buffer_handle;
+	private GpuDevice _device;
+	private GpuWindow _window;
 	// (copy pass)
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
-		this.device = device;
+		this._device = cast(GpuDevice) device;
+		this._window = null;
 		return;
 	}
 	// need swapchain texture (render-pass, compute-pass)
-	this(GpuDevice device, GpuWindow window)
+	this(GpuDevice device, GpuWindow window) pure nothrow @nogc @safe
 	{
-		this.device = device;
-		this.window = window;
+		this._device = device;
+		this._window = window;
 		return;
 	}
 
 	invariant
 	{
 		assert(this !is null);
-		assert(this.device !is null);
+		assert(this._device !is null);
 	}
 
 public:
@@ -43,6 +45,16 @@ public:
 	@property inout(SDL_GPUCommandBuffer*) handle() inout pure nothrow @nogc @safe
 	{
 		return this.command_buffer_handle;
+	}
+
+	@property inout(GpuDevice) device() inout pure nothrow @nogc @safe
+	{
+		return this._device;
+	}
+
+	@property inout(GpuWindow) window() inout pure nothrow @nogc @safe
+	{
+		return this._window;
 	}
 
 	typeof(this) acquire_buffer()
@@ -60,12 +72,7 @@ public:
 	in (this.handle !is null)
 	in (this.window !is null)
 	{
-		SDL_WaitAndAcquireGPUSwapchainTexture(
-			this.handle, this.window.handle,
-			&(swapchain_texture.texture_handle),
-			&(swapchain_texture._width),
-			&(swapchain_texture._height),
-		);
+		swapchain_texture.acquire(this);
 		return this;
 	}
 	// submit command buffer
@@ -133,7 +140,7 @@ public:
 		return this;
 	}
 
-	alias push_drag = push_fragment;
+	alias push_frag = push_fragment;
 	// push fragment uniform data (only render_pass)
 	typeof(this) push_fragment(Type)(
 		Type fragment_uniform_data,

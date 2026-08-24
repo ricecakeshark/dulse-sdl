@@ -1,7 +1,5 @@
 module kelp_sdl.text.desc.sdl_ttf_flags;
 
-import bindbc.sdl;
-
 enum FontHinting : uint
 {
 	normal = 0,

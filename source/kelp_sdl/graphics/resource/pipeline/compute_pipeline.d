@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.resource.pipeline.compute_pipeline;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_core.math;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
@@ -13,7 +13,7 @@ class GpuComputePipeline : GpuResource!(GpuComputePipeline)
 
 	int[3] local_size;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

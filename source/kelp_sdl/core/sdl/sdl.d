@@ -1,12 +1,12 @@
 module kelp_sdl.core.sdl.sdl;
 
-import bindbc.sdl;
+import sdl.init,sdl.version_;
 import kelp_core.core;
 import kelp_sdl.core;
 
 class LibrarySDL
 {
-	const SDL_InitFlags init_flags = SDL_InitFlags.audio | SDL_InitFlags.video | SDL_InitFlags.events | SDL_InitFlags
+	immutable SDL_InitFlags init_flags = SDL_InitFlags.audio | SDL_InitFlags.video | SDL_InitFlags.events | SDL_InitFlags
 		.gamepad;
 	Ver3 compiled_version;
 	Ver3 linked_version;
@@ -18,7 +18,7 @@ class LibrarySDL
 
 	void initialize()
 	{
-		SDL_Init(init_flags).catchSDLError();
+		SDL_Init(init_flags).catch_sdl_error();
 		get_version();
 		return;
 	}

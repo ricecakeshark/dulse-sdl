@@ -1,7 +1,7 @@
 module kelp_sdl.mixer.resource.audio;
 
-import bindbc.sdl;
 import kelp_sdl.mixer;
+import sdl_mixer;
 import std.exception : enforce;
 import std.string : toStringz;
 
@@ -27,14 +27,14 @@ class Audio
 		return this._handle !is null;
 	}
 
-	typeof(this) load(string path)
+	typeof(this) load(string path) @system
 	{
 		this._handle = MIX_LoadAudio(this.mixer.handle, path.toStringz, true);
 		enforce(this._handle !is null);
 		return this;
 	}
 
-	typeof(this) release()
+	typeof(this) release() @trusted
 	{
 		if (this._handle is null)
 		{

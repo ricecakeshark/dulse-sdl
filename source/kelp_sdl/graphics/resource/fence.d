@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.resource.fence;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.core;
 import kelp_sdl.graphics.core.gpu_device;
 import kelp_sdl.graphics.resource.gpu_resource;
@@ -8,7 +8,7 @@ import std.exception : enforce;
 
 class GpuFence : GpuResource!(GpuFence)
 {
-	SDL_GPUFence* fence_handle;
+	private SDL_GPUFence* fence_handle;
 
 	this(GpuDevice device)
 	{
@@ -60,7 +60,7 @@ class GpuFence : GpuResource!(GpuFence)
 			true,
 			[this.fence_handle].ptr,
 			1u,
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 }

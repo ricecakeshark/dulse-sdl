@@ -4,12 +4,12 @@ import kelp_core.input;
 import kelp_core.math : Vec1;
 import kelp_core.core.container.ring_buffer;
 import std.exception : enforce;
-import bindbc.sdl;
+import sdl.gamepad, sdl.joystick;
 import std.conv : to;
 
 struct Gamepad
 {
-	SDL_Gamepad* _handle;
+	private SDL_Gamepad* _handle;
 	RingBuffer!(GamepadState, 5) state_list;
 
 	@property inout(SDL_Gamepad*) handle() inout pure nothrow @nogc @safe
@@ -17,7 +17,7 @@ struct Gamepad
 		return this._handle;
 	}
 
-	@property bool opened() const pure nothrow @nogc @safe
+	@property bool opened() pure nothrow @nogc @safe
 	{
 		return this._handle !is null;
 	}
@@ -46,7 +46,7 @@ struct Gamepad
 		return this;
 	}
 
-	typeof(this) update()
+	typeof(this) update() nothrow @nogc @trusted
 	{
 		if (!this.opened)
 		{
@@ -96,7 +96,7 @@ struct Gamepad
 		return this;
 	}
 
-	bool pressed(GamepadButton button)
+	bool pressed(GamepadButton button) pure nothrow @nogc @safe
 	{
 		if (!this.opened)
 		{
@@ -105,7 +105,7 @@ struct Gamepad
 		return this.state_list.tail.button[button].pressed;
 	}
 
-	bool pressed_just(GamepadButton button)
+	bool pressed_just(GamepadButton button) pure nothrow @nogc @safe
 	{
 		if (!this.opened)
 		{
@@ -115,7 +115,7 @@ struct Gamepad
 			&& !this.state_list[$ - 2].button[button].pressed;
 	}
 
-	bool released(GamepadButton button)
+	bool released(GamepadButton button) pure nothrow @nogc @safe
 	{
 		if (!this.opened)
 		{
@@ -124,7 +124,7 @@ struct Gamepad
 		return !this.state_list.tail.button[button].pressed;
 	}
 
-	bool released_just(GamepadButton button)
+	bool released_just(GamepadButton button) pure nothrow @nogc @safe
 	{
 		if (!this.opened)
 		{
@@ -135,7 +135,7 @@ struct Gamepad
 	}
 }
 
-SDL_JoystickID[] get_gamepad_list()
+SDL_JoystickID[] get_gamepad_list() nothrow @nogc @trusted
 {
 	scope SDL_JoystickID* joystick_list_ptr;
 	scope int count;

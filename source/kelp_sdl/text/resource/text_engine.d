@@ -2,9 +2,7 @@ module kelp_sdl.text.resource.text_engine;
 
 import kelp_sdl.graphics.core;
 import kelp_sdl.text;
-
-import bindbc.sdl;
-
+import sdl_ttf;
 import std.exception : enforce;
 
 abstract class AbstractTextEngine

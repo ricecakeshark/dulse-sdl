@@ -1,8 +1,7 @@
 module kelp_sdl.graphics.resource.shader.shader;
 
-import bindbc.sdl;
+import sdl.error, sdl.gpu;
 import kelp_sdl.graphics;
-import std.algorithm;
 import std.array : join;
 import std.exception : enforce;
 import std.file : isFile, read;
@@ -20,7 +19,7 @@ abstract class GpuShader(Derived) : GpuResource!(GpuShader)
 {
 	SDL_GPUShader* shader_handle;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

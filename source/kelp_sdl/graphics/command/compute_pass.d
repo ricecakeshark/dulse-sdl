@@ -1,24 +1,25 @@
 module kelp_sdl.graphics.command.compute_pass;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer.storage_buffer;
 import kelp_sdl.graphics.resource.pipeline;
 import kelp_sdl.graphics.resource.texture;
 
-import std.exception, std.string;
 import std.array : array;
 import std.algorithm : map;
+import std.exception : enforce;
+import std.string : fromStringz;
 
 struct GpuComputePass
 {
-	SDL_GPUComputePass* pass_handle;
-	GpuCommandBuffer command_buffer;
+	private SDL_GPUComputePass* pass_handle;
+	private GpuCommandBuffer command_buffer;
 
 	@disable this(this);
 
-	this(GpuCommandBuffer command_buffer)
+	this(GpuCommandBuffer command_buffer) pure nothrow @nogc @safe
 	{
 		this.command_buffer = command_buffer;
 		return;

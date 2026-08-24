@@ -1,17 +1,17 @@
 module kelp_sdl.graphics.resource.texture.abstract_texture;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 
 abstract class GpuAbstractTexture : GpuResource!(GpuAbstractTexture)
 {
-	SDL_GPUTexture* texture_handle;
-	uint _width, _height;
+	protected SDL_GPUTexture* texture_handle;
+	protected uint _width, _height;
 	protected GpuTextureFormat _format;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

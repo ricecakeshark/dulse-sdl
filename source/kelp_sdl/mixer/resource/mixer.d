@@ -1,6 +1,7 @@
 module kelp_sdl.mixer.resource.mixer;
 
-import bindbc.sdl;
+import sdl.audio;
+import sdl_mixer;
 import std.exception : enforce;
 
 class Mixer

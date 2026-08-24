@@ -1,6 +1,6 @@
 module kelp_sdl.core.sdl.sdl_ttf;
 
-import bindbc.sdl;
+import sdl_ttf;
 import kelp_core.core;
 import kelp_sdl.core;
 
@@ -16,7 +16,7 @@ class LibrarySDLTTF
 
 	void initialize()
 	{
-		TTF_Init().catchSDLError();
+		TTF_Init().catch_sdl_error();
 		get_version();
 		return;
 	}

@@ -1,15 +1,15 @@
 module kelp_sdl.graphics.resource.buffer.storage_buffer;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.buffer.buffer_abstract;
 import kelp_sdl.graphics.desc;
 
 class GpuStorageBuffer : GpuBuffer
 {
-	size_t _capacity;
+	private size_t _capacity;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

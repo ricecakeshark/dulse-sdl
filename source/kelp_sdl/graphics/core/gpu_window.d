@@ -1,23 +1,17 @@
 module kelp_sdl.graphics.core.gpu_window;
 
-import bindbc.sdl;
+import sdl.gpu;
+import sdl.properties;
+import sdl.video;
+//import sdl.window;
 import kelp_core.core;
 import kelp_sdl.graphics.core;
-import std.exception, std.string;
+import std.exception : enforce;
+import std.string : toStringz;
 
 class GpuWindow
 {
-	SDL_Window* window_handle;
-
-	this()
-	{
-		return;
-	}
-
-	~this()
-	{
-		return;
-	}
+	private SDL_Window* window_handle;
 
 	invariant
 	{
@@ -44,7 +38,7 @@ class GpuWindow
 		return this;
 	}
 
-	typeof(this) release()
+	typeof(this) release() @trusted
 	{
 		if (this.window_handle is null)
 		{

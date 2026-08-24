@@ -1,15 +1,16 @@
 module kelp_sdl.graphics.resource.pipeline.graphics_pipeline;
 
-import bindbc.sdl;
+import sdl.error;
+import sdl.gpu;
 import kelp_sdl.graphics;
 import std.exception : enforce;
 import std.string : fromStringz;
 
 class GpuGraphicsPipeline : GpuResource!(GpuGraphicsPipeline)
 {
-	SDL_GPUGraphicsPipeline* pipeline_handle;
+	protected SDL_GPUGraphicsPipeline* pipeline_handle;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

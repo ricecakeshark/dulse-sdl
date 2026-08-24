@@ -1,10 +1,10 @@
 module kelp_sdl.core.util.exception;
 
-import bindbc.sdl;
+import sdl.error;
 import std.stdio : writeln;
 import std.string : fromStringz;
 
-void catchSDLError(in bool succeed) @trusted
+void catch_sdl_error(in bool succeed) @trusted
 {
 	if (succeed == false)
 	{

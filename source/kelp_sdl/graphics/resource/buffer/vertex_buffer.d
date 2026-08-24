@@ -1,13 +1,13 @@
 module kelp_sdl.graphics.resource.buffer.vertex_buffer;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 
 class GpuVertexBuffer : GpuBuffer
 {
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

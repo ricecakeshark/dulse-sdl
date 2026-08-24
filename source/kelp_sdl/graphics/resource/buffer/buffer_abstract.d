@@ -1,6 +1,6 @@
 module kelp_sdl.graphics.resource.buffer.buffer_abstract;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
@@ -8,10 +8,10 @@ import std.exception : enforce;
 
 abstract class GpuBuffer : GpuResource!(GpuBuffer), IGpuResourceUpload
 {
-	SDL_GPUBuffer* buffer_handle;
+	private SDL_GPUBuffer* buffer_handle;
 	protected size_t _count, _stride;
 
-	this(GpuDevice device)
+	this(GpuDevice device) pure nothrow @nogc @safe
 	{
 		super(device);
 		return;

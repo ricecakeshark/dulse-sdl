@@ -5,7 +5,7 @@ import kelp_sdl.core.util;
 import kelp_sdl.text;
 import kelp_sdl.image;
 
-import bindbc.sdl;
+import sdl_ttf;
 
 import std.exception : enforce;
 import std.string : toStringz;
@@ -38,7 +38,7 @@ abstract class AbstractText
 	{
 		TTF_GetTextColorFloat(
 			this.text_handle, &(color.red), &(color.green), &(color.blue), &(color.alpha)
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 
@@ -46,7 +46,7 @@ abstract class AbstractText
 	{
 		TTF_GetTextColor(
 			this.text_handle, &(color.red), &(color.green), &(color.blue), &(color.alpha)
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 
@@ -55,7 +55,7 @@ abstract class AbstractText
 	{
 		TTF_SetTextColorFloat(
 			this.text_handle, color.red, color.green, color.blue, color.alpha
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 
@@ -64,7 +64,7 @@ abstract class AbstractText
 	{
 		TTF_SetTextColor(
 			this.text_handle, color.red, color.green, color.blue, color.alpha
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 	// text direction
@@ -78,7 +78,7 @@ abstract class AbstractText
 	{
 		TTF_SetTextDirection(
 			this.text_handle, cast(TTF_Direction) text_direction
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 	// text position
@@ -87,7 +87,7 @@ abstract class AbstractText
 	{
 		TTF_GetTextPosition(
 			this.text_handle, &(pos[0]), &(pos[1]),
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 
@@ -96,14 +96,14 @@ abstract class AbstractText
 	{
 		TTF_SetTextPosition(
 			this.text_handle, pos[0], pos[1],
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 	// text size
 	typeof(this) get_size(out int w, out int h)
 	{
 		TTF_GetTextSize(this.text_handle, &w, &h)
-			.catchSDLError();
+			.catch_sdl_error();
 		enforce(w >= 1);
 		enforce(h >= 1);
 		return this;
@@ -114,7 +114,7 @@ abstract class AbstractText
 	{
 		TTF_SetTextString(
 			this.text_handle, str.toStringz(), str.length
-		).catchSDLError();
+		).catch_sdl_error();
 		return this;
 	}
 }
@@ -147,7 +147,7 @@ class SurfaceText : AbstractText
 	typeof(this) draw(ref Surface surface, in int x = 0, in int y = 0)
 	{
 		TTF_DrawSurfaceText(this.text_handle, x, y, surface.handle)
-			.catchSDLError();
+			.catch_sdl_error();
 		return this;
 	}
 }

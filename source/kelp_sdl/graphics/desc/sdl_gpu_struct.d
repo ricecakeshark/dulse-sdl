@@ -1,9 +1,9 @@
 module kelp_sdl.graphics.desc.sdl_gpu_struct;
 
-import bindbc.sdl;
+import sdl.gpu;
+import sdl.properties;
 import kelp_core.core.data;
 import kelp_core.graphics;
-import kelp_core.math;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
 import kelp_sdl.image.desc;

@@ -1,6 +1,7 @@
 module kelp_sdl.mixer.resource.track;
 
-import bindbc.sdl;
+import sdl.audio, sdl.properties;
+import sdl_mixer;
 import kelp_sdl.mixer;
 import std.exception : enforce;
 
@@ -20,9 +21,9 @@ class Track
 		return this._handle;
 	}
 
-	@property bool is_valid()
+	@property bool is_valid() pure nothrow @nogc @safe
 	{
-		return this._handle !is null;
+		return (this._handle !is null);
 	}
 
 	typeof(this) create()
@@ -32,7 +33,7 @@ class Track
 		return this;
 	}
 
-	typeof(this) release()
+	typeof(this) release() @trusted
 	{
 		if (this._handle is null)
 		{
