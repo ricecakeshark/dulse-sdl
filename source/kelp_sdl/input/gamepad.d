@@ -142,8 +142,3 @@ SDL_JoystickID[] get_gamepad_list()
 	joystick_list_ptr = SDL_GetGamepads(&count);
 	return joystick_list_ptr[0 .. count];
 }
-
-Vec1 gamepad_axis_value(short value) pure nothrow @nogc @safe
-{
-	return Vec1(1.0 / value);
-}
