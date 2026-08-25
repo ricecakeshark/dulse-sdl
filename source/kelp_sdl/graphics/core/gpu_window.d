@@ -3,7 +3,6 @@ module kelp_sdl.graphics.core.gpu_window;
 import sdl.gpu;
 import sdl.properties;
 import sdl.video;
-//import sdl.window;
 import kelp_core.core;
 import kelp_sdl.graphics.core;
 import std.exception : enforce;
@@ -35,6 +34,8 @@ class GpuWindow
 			toStringz(title), width, height, 0
 		);
 		enforce(this.window_handle !is null);
+		import sdl.keyboard;
+		SDL_StartTextInput(this.window_handle);
 		return this;
 	}
 
