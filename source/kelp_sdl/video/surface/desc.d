@@ -1,4 +1,4 @@
-module kelp_sdl.image.desc;
+module kelp_sdl.video.surface.desc;
 
 enum SurfaceFlags : uint
 {

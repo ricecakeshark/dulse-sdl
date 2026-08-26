@@ -1,11 +1,11 @@
-module kelp_sdl.graphics.core.gpu_device;
+module kelp_sdl.graphics.core.device;
 
 import sdl.error;
 import sdl.gpu;
 import sdl.properties;
-import kelp_sdl.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
+import kelp_sdl.video.window;
 
 import std.exception : enforce;
 import std.string : fromStringz, toStringz;
@@ -13,7 +13,7 @@ import std.string : fromStringz, toStringz;
 class GpuDevice
 {
 	private SDL_GPUDevice* device_handle;
-	private GpuWindow claimed_window;
+	private Window claimed_window;
 
 	this()
 	{
@@ -104,7 +104,7 @@ class GpuDevice
 		return this;
 	}
 
-	typeof(this) claim(GpuWindow window)
+	typeof(this) claim(Window window)
 	in (this.handle !is null)
 	in (window !is null)
 	in (window.handle !is null)
@@ -113,7 +113,7 @@ class GpuDevice
 		return this;
 	}
 
-	typeof(this) release_window(GpuWindow window)
+	typeof(this) release_window(Window window)
 	in (this.device_handle !is null)
 	{
 		SDL_ReleaseWindowFromGPUDevice(this.handle, window.handle);
@@ -123,7 +123,7 @@ class GpuDevice
 	typeof(this) wait()
 	in (this.handle !is null)
 	{
-		SDL_WaitForGPUIdle(this.device_handle).catch_sdl_error();
+		SDL_WaitForGPUIdle(this.device_handle).enforce();
 		return this;
 	}
 

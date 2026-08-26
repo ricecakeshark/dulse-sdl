@@ -6,7 +6,7 @@ import kelp_core.core.data;
 import kelp_core.graphics;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
-import kelp_sdl.image.desc;
+import kelp_sdl.video.surface.desc : SdlFlipMode;
 
 struct GpuBlitInfo
 {

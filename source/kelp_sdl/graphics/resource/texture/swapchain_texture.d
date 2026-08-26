@@ -5,13 +5,14 @@ import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.texture;
+import kelp_sdl.video.window;
 import std.exception : enforce;
 
 final class GpuSwapchainTexture : GpuAbstractTexture
 {
-	GpuWindow window;
+	Window window;
 
-	this(GpuDevice device, GpuWindow window)
+	this(GpuDevice device, Window window)
 	{
 		super(device);
 		this.window = window;

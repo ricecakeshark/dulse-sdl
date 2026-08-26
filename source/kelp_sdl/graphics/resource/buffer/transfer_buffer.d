@@ -5,7 +5,7 @@ import kelp_core.graphics.resource;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource;
-import kelp_sdl.image;
+import kelp_sdl.video.surface;
 
 import std.exception : enforce;
 import std.algorithm : map, sum;

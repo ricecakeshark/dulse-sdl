@@ -1,6 +1,6 @@
-module kelp_sdl.graphics.resource.gpu_resource;
+module kelp_sdl.graphics.resource.resource;
 
-import kelp_sdl.graphics.core.gpu_device;
+import kelp_sdl.graphics.core.device;
 
 interface IGpuResource
 {

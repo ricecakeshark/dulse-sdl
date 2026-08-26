@@ -2,8 +2,8 @@ module kelp_sdl.graphics.resource.fence;
 
 import sdl.gpu;
 import kelp_sdl.core;
-import kelp_sdl.graphics.core.gpu_device;
-import kelp_sdl.graphics.resource.gpu_resource;
+import kelp_sdl.graphics.core.device;
+import kelp_sdl.graphics.resource.resource;
 import std.exception : enforce;
 
 class GpuFence : GpuResource!(GpuFence)

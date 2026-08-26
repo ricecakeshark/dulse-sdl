@@ -6,6 +6,7 @@ import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.core;
 import kelp_sdl.graphics.resource.texture.swapchain_texture;
 import kelp_sdl.graphics.resource.fence;
+import kelp_sdl.video.window;
 
 import std.exception : enforce;
 import std.string : fromStringz;
@@ -14,16 +15,16 @@ class GpuCommandBuffer
 {
 	private SDL_GPUCommandBuffer* command_buffer_handle;
 	private GpuDevice _device;
-	private GpuWindow _window;
+	private Window _window;
 	// (copy pass)
 	this(GpuDevice device) pure nothrow @nogc @safe
 	{
-		this._device = cast(GpuDevice) device;
+		this._device = device;
 		this._window = null;
 		return;
 	}
 	// need swapchain texture (render-pass, compute-pass)
-	this(GpuDevice device, GpuWindow window) pure nothrow @nogc @safe
+	this(GpuDevice device, Window window) pure nothrow @nogc @safe
 	{
 		this._device = device;
 		this._window = window;
@@ -52,7 +53,7 @@ public:
 		return this._device;
 	}
 
-	@property inout(GpuWindow) window() inout pure nothrow @nogc @safe
+	@property inout(Window) window() inout pure nothrow @nogc @safe
 	{
 		return this._window;
 	}

@@ -3,7 +3,7 @@ module kelp_sdl.text.resource.text;
 import kelp_core.core;
 import kelp_sdl.core.util;
 import kelp_sdl.text;
-import kelp_sdl.image;
+import kelp_sdl.video.surface;
 
 import sdl_ttf;
 

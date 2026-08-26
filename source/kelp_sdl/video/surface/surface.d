@@ -1,9 +1,9 @@
-module kelp_sdl.image.surface;
+module kelp_sdl.video.surface.surface;
 
 import sdl.blendmode, sdl.pixels, sdl.surface;
 import sdl_image;
 import kelp_core.core.data;
-import kelp_sdl.image;
+import kelp_sdl.video.surface;
 
 import std.string : toStringz;
 import std.exception : enforce;
