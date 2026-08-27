@@ -241,6 +241,8 @@ struct GpuRenderPass
 		}
 		return this;
 	}
+	// push uniform alias for fragment
+	alias push_vert = push_vertex;
 	// push uniform data list to vertex shader
 	ref typeof(this) push_vertex(Type)(
 		Type vertex_uniform_data,
@@ -274,6 +276,8 @@ struct GpuRenderPass
 		);
 		return this;
 	}
+	// push uniform alias for fragment
+	alias push_frag = push_fragment;
 	// push uniform data list to fragment shader
 	ref typeof(this) push_fragment(Type...)(
 		in uint first_slot,
