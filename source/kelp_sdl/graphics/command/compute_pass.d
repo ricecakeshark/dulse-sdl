@@ -84,6 +84,15 @@ struct GpuComputePass
 		this.pass_handle = null;
 		return this;
 	}
+	// bind all bindable 
+	ref typeof(this) bind(TypeList...)(TypeList bindable_list)
+	{
+		foreach (bindable; bindable_list)
+		{
+			this.bind(bindable);
+		}
+		return this;
+	}
 	// bind compute pipeline
 	ref typeof(this) bind(GpuComputePipeline compute_pipeline)
 	in (this.handle !is null)
