@@ -205,6 +205,20 @@ GpuBufferTransferBuffer prepare(G : GfxGeometry!(V, I), V, I)(
 	return buffer;
 }
 
+GpuBufferTransferBuffer prepare(M : GfxMesh!(V, I), V, I)(
+	GpuBufferTransferBuffer buffer,
+	M mesh, bool cycle = false,
+)
+{
+	buffer
+		.create_by_size(cast(uint) mesh.size)
+		.map(cycle)
+		.set(mesh.vertices!M(), mesh.offset_vertex)
+		.set(mesh.indices!M(), mesh.offset_index)
+		.unmap();
+	return buffer;
+}
+
 class GpuTextureTransferBuffer : GpuTransferBuffer!(GpuTextureTransferBuffer)
 {
 	this(GpuDevice device)
