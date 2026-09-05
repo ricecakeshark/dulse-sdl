@@ -1,16 +1,16 @@
-name "kelp-sdl"
+name "dulse-sdl"
 description "A minimal D application."
 authors "RiceShark"
 copyright "Copyright © 2025, RiceShark"
 license "proprietary"
 
-dependency "kelp-core" path="..\\kelp_core"
+dependency "dulse" path="..\\dulse"
 dependency "bindbc-sdl" version="~>2.4.2"
 
 subConfiguration "bindbc-sdl" "static"
 
 targetType "sourceLibrary"
-targetName "kelp_sdl"
+targetName "dulse_sdl"
 targetPath "build"
 sourcePaths "source"
 importPaths "source"

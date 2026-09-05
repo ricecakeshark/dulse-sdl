@@ -1,0 +1,69 @@
+module dulse_sdl.text.resource.text_engine;
+
+import dulse_sdl.graphics.core;
+import dulse_sdl.text;
+import sdl_ttf;
+import std.exception : enforce;
+
+abstract class AbstractTextEngine
+{
+	TTF_TextEngine* text_engine_handle;
+	GpuDevice device;
+
+	@property inout(TTF_TextEngine*) handle() inout pure nothrow @nogc @safe
+	{
+		return this.text_engine_handle;
+	}
+}
+
+class GpuTextEngine : AbstractTextEngine
+{
+	this(GpuDevice device)
+	{
+		this.device = device;
+		return;
+	}
+
+	typeof(this) create()
+	{
+		this.text_engine_handle = TTF_CreateGPUTextEngine(device.handle);
+		enforce(text_engine_handle !is null);
+		return this;
+	}
+
+	typeof(this) release()
+	{
+		TTF_DestroyGPUTextEngine(this.text_engine_handle);
+		this.text_engine_handle = null;
+		return this;
+	}
+
+	typeof(this) set(in TextEngineWinding winding)
+	{
+		TTF_SetGPUTextEngineWinding(this.handle, cast(TTF_GPUTextEngineWinding) winding);
+		return this;
+	}
+}
+
+class SurfaceTextEngine : AbstractTextEngine
+{
+	this(GpuDevice device)
+	{
+		this.device = device;
+		return;
+	}
+
+	typeof(this) create()
+	{
+		this.text_engine_handle = TTF_CreateSurfaceTextEngine();
+		enforce(text_engine_handle !is null);
+		return this;
+	}
+
+	typeof(this) release()
+	{
+		TTF_DestroySurfaceTextEngine(this.text_engine_handle);
+		this.text_engine_handle = null;
+		return this;
+	}
+}
