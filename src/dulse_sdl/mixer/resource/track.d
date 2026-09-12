@@ -2,6 +2,8 @@ module dulse_sdl.mixer.resource.track;
 
 import sdl.audio, sdl.properties;
 import sdl_mixer;
+import dulse.core.util;
+import dulse_sdl.core.util;
 import dulse_sdl.mixer;
 import std.exception : enforce;
 
@@ -41,6 +43,20 @@ class Track
 		}
 		MIX_DestroyTrack(this._handle);
 		this._handle = null;
+		return this;
+	}
+
+	typeof(this) set(Audio audio)
+	{
+		MIX_SetTrackAudio(this.handle, audio.handle)
+			.check("failed to set audio to track");
+		return this;
+	}
+	
+	typeof(this) set(SDL_AudioStream* stream_handle)
+	{
+		MIX_SetTrackAudioStream(this.handle, stream_handle)
+			.check("failed to set audio to track");
 		return this;
 	}
 

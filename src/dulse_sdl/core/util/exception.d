@@ -12,3 +12,9 @@ void catch_sdl_error(in bool succeed) @trusted
 	}
 	return;
 }
+
+void write_sdl_error()
+{
+	SDL_GetError().fromStringz().writeln();
+	return;
+}

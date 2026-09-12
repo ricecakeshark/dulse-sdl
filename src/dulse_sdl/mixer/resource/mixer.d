@@ -1,5 +1,10 @@
 module dulse_sdl.mixer.resource.mixer;
 
+import dulse.audio.desc;
+import dulse_sdl.audio.desc;
+import dulse_sdl.mixer;
+import dulse.core.util;
+import dulse_sdl.core.util;
 import sdl.audio;
 import sdl_mixer;
 import std.exception : enforce;
@@ -23,10 +28,24 @@ class Mixer
 		return this._handle !is null;
 	}
 
+	@property AudioSpec format()
+	{
+		scope SDL_AudioSpec spec;
+		MIX_GetMixerFormat(this._handle, &spec);
+		return audio_spec(spec);
+	}
+
+	typeof(this) create()
+	{
+		this._handle = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, null);
+		enforce(this._handle !is null, "failed to create mixer device");
+		return this;
+	}
+
 	typeof(this) create(SDL_AudioDeviceID device_id)
 	{
 		this._handle = MIX_CreateMixerDevice(device_id, null);
-		enforce(this._handle !is null);
+		enforce(this._handle !is null, "failed to create mixer device");
 		return this;
 	}
 
@@ -42,4 +61,12 @@ class Mixer
 	}
 
 	//available_format
+
+protected:
+	@property SDL_AudioSpec _format()
+	{
+		scope SDL_AudioSpec spec;
+		MIX_GetMixerFormat(this._handle, &spec);
+		return spec;
+	}
 }
