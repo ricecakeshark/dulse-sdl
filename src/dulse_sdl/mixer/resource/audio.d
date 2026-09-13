@@ -17,9 +17,15 @@ class Audio
 
 	this(Mixer mixer)
 	{
-		//enforce(this.mixer.is_valid(), "mixer is not valid");
 		this.mixer = mixer;
 		return;
+	}
+
+	invariant
+	{
+		assert(this !is null, "this is null");
+		assert(this.mixer !is null, "mixer is null");
+		assert(this.mixer.is_valid, "mixer is some wrong");
 	}
 
 	@property inout(MIX_Audio*) handle() inout pure nothrow @nogc @safe
@@ -27,7 +33,7 @@ class Audio
 		return this._handle;
 	}
 
-	@property bool is_valid()
+	@property bool is_valid() const pure nothrow @nogc @safe
 	{
 		return this._handle !is null;
 	}
@@ -39,11 +45,10 @@ class Audio
 		return audio_spec(spec);
 	}
 
-	typeof(this) load(string path) @system
+	typeof(this) load(string path)
 	{
-		enforce(mixer.is_valid, "mixer is not valid");
 		this._handle = MIX_LoadAudio(this.mixer.handle, path.toStringz, true);
-		enforce(this._handle !is null, "failed to load audio filze");
+		enforce(this._handle !is null, "failed to load audio file");
 		return this;
 	}
 
@@ -55,6 +60,13 @@ class Audio
 		}
 		MIX_DestroyAudio(this._handle);
 		this._handle = null;
+		return this;
+	}
+
+	typeof(this) play(ref Track track)
+	{
+		track.set(this);
+		track.play();
 		return this;
 	}
 

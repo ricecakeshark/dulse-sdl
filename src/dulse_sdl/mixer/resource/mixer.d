@@ -18,12 +18,17 @@ class Mixer
 
 	}
 
+	invariant
+	{
+		assert(this !is null, "this is null");
+	}
+
 	@property inout(MIX_Mixer*) handle() inout pure nothrow @nogc @safe
 	{
 		return this._handle;
 	}
 
-	@property bool is_valid()
+	@property bool is_valid() const pure nothrow @nogc @safe
 	{
 		return this._handle !is null;
 	}

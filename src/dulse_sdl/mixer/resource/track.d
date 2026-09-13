@@ -18,6 +18,11 @@ class Track
 		return;
 	}
 
+	invariant
+	{
+		assert(this !is null, "this is null");
+	}
+
 	@property inout(MIX_Track*) handle() inout pure nothrow @nogc @safe
 	{
 		return this._handle;
@@ -52,7 +57,7 @@ class Track
 			.check("failed to set audio to track");
 		return this;
 	}
-	
+
 	typeof(this) set(SDL_AudioStream* stream_handle)
 	{
 		MIX_SetTrackAudioStream(this.handle, stream_handle)
