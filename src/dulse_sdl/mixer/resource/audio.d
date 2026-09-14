@@ -14,6 +14,7 @@ class Audio
 {
 	protected MIX_Audio* _handle;
 	protected Mixer mixer;
+	protected Track binded_track;
 
 	this(Mixer mixer)
 	{
@@ -47,6 +48,10 @@ class Audio
 
 	typeof(this) load(string path)
 	{
+		if (this._handle !is null)
+		{
+			return this;
+		}
 		this._handle = MIX_LoadAudio(this.mixer.handle, path.toStringz, true);
 		enforce(this._handle !is null, "failed to load audio file");
 		return this;
@@ -73,7 +78,7 @@ class Audio
 	typeof(this) play()
 	{
 		MIX_PlayAudio(this.mixer.handle, this.handle)
-			.check("failed to play.");
+			.expect_sdl("failed to play.");
 		return this;
 	}
 
