@@ -13,6 +13,19 @@ void catch_sdl_error(in bool succeed) @trusted
 	return;
 }
 
+void expect_sdl(in bool succeed, string message = null) @trusted
+{
+	if (succeed == false)
+	{
+		if (message !is null)
+		{
+			writeln(message);
+		}
+		writeln(SDL_GetError().fromStringz());
+	}
+	return;
+}
+
 void write_sdl_error()
 {
 	SDL_GetError().fromStringz().writeln();
