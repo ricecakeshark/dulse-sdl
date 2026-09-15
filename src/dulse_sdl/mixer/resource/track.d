@@ -66,6 +66,12 @@ class Track
 		return MIX_TrackPlaying(this._handle);
 	}
 
+	@property bool paused()
+	{
+		enforce(this.is_valid, "handle is null");
+		return MIX_TrackPaused(this._handle);
+	}
+
 	@property Vec3 pos()
 	{
 		enforce(this.is_valid, "handle is null");
@@ -152,7 +158,7 @@ class Track
 		return this;
 	}
 
-	typeof(this) set_tag(in string tag_name, out AudioTag tag)
+	typeof(this) tag(in string tag_name, out AudioTag tag)
 	{
 		enforce(this.is_valid, "cannot set tag, the track is not valid");
 		MIX_TagTrack(this._handle, tag_name.toStringz())
@@ -161,11 +167,19 @@ class Track
 		return this;
 	}
 
-	typeof(this) set_tag(in string tag_name)
+	typeof(this) tag(in string tag_name)
 	{
 		enforce(this.is_valid, "cannot set tag, the track is not valid");
 		MIX_TagTrack(this._handle, tag_name.toStringz())
-			.expect("failed to set tag to track");
+			.expect_sdl("failed to set tag to track");
+		return this;
+	}
+
+	typeof(this) set_loop(int num_loop)
+	{
+		enforce(this.is_valid, "cannot set tag, the track is not valid");
+		MIX_SetTrackLoops(this._handle, num_loop)
+			.expect_sdl("failed to set tag to track");
 		return this;
 	}
 }

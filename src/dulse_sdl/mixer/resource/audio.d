@@ -46,6 +46,11 @@ class Audio
 		return audio_spec(spec);
 	}
 
+	@property long duration()
+	{
+		return MIX_GetAudioDuration(this._handle);
+	}
+
 	typeof(this) load(string path)
 	{
 		if (this._handle !is null)

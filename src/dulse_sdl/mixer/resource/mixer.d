@@ -57,6 +57,11 @@ class Mixer
 		return audio_spec(spec);
 	}
 
+	@property float frequency()
+	{
+		return MIX_GetMixerFrequencyRatio(this._handle);
+	}
+
 	@property string[] decoders()
 	{
 		return this.get_decoder();
@@ -92,6 +97,14 @@ class Mixer
 		}
 		MIX_DestroyMixer(this._handle);
 		this._handle = null;
+		return this;
+	}
+
+	typeof(this) stop(long fade_out_ms)
+	{
+		enforce(this.is_valid, "handle is null");
+		MIX_StopAllTracks(this._handle,fade_out_ms,)
+			.expect_sdl("failed to stop all tracks");
 		return this;
 	}
 
