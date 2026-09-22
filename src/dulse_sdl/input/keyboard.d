@@ -6,7 +6,7 @@ import dulse.input.event.event;
 import dulse.input.state.keyboard;
 import sdl.keyboard;
 
-void update(ref KeyboardState state) nothrow @safe
+void catch_up(ref KeyboardState state) nothrow @safe
 {
 	foreach (key, pressed; get_keyboard_state())
 	{

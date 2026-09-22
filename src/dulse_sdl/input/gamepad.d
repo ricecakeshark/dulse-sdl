@@ -22,7 +22,7 @@ struct Gamepad
 		return this._handle !is null;
 	}
 
-	typeof(this) open(SDL_JoystickID id)
+	ref typeof(this) open(SDL_JoystickID id)
 	{
 		this._handle = SDL_OpenGamepad(id);
 		enforce(this._handle !is null);
@@ -30,59 +30,59 @@ struct Gamepad
 		return this;
 	}
 
-	typeof(this) close()
+	ref typeof(this) close()
 	{
 		SDL_CloseGamepad(this._handle);
 		return this;
 	}
 
-	typeof(this) process()
+	ref typeof(this) process()
 	{
-		if (!this.opened)
-		{
-			return this;
-		}
-		this.state_list.append(this.state_list.tail);
+		this.update();
 		return this;
 	}
 
-	typeof(this) update() nothrow @nogc @trusted
+	protected ref typeof(this) update() nothrow @nogc @trusted
 	{
+		scope GamepadState temp_state;
 		if (!this.opened)
 		{
+			this.state_list.append(GamepadState.init);
 			return this;
 		}
+		temp_state = (!this.state_list.is_empty) ? this.state_list.tail : GamepadState.init;
 		foreach (button; 0 .. GamepadButton.max + 1)
 		{
-			this.state_list.tail.button[button] = GamepadButtonState(
+			temp_state.button[button] = GamepadButtonState(
 				SDL_GetGamepadButton(this.handle, cast(SDL_GamepadButton) button,)
 			);
 		}
 		// tirgger
-		this.state_list.tail.trigger[GamepadTrigger.left].value[0] =
+		temp_state.trigger[GamepadTrigger.left].value[0] =
 			SDL_GetGamepadAxis(this.handle, SDL_GamepadAxis.leftX).to!float();
-		this.state_list.tail.trigger[GamepadTrigger.left].pressed =
+		temp_state.trigger[GamepadTrigger.left].pressed =
 			SDL_GetGamepadButton(this.handle, SDL_GamepadButton.leftShoulder,);
-		with (this.state_list.tail.trigger[GamepadTrigger.right])
+		with (temp_state.trigger[GamepadTrigger.right])
 		{
 			value[0] = SDL_GetGamepadAxis(this.handle, SDL_GamepadAxis.rightY).to!float();
 			pressed = SDL_GetGamepadButton(this.handle, SDL_GamepadButton.rightShoulder,);
 		}
 		// stick
-		with (this.state_list.tail.stick[GamepadStick.left])
+		with (temp_state.stick[GamepadStick.left])
 		{
 			value[0] = SDL_GetGamepadAxis(this.handle, SDL_GamepadAxis.leftX).to!float();
 			value[1] = SDL_GetGamepadAxis(this.handle, SDL_GamepadAxis.leftY).to!float();
 			pressed = SDL_GetGamepadButton(this.handle, SDL_GamepadButton.leftStick,);
 		}
 		// stick
-		with (this.state_list.tail.stick[GamepadStick.right])
+		with (temp_state.stick[GamepadStick.right])
 		{
 			value[0] = SDL_GetGamepadAxis(this.handle, SDL_GamepadAxis.rightX).to!float();
 			value[1] = SDL_GetGamepadAxis(this.handle, SDL_GamepadAxis.rightY).to!float();
 			pressed = SDL_GetGamepadButton(this.handle, SDL_GamepadButton.rightStick,);
 		}
 
+		this.state_list.append(temp_state);
 		return this;
 	}
 

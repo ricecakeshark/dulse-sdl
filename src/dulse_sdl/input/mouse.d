@@ -4,7 +4,7 @@ import dulse.input.device.mouse;
 import dulse.input.state.mouse;
 import sdl.mouse : SDL_GetMouseState, SDL_MouseButtonFlags;
 
-void apply_mouse_state(out MouseState) nothrow @nogc @trusted
+void catch_up(out MouseState) nothrow @nogc @trusted
 {
 	scope MouseState state;
 	scope SDL_MouseButtonFlags flags;
