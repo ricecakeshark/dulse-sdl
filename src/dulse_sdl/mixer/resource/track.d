@@ -182,6 +182,13 @@ class Track
 			.expect_sdl("failed to set tag to track");
 		return this;
 	}
+
+	typeof(this) set_gain(in float gain)
+	{
+		enforce(this.is_valid, "handle is null");
+		MIX_SetTrackGain(this._handle, gain);
+		return this;
+	}
 }
 
 Vec3 to_vec3(in MIX_Point3D point) pure nothrow @nogc @safe
