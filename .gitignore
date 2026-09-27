@@ -1,6 +1,7 @@
 
 build/
 lib/
+docs/
 
 .dub/
 dub.selections.json
