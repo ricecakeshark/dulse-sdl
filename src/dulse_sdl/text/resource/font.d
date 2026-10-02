@@ -6,6 +6,7 @@ import dulse_sdl.text;
 
 import std.exception : enforce;
 import std.string : toStringz, fromStringz;
+import std.file : exists;
 
 class TextFont
 {
@@ -18,6 +19,7 @@ class TextFont
 
 	typeof(this) create(in string font_uri, in float font_size)
 	{
+		enforce(font_uri.exists, "font file not exist");
 		font_handle = TTF_OpenFont(toStringz(font_uri), font_size);
 		enforce(font_handle !is null);
 		return this;
