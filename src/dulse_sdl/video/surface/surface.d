@@ -54,9 +54,9 @@ class Surface
 		return this.surface_handle.pixels;
 	}
 
-	@property inout(size_t) size() inout pure nothrow @nogc @safe
+	@property inout(size_t) size() inout nothrow @nogc
 	{
-		return (this.width * this.height * 4);
+		return (this.width * this.height * this.format_detail.bytes_per_pixel);
 	}
 
 	@property SurfaceFlags flag()
@@ -159,5 +159,13 @@ class Surface
 	{
 		SDL_SetSurfaceBlendMode(this.surface_handle, SDL_BLENDMODE_BLEND);
 		return this;
+	}
+
+protected:
+	PixelFormatDetail format_detail() const nothrow @nogc
+	{
+		scope const(SDL_PixelFormatDetails)* format;
+		format = SDL_GetPixelFormatDetails(this.surface_handle.format);
+		return cast(PixelFormatDetail)(*format);
 	}
 }

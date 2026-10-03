@@ -93,7 +93,7 @@ struct GpuCopyPass
 			this.handle,
 			cast(SDL_GPUTextureTransferInfo*)&transfer_info,
 			cast(SDL_GPUTextureRegion*)&texture_region,
-			false
+			false,
 		);
 		return this;
 	}

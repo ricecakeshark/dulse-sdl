@@ -84,3 +84,23 @@ enum SdlPixelFormat : uint
 	external_oes = 0x2053454fu,
 	mjpg = 0x47504a4du
 }
+
+struct PixelFormatDetail
+{
+	SdlPixelFormat format;
+	ubyte bits_per_pixel;
+	ubyte bytes_per_pixel;
+	ubyte[2] padding;
+	uint r_mask;
+	uint g_mask;
+	uint b_mask;
+	uint a_mask;
+	ubyte r_bits;
+	ubyte g_bits;
+	ubyte b_bits;
+	ubyte a_bits;
+	ubyte r_shift;
+	ubyte g_shift;
+	ubyte b_shift;
+	ubyte a_shift;
+}
