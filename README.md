@@ -2,11 +2,26 @@
 
 ## Overview
 
-Dulse-sdl is minimal wrapper of SDL3.
+Dulse-sdl is minimal (secondary) wrapper  of SDL3.
 
 ## Lisence
 
 Mozilla Public License Version 2.0
+
+## 3rd-party software license
+
+- bindbc-sdl
+	- GNU Lesser General Public License v3.0
+- SDL 3
+	- Zlib license
+- SDL_image
+	- Zlib license
+- SDL_mixer
+	- Zlib license
+- SDL_ttf
+	- Zlib license
+
+(sorted a to z)
 
 ## Usage
 
