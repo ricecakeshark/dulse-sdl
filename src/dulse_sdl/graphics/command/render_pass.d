@@ -45,7 +45,6 @@ struct GpuRenderPass
 		in GpuColorTargetInfo[] color_target_info_list,
 	)
 	in (this.command_buffer.is_valid)
-	in (color_target_info_list.length >= 1)
 	{
 		this.pass_handle = SDL_BeginGPURenderPass(
 			this.command_buffer.handle,
@@ -61,7 +60,6 @@ struct GpuRenderPass
 		in GpuDepthStencilTargetInfo depth_stencil_target_info,
 	)
 	in (this.command_buffer.is_valid)
-	in (color_target_info_list.length >= 1)
 	{
 		this.pass_handle = SDL_BeginGPURenderPass(
 			this.command_buffer.handle,

@@ -27,6 +27,11 @@ class GpuSampler : GpuResource!(GpuSampler)
 		return this.sampler_handle;
 	}
 
+	@property bool is_valid() const pure nothrow @nogc @safe
+	{
+		return (this.sampler_handle !is null);
+	}
+
 	typeof(this) create(in GpuSamplerCreateInfo create_info)
 	in (this.device !is null)
 	{

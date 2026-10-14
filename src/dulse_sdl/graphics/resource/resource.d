@@ -26,7 +26,7 @@ abstract class GpuResource(Derived) : IGpuResource
 
 	invariant
 	{
-		assert(this !is null);
-		assert(this.device !is null);
+		assert(this !is null, "this is null");
+		assert(this.device !is null, "device is null");
 	}
 }

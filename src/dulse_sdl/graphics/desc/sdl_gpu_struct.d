@@ -445,6 +445,28 @@ struct GpuTextureCreateInfo
 	GpuSampleCount sample_count;
 
 	SDL_PropertiesID props;
+
+	this(
+		in GpuTextureType type,
+		in GpuTextureFormat format,
+		in GpuTextureUsageFlags usage,
+		in uint width,
+		in uint height,
+		in uint layer_count_or_depth = 1,
+		in uint num_levels = 1,
+		GpuSampleCount sample_count = GpuSampleCount.x1,
+	)
+	in (format != GpuTextureFormat.invalid)
+	{
+		this.type = type;
+		this.format = format;
+		this.usage = usage;
+		this.width = width;
+		this.height = height;
+		this.layer_count_or_depth = layer_count_or_depth;
+		this.num_levels = num_levels;
+		return;
+	}
 }
 
 struct GpuTextureLocation

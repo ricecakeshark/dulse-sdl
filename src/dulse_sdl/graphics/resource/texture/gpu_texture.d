@@ -8,7 +8,7 @@ import std.exception : enforce;
 import std.file : isFile;
 import std.string : toStringz;
 
-final class GpuTexture : GpuAbstractTexture
+class GpuTexture : GpuAbstractTexture
 {
 	this(GpuDevice device)
 	{
