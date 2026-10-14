@@ -26,7 +26,7 @@ struct GpuBlitInfo
 		GpuBlitRegion dest,
 		GpuLoadOp load_op = GpuLoadOp.dont_care,
 		Color color = Color(0.0f, 0.0f, 0.0f, 1.0f),
-	)
+	) pure nothrow @nogc @safe
 	{
 		this.source = source;
 		this.destination = dest;
@@ -50,7 +50,7 @@ struct GpuBlitRegion
 		GpuAbstractTexture texture,
 		uint x, uint y,
 		uint w, uint h,
-	)
+	) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.x = x;
@@ -62,7 +62,7 @@ struct GpuBlitRegion
 
 	this(
 		GpuAbstractTexture texture,
-	)
+	) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.x = 0u;
@@ -76,7 +76,7 @@ struct GpuBlitRegion
 		GpuAbstractTexture texture,
 		uint mip_level, uint layer_or_depth_plane,
 		uint x, uint y, uint w, uint h
-	)
+	) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.mip_level = mip_level;
@@ -94,7 +94,7 @@ struct GpuBufferBinding
 	SDL_GPUBuffer* buffer;
 	uint offset;
 
-	this(GpuBuffer buffer, uint offset = 0)
+	this(GpuBuffer buffer, in uint offset = 0) pure nothrow @nogc @safe
 	in (buffer.handle !is null)
 	{
 		this.buffer = buffer.handle;
@@ -110,7 +110,7 @@ struct GpuBufferCreateInfo
 
 	SDL_PropertiesID props;
 
-	this(GpuBufferUsageFlags flags, size_t size)
+	this(in GpuBufferUsageFlags flags, in size_t size) pure nothrow @nogc @safe
 	in (size <= uint.max)
 	{
 		this.usage = flags;
@@ -156,7 +156,7 @@ struct GpuColorTargetInfo
 	ubyte padding1;
 	ubyte padding2;
 
-	this(GpuAbstractTexture texture, GpuLoadOp load_op, GpuStoreOp store_op)
+	this(GpuAbstractTexture texture, in GpuLoadOp load_op, in GpuStoreOp store_op) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.load_op = load_op;
@@ -166,13 +166,12 @@ struct GpuColorTargetInfo
 
 	this(
 		GpuAbstractTexture texture,
-		uint mip_level = 0,
-		uint depth = 0,
-		ColorF clear_color = ColorF(1.0f, 0.0f, 1.0f, 0.0f),
-		GpuLoadOp load_op = GpuLoadOp.load,
-		GpuStoreOp store_op = GpuStoreOp.store,
-
-	)
+		in uint mip_level = 0,
+		in uint depth = 0,
+		in ColorF clear_color = ColorF(1.0f, 0.0f, 1.0f, 0.0f),
+		in GpuLoadOp load_op = GpuLoadOp.load,
+		in GpuStoreOp store_op = GpuStoreOp.store,
+	) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.load_op = load_op;
@@ -208,7 +207,7 @@ struct GpuComputePipelineCreateInfo
 
 	SDL_PropertiesID props;
 
-	this(ShaderFile shader_file)
+	this(ShaderFile shader_file) pure nothrow @nogc
 	{
 		this.code = cast(const(ubyte)*) shader_file.code;
 		this.code_size = shader_file.code.length;
@@ -273,7 +272,7 @@ struct GpuGraphicsPipelineTargetInfo
 
 	this(
 		GpuColorTargetDescription[] description_list
-	)
+	) pure nothrow @nogc
 	in (description_list.length < uint.max)
 	{
 		this.color_target_descriptions = cast(GpuColorTargetDescription*) description_list.ptr;
@@ -282,9 +281,9 @@ struct GpuGraphicsPipelineTargetInfo
 	}
 
 	this(
-		GpuColorTargetDescription[] description_list,
-		GpuTextureFormat depth_stencil_format,
-	)
+		in GpuColorTargetDescription[] description_list,
+		in GpuTextureFormat depth_stencil_format,
+	) pure nothrow @nogc
 	in (description_list.length < uint.max)
 	{
 		this.color_target_descriptions = cast(GpuColorTargetDescription*) description_list.ptr;
@@ -338,10 +337,10 @@ struct GpuSamplerCreateInfo
 	ubyte padding2;
 
 	this(
-		GpuFilter min_filter,
-		GpuFilter mag_filter,
-		GpuSamplerAddressMode addres_mode = GpuSamplerAddressMode.clamp_to_edge,
-	)
+		in GpuFilter min_filter,
+		in GpuFilter mag_filter,
+		in GpuSamplerAddressMode addres_mode = GpuSamplerAddressMode.clamp_to_edge,
+	) pure nothrow @nogc @safe
 	{
 		this.min_filter = min_filter,
 		this.mag_filter = mag_filter,
@@ -365,9 +364,9 @@ struct GpuShaderCreateInfo
 	uint num_uniform_buffers;
 
 	this(
-		ShaderFile shader_file,
-		GpuShaderArguments shader_args
-	)
+		in ShaderFile shader_file,
+		in GpuShaderArguments shader_args
+	) pure nothrow
 	{
 		import std.string : toStringz;
 
@@ -400,7 +399,7 @@ struct GpuStorageBufferReadWriteBinding
 	ubyte padding2;
 	ubyte padding3;
 
-	this(GpuBuffer buffer, bool cycle = false)
+	this(GpuBuffer buffer, in bool cycle = false) pure nothrow @nogc @safe
 	{
 		this.buffer = buffer.handle;
 		this.cycle = cycle;
@@ -418,13 +417,13 @@ struct GpuStorageTextureReadWriteBinding
 	ubyte padding2;
 	ubyte padding3;
 
-	this(GpuTexture texture)
+	this(GpuTexture texture) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		return;
 	}
 
-	this(GpuTexture texture, uint mip_level, uint layer, bool cycle = false)
+	this(GpuTexture texture, in uint mip_level, in uint layer, in bool cycle = false) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.mip_level = mip_level;
@@ -470,7 +469,7 @@ struct GpuTextureRegion
 	uint h;
 	uint d;
 
-	this(GpuTexture texture)
+	this(GpuTexture texture) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
 		this.w = texture.width;
@@ -485,7 +484,7 @@ struct GpuTextureSamplerBinding
 	SDL_GPUTexture* texture;
 	SDL_GPUSampler* sampler;
 
-	this(SDL_GPUTexture* texture_handle, SDL_GPUSampler* sampler_handle)
+	this(SDL_GPUTexture* texture_handle, SDL_GPUSampler* sampler_handle) pure nothrow @nogc @safe
 	in (texture_handle !is null)
 	in (sampler_handle !is null)
 	{
@@ -494,7 +493,7 @@ struct GpuTextureSamplerBinding
 		return;
 	}
 
-	this(GpuTexture texture, GpuSampler sampler)
+	this(GpuTexture texture, GpuSampler sampler) pure nothrow @nogc @safe
 	in (texture !is null)
 	in (texture.handle !is null)
 	in (sampler !is null)
@@ -514,8 +513,8 @@ struct GpuTextureTransferInfo
 	uint rows_per_layer;
 
 	this(GpuTextureTransferBuffer texture_transfer_buffer,
-		uint width, uint height, uint offset = 0,
-	)
+		in uint width, in uint height, in uint offset = 0,
+	) pure nothrow @nogc @safe
 	{
 		this.transfer_buffer = texture_transfer_buffer.handle;
 		this.offset = offset;
@@ -524,7 +523,7 @@ struct GpuTextureTransferInfo
 		return;
 	}
 
-	this(GpuTextureTransferBuffer texture_transfer_buffer, uint offset)
+	this(GpuTextureTransferBuffer texture_transfer_buffer, in uint offset) pure nothrow @nogc @safe
 	{
 		this.transfer_buffer = texture_transfer_buffer.handle;
 		this.offset = offset;
@@ -556,11 +555,11 @@ struct GpuVertexAttribute
 	uint offset;
 
 	this(
-		uint location,
-		uint buffer_slot,
-		GpuVertexElementFormat format,
-		uint offset,
-	)
+		in uint location,
+		in uint buffer_slot,
+		in GpuVertexElementFormat format,
+		in uint offset,
+	) pure nothrow @nogc @safe
 	{
 		this.location = location;
 		this.buffer_slot = buffer_slot;
@@ -569,19 +568,12 @@ struct GpuVertexAttribute
 		return;
 	}
 
-	this(GpuVertexElementFormat format, uint buffer_slot = 0)
-	{
-		this.format = format;
-		this.buffer_slot = buffer_slot;
-		return;
-	}
-
 	this(
-		GpuVertexElementFormat format,
-		uint buffer_slot,
-		uint location,
-		uint offset,
-	)
+		in GpuVertexElementFormat format,
+		in uint buffer_slot,
+		in uint location,
+		in uint offset,
+	) pure nothrow @nogc @safe
 	{
 		this.format = format;
 		this.buffer_slot = buffer_slot;
@@ -601,7 +593,7 @@ struct GpuVertexInputState
 	this(
 		in GpuVertexBufferDescription[] description,
 		in GpuVertexAttribute[] attribute
-	)
+	) pure nothrow @nogc
 	in (description.length < uint.max)
 	in (attribute.length < uint.max)
 	{
@@ -610,29 +602,6 @@ struct GpuVertexInputState
 		this.vertex_attributes = cast(GpuVertexAttribute*) attribute;
 		this.num_vertex_attributes = cast(uint) attribute.length;
 		return;
-	}
-
-	typeof(this) position_color_texture()
-	{
-		this.vertex_buffer_descriptions = cast(GpuVertexBufferDescription*)[
-			GpuVertexBufferDescription(
-				0, VertexPCT.sizeof, GpuVertexInputRate.vertex, 0
-			)
-		];
-		this.num_vertex_buffers = 1u;
-		this.vertex_attributes = cast(GpuVertexAttribute*)[
-			GpuVertexAttribute(
-				0, 0, GpuVertexElementFormat.float3, 0
-			),
-			GpuVertexAttribute(
-				1, 0, GpuVertexElementFormat.float4, float.sizeof * 3
-			),
-			GpuVertexAttribute(
-				2, 0, GpuVertexElementFormat.float2, float.sizeof * 7
-			),
-		];
-		this.num_vertex_attributes = 3u;
-		return this;
 	}
 }
 
@@ -645,7 +614,7 @@ struct GpuViewport
 	float min_depth = 0.0f;
 	float max_depth = 1.0f;
 
-	this(float x, float y, float w, float h)
+	this(in float x, in float y, in float w, in float h) pure nothrow @nogc @safe
 	{
 		this.x = x;
 		this.y = y;
@@ -664,8 +633,8 @@ struct GpuTransferBufferLocation
 
 	this(
 		SDL_GPUTransferBuffer* transfer_buffer_handle,
-		uint offset = 0,
-	)
+		in uint offset = 0,
+	) pure nothrow @nogc @safe
 	in (transfer_buffer_handle !is null)
 	{
 		this.transfer_buffer = transfer_buffer_handle;
@@ -674,13 +643,13 @@ struct GpuTransferBufferLocation
 	}
 
 	this(
-		in GpuBufferTransferBuffer transfer_buffer,
-		ulong offset = 0u,
-	)
+		GpuBufferTransferBuffer transfer_buffer,
+		in ulong offset = 0u,
+	) pure nothrow @nogc @safe
 	in (transfer_buffer.handle !is null)
 	in (offset <= uint.max)
 	{
-		this.transfer_buffer = cast(SDL_GPUTransferBuffer*) transfer_buffer.handle;
+		this.transfer_buffer = transfer_buffer.handle;
 		this.offset = cast(uint) offset;
 		return;
 	}
@@ -694,9 +663,9 @@ struct GpuBufferRegion
 
 	this(
 		SDL_GPUBuffer* buffer_handle,
-		uint offset,
-		uint size,
-	)
+		in uint offset,
+		in uint size,
+	) pure nothrow @nogc @safe
 	in (buffer_handle !is null)
 	{
 		this.buffer = buffer_handle;
@@ -706,12 +675,12 @@ struct GpuBufferRegion
 	}
 
 	this(
-		in GpuBuffer buffer,
-		uint offset = 0,
-	)
+		GpuBuffer buffer,
+		in uint offset = 0,
+	) pure nothrow @nogc @safe
 	in (buffer.handle !is null)
 	{
-		this.buffer = cast(SDL_GPUBuffer*) buffer.handle;
+		this.buffer = buffer.handle;
 		this.offset = offset;
 		this.size = cast(uint) buffer.size_byte;
 		return;
@@ -719,9 +688,9 @@ struct GpuBufferRegion
 
 	this(
 		GpuBuffer buffer,
-		uint offset,
-		ulong size,
-	)
+		in uint offset,
+		in ulong size,
+	) pure nothrow @nogc @safe
 	in (buffer.handle !is null)
 	in (size <= uint.max)
 	{
