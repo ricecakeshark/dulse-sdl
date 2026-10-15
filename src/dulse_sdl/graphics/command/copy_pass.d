@@ -68,7 +68,7 @@ struct GpuCopyPass
 	)
 	{
 		scope GpuTransferBufferLocation buffer_location;
-		buffer_location = GpuTransferBufferLocation(transfer_buffer);
+		buffer_location = GpuTransferBufferLocation(cast()transfer_buffer);
 		foreach (buffer; buffer_list)
 		{
 			scope GpuBufferRegion buffer_region;
