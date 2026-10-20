@@ -209,10 +209,19 @@ struct GpuComputePipelineCreateInfo
 
 	this(ShaderFile shader_file) pure nothrow @nogc
 	{
-		this.code = cast(const(ubyte)*) shader_file.code;
 		this.code_size = shader_file.code.length;
+		this.code = cast(const(ubyte)*) shader_file.code;
 		this.entrypoint = shader_file.entry_point.ptr;
 		this.format = cast(GpuShaderFormat) shader_file.frontend_format;
+		return;
+	}
+
+	this(typeof(this.tupleof[0 .. $ - 1]) args) pure nothrow @nogc @safe
+	{
+		foreach (count, arg; args)
+		{
+			this.tupleof[count] = arg;
+		}
 		return;
 	}
 }
@@ -442,7 +451,7 @@ struct GpuTextureCreateInfo
 	uint height;
 	uint layer_count_or_depth = 1;
 	uint num_levels = 1;
-	GpuSampleCount sample_count;
+	GpuSampleCount sample_count = GpuSampleCount.x1;
 
 	SDL_PropertiesID props;
 
@@ -729,7 +738,8 @@ unittest
 	import std.format;
 
 	static foreach (symbol; [
-			"PrimitiveType", "ColorTargetInfo", "ColorTargetDescription", "LoadOp",
+			"PrimitiveType", "ColorTargetInfo", "ColorTargetDescription",
+			"LoadOp",
 			"StoreOp"
 		])
 	{
@@ -742,7 +752,9 @@ unittest
 	}
 }
 
-static foreach (str; ["GraphicsPipelineCreateInfo","GraphicsPipelineTargetInfo"])
+static foreach (str; [
+		"GraphicsPipelineCreateInfo", "GraphicsPipelineTargetInfo"
+	])
 {
 	mixin("alias " ~ str ~ " = Gpu" ~ str ~ ";\n");
 }
