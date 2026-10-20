@@ -156,6 +156,19 @@ struct GpuColorTargetInfo
 	ubyte padding1;
 	ubyte padding2;
 
+	this(
+		GpuAbstractTexture texture,
+		in GpuLoadOp load_op, in GpuStoreOp store_op,
+		in Color clear_color = Color(0.0f, 0.0f, 0.0f, 1.0f),
+	) pure nothrow @nogc @safe
+	{
+		this.texture = texture.handle;
+		this.load_op = load_op;
+		this.store_op = store_op;
+		this.clear_color = clear_color;
+		return;
+	}
+
 	this(GpuAbstractTexture texture, in GpuLoadOp load_op, in GpuStoreOp store_op) pure nothrow @nogc @safe
 	{
 		this.texture = texture.handle;
