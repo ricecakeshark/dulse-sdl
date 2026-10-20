@@ -8,6 +8,7 @@ import dulse_sdl.graphics.resource.texture.swapchain_texture;
 import dulse_sdl.graphics.resource.fence;
 import dulse_sdl.video.window;
 
+import dulse_sdl.core.util;
 import std.exception : enforce;
 import std.string : fromStringz;
 
@@ -80,9 +81,8 @@ public:
 	typeof(this) submit()
 	in (this.handle !is null)
 	{
-		bool succeed;
-		succeed = SDL_SubmitGPUCommandBuffer(this.command_buffer_handle);
-		enforce(succeed, SDL_GetError().fromStringz());
+		SDL_SubmitGPUCommandBuffer(this.command_buffer_handle)
+		.expect_sdl();
 		this.command_buffer_handle = null;
 		return this;
 	}

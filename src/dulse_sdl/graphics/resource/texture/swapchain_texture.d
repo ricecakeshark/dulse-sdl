@@ -6,7 +6,7 @@ import dulse_sdl.graphics.core;
 import dulse_sdl.graphics.desc;
 import dulse_sdl.graphics.resource.texture;
 import dulse_sdl.video.window;
-import std.exception : enforce;
+import dulse_sdl.core.util;
 
 final class GpuSwapchainTexture : GpuAbstractTexture
 {
@@ -21,15 +21,14 @@ final class GpuSwapchainTexture : GpuAbstractTexture
 
 	typeof(this) acquire(GpuCommandBuffer command_buffer)
 	{
-		bool succeed;
-		succeed = SDL_WaitAndAcquireGPUSwapchainTexture(
+		SDL_WaitAndAcquireGPUSwapchainTexture(
 			command_buffer.handle,
 			this.window.handle,
 			&(this.texture_handle),
 			&(this._width),
 			&(this._height),
-		);
-		enforce(succeed, "failed to acquire swapchain texture");
+		)
+			.expect_sdl("failed to acquire swapchain texture");
 		this._format = this.get_format();
 		return this;
 	}
@@ -41,13 +40,13 @@ final class GpuSwapchainTexture : GpuAbstractTexture
 	in (this.device.is_valid)
 	in (this.window.is_valid)
 	{
-		bool succeed = SDL_SetGPUSwapchainParameters(
+		SDL_SetGPUSwapchainParameters(
 			this.device.handle,
 			this.window.handle,
 			cast(SDL_GPUSwapchainComposition) composition,
 			cast(SDL_GPUPresentMode) present_mode,
-		);
-		enforce(succeed);
+		)
+			.expect_sdl("failed to get swapchain params");
 		return this;
 	}
 
