@@ -764,10 +764,10 @@ unittest
 		);
 	}
 }
-
+/+
 static foreach (str; [
 		"GraphicsPipelineCreateInfo", "GraphicsPipelineTargetInfo"
 	])
 {
 	mixin("alias " ~ str ~ " = Gpu" ~ str ~ ";\n");
-}
+}+/

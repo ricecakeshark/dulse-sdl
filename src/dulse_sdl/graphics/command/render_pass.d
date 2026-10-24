@@ -95,8 +95,35 @@ struct GpuRenderPass
 		SDL_BindGPUGraphicsPipeline(this.handle, pipeline.handle);
 		return this;
 	}
+
+	ref typeof(this) bind(GpuTexture[] texture_list...)
+	{
+		SDL_GPUTexture*[] texture_binding_list;
+		texture_binding_list = texture_list.map!(texture => texture.handle).array();
+		SDL_BindGPUFragmentStorageTextures(
+			this.pass_handle,
+			0u,
+			cast(SDL_GPUTexture**) texture_binding_list.ptr,
+			cast(uint) texture_list.length,
+		);
+		return this;
+	}
+
+	ref typeof(this) bind(in GpuTextureSamplerBinding[] binding_list...)
+	in (this.handle !is null)
+	in (binding_list.length >= 1)
+	in (binding_list.length < uint.max)
+	{
+		SDL_BindGPUFragmentSamplers(
+			this.pass_handle,
+			0u,
+			cast(const(SDL_GPUTextureSamplerBinding*)) binding_list.ptr,
+			cast(uint) binding_list.length,
+		);
+		return this;
+	}
 	// bind Vertex Buffer
-	ref typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list, in uint first_slot = 0)
+	ref typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list,uint first_slot,)
 	in (this.handle !is null)
 	in (vertex_buffer_list.all!(buffer => buffer !is null))
 	in (vertex_buffer_list.all!(buffer => buffer.handle !is null))
@@ -163,7 +190,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	ref typeof(this) bind(GpuTexture[] texture_list, in uint first_slot = 0u)
+	ref typeof(this) bind(GpuTexture[] texture_list, in uint first_slot)
 	{
 		SDL_GPUTexture*[] texture_binding_list;
 		texture_binding_list = texture_list.map!(texture => texture.handle).array();
@@ -176,7 +203,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	ref typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot = 0)
+	ref typeof(this) bind(in GpuTextureSamplerBinding[] binding_list, in uint first_slot)
 	in (this.handle !is null)
 	in (binding_list.length >= 1)
 	in (binding_list.length < uint.max)
