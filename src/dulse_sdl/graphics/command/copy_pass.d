@@ -3,6 +3,7 @@ module dulse_sdl.graphics.command.copy_pass;
 import dulse_sdl.graphics.command;
 import dulse_sdl.graphics.desc;
 import dulse_sdl.graphics.resource.buffer;
+import dulse_sdl.graphics.resource.texture;
 import sdl.gpu;
 
 struct GpuCopyPass
@@ -62,24 +63,46 @@ struct GpuCopyPass
 		return this;
 	}
 	// upload buffer list
-	ref typeof(this) upload(TypeList...)(
+	ref typeof(this) upload(
 		in GpuBufferTransferBuffer transfer_buffer,
-		auto ref TypeList buffer_list,
+		GpuBuffer[] buffer_list...
 	)
 	{
 		scope GpuTransferBufferLocation buffer_location;
-		buffer_location = GpuTransferBufferLocation(cast()transfer_buffer);
-		foreach (buffer; buffer_list)
+		buffer_location = GpuTransferBufferLocation(cast() transfer_buffer);
+		foreach (ref buffer; buffer_list)
 		{
 			scope GpuBufferRegion buffer_region;
-			buffer_region = GpuBufferRegion(buffer, 0u);
+			buffer_region = GpuBufferRegion(buffer, 0u, buffer.size);
 			SDL_UploadToGPUBuffer(
 				this.handle,
 				cast(SDL_GPUTransferBufferLocation*)&buffer_location,
 				cast(SDL_GPUBufferRegion*)&buffer_region,
 				false,
 			);
-			buffer_location.offset += buffer.size_byte;
+			buffer_location.offset += buffer.size;
+		}
+		return this;
+	}
+	// upload texture list
+	ref typeof(this) upload(
+		in GpuTextureTransferBuffer transfer_buffer,
+		GpuTexture[] texture_list...
+	)
+	{
+		scope GpuTextureTransferInfo transfer_info;
+		transfer_info = GpuTextureTransferInfo(cast() transfer_buffer);
+		foreach (ref texture; texture_list)
+		{
+			scope GpuTextureRegion texture_region;
+			texture_region = GpuTextureRegion(texture);
+			SDL_UploadToGPUTexture(
+				this.handle,
+				cast(SDL_GPUTextureTransferInfo*)&transfer_info,
+				cast(SDL_GPUTextureRegion*)&texture_region,
+				false,
+			);
+			transfer_info.offset += texture.size;
 		}
 		return this;
 	}

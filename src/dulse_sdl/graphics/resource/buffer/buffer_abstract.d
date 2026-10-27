@@ -39,7 +39,7 @@ public:
 		return this._stride;
 	}
 
-	@property inout(size_t) size_byte() inout pure nothrow @nogc @safe
+	@property inout(size_t) size() inout pure nothrow @nogc @safe
 	{
 		return this._count * this._stride;
 	}

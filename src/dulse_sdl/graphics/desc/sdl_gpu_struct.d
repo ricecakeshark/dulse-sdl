@@ -567,7 +567,7 @@ struct GpuTextureTransferInfo
 		return;
 	}
 
-	this(GpuTextureTransferBuffer texture_transfer_buffer, in uint offset) pure nothrow @nogc @safe
+	this(GpuTextureTransferBuffer texture_transfer_buffer, in uint offset = 0) pure nothrow @nogc @safe
 	{
 		this.transfer_buffer = texture_transfer_buffer.handle;
 		this.offset = offset;
@@ -726,7 +726,7 @@ struct GpuBufferRegion
 	{
 		this.buffer = buffer.handle;
 		this.offset = offset;
-		this.size = cast(uint) buffer.size_byte;
+		this.size = cast(uint) buffer.size;
 		return;
 	}
 
