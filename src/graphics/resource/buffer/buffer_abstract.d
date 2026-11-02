@@ -28,20 +28,20 @@ public:
 		return this.buffer_handle;
 	}
 
-	@property inout(size_t) count() inout pure nothrow @nogc @safe
+	@property uint count() const pure nothrow @nogc @safe
 	{
-		return this._count;
+		return cast(uint)this._count;
 	}
 
-	@property inout(size_t) stride() inout pure nothrow @nogc @safe
+	@property uint stride() const pure nothrow @nogc @safe
 	in (this._stride != 0)
 	{
-		return this._stride;
+		return cast(uint)this._stride;
 	}
 
-	@property inout(size_t) size() inout pure nothrow @nogc @safe
+	@property uint size() const pure nothrow @nogc @safe
 	{
-		return this._count * this._stride;
+		return cast(uint)(this._count * this._stride);
 	}
 
 	typeof(this) release()

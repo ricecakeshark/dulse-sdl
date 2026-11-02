@@ -9,9 +9,9 @@ interface IGpuResource
 
 interface IGpuResourceUpload
 {
-	@property inout(uint) stride() inout pure nothrow @nogc @safe;
-	@property inout(uint) count() inout pure nothrow @nogc @safe;
-	@property inout(uint) size() inout pure nothrow @nogc @safe;
+	//@property uint stride() pure nothrow @nogc @safe;
+	//@property uint count() pure nothrow @nogc @safe;
+	@property uint size() pure nothrow @nogc @safe;
 }
 
 abstract class GpuResource(Derived) : IGpuResource

@@ -20,10 +20,11 @@ class GpuDrawBuffer : GpuBuffer
 	}
 
 public:
-	override @property inout(size_t) size() inout pure nothrow @nogc @safe
+	override @property uint size() const pure nothrow @nogc @safe
 	{
-		return (this._stride_command * this._count_command) + (
-			this._stride_command_indexed * this._count_command_indexed);
+		return cast(uint)
+		((this._stride_command * this._count_command) + (
+			this._stride_command_indexed * this._count_command_indexed));
 	}
 
 	@property size_t size_command() pure nothrow @nogc @safe

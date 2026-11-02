@@ -40,7 +40,7 @@ class GpuTexture : GpuAbstractTexture
 		return this;
 	}
 
-	typeof(this) release()
+	override typeof(this) release()
 	{
 		if (this.texture_handle is null || this.device.handle is null)
 		{
@@ -63,6 +63,12 @@ class GpuRefTexture : GpuAbstractTexture
 	~this()
 	{
 		return;
+	}
+
+	override typeof(this) release()
+	{
+		this.texture_handle = null;
+		return this;
 	}
 
 	typeof(this) refer(SDL_GPUTexture* texture_ref)

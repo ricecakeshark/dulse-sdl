@@ -33,6 +33,12 @@ final class GpuSwapchainTexture : GpuAbstractTexture
 		return this;
 	}
 
+	override typeof(this) release()
+	{
+		this.texture_handle = null;
+		return this;
+	}
+
 	typeof(this) set(
 		in GpuSwapchainComposition composition,
 		in GpuPresentMode present_mode = GpuPresentMode.immediate,

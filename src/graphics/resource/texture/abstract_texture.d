@@ -62,6 +62,12 @@ abstract class GpuAbstractTexture : GpuResource!(GpuAbstractTexture)
 		}
 		return true;
 	}
+
+	override abstract GpuAbstractTexture release()
+	{
+		return this;
+	}
+	
 }
 
 uint size_of_format(in GpuTextureFormat format) pure nothrow @nogc @safe
