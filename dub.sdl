@@ -12,6 +12,7 @@ subConfiguration "bindbc-sdl" "static"
 targetType "sourceLibrary"
 targetName "dulse_sdl"
 targetPath "build"
+importPaths "src"
 
 lflags "/LIBPATH:$PACKAGE_DIR\\lib\\win_x86-64" platform="windows-x86_64"
 copyFiles "lib\\win_x86-64\\*.dll" platform="windows-x86_64"
