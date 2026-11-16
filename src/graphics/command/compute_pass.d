@@ -41,6 +41,21 @@ struct GpuComputePass
 		return this.pass_handle;
 	}
 
+	ref typeof(this) begin()
+	in (this.command_buffer.is_valid)
+	in (command_buffer.handle !is null)
+	{
+		this.pass_handle = SDL_BeginGPUComputePass(
+			this.command_buffer.handle,
+			null,
+			cast(uint) 0u,
+			null,
+			cast(uint) 0u,
+		);
+		enforce(this.pass_handle !is null);
+		return this;
+	}
+
 	ref typeof(this) begin(
 		in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 	)
@@ -84,15 +99,6 @@ struct GpuComputePass
 		this.pass_handle = null;
 		return this;
 	}
-	// bind all bindable 
-	ref typeof(this) bind(TypeList...)(TypeList bindable_list)
-	{
-		foreach (bindable; bindable_list)
-		{
-			this.bind(bindable);
-		}
-		return this;
-	}
 	// bind compute pipeline
 	ref typeof(this) bind(GpuComputePipeline compute_pipeline)
 	in (this.handle !is null)
@@ -101,18 +107,19 @@ struct GpuComputePass
 		SDL_BindGPUComputePipeline(this.pass_handle, compute_pipeline.handle);
 		return this;
 	}
-	// bind Storage Buffer List
+	// bind Storage Buffer
 	ref typeof(this) bind(
+		in uint first_slot,
 		in GpuStorageBuffer[] storage_buffer_list,
-		in uint first_slot
 	)
 	in (this.handle !is null)
 	{
 		SDL_BindGPUComputeStorageBuffers(
 			this.handle,
 			first_slot,
-			cast(SDL_GPUBuffer**) storage_buffer_list.map!(buffer => buffer.handle)
-				.array,
+			cast(SDL_GPUBuffer**) storage_buffer_list
+				.map!(buffer => buffer.handle)
+				.array.ptr,
 				cast(uint) storage_buffer_list.length,
 		);
 		return this;
@@ -132,7 +139,7 @@ struct GpuComputePass
 		);
 		return this;
 	}
-	// bind texture sampler
+	// bind texture sampler without slot num
 	ref typeof(this) bind(
 		in GpuTextureSamplerBinding[] texture_sampler_binding...
 	)

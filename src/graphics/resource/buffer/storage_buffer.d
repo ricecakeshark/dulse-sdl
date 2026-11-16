@@ -29,11 +29,14 @@ public:
 		return this;
 	}
 
-	typeof(this) create(in size_t size)
+	typeof(this) create(
+		in size_t size,
+		in GpuBufferUsageFlags flags = GpuBufferUsageFlags.graphics_storage_read,
+	)
 	in (this !is null)
 	{
 		this._capacity = size;
-		super.create(GpuBufferUsageFlags.graphics_storage_read, size, 1u);
+		super.create(flags, size, 1u);
 		return this;
 	}
 }
