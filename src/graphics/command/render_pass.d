@@ -77,7 +77,7 @@ struct GpuRenderPass
 		return this;
 	}
 
-	ref typeof(this) bind(TypeList...)(TypeList bind_list)
+	/+ref typeof(this) bind(TypeList...)(TypeList bind_list)
 	in (this.handle !is null)
 	{
 		foreach (bindable; bind_list)
@@ -85,7 +85,7 @@ struct GpuRenderPass
 			this.bind(bindable);
 		}
 		return this;
-	}
+	}+/
 
 	ref typeof(this) bind(GpuGraphicsPipeline pipeline)
 	in (this.handle !is null)
@@ -123,7 +123,7 @@ struct GpuRenderPass
 		return this;
 	}
 	// bind Vertex Buffer
-	ref typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list,uint first_slot,)
+	ref typeof(this) bind(GpuVertexBuffer[] vertex_buffer_list, uint first_slot,)
 	in (this.handle !is null)
 	in (vertex_buffer_list.all!(buffer => buffer !is null))
 	in (vertex_buffer_list.all!(buffer => buffer.handle !is null))
@@ -159,8 +159,8 @@ struct GpuRenderPass
 	}
 	// bind Storage Buffer
 	ref typeof(this) bind_to_vertex(
-		GpuStorageBuffer[] storage_buffer_list,
 		uint first_slot,
+		GpuStorageBuffer[] storage_buffer_list...
 	)
 	{
 		SDL_BindGPUVertexStorageBuffers(
@@ -175,8 +175,8 @@ struct GpuRenderPass
 	}
 	// bind Storage Buffer
 	ref typeof(this) bind_to_fragment(
-		GpuStorageBuffer[] storage_buffer_list,
 		uint first_slot,
+		GpuStorageBuffer[] storage_buffer_list...
 	)
 	{
 		SDL_BindGPUFragmentStorageBuffers(
